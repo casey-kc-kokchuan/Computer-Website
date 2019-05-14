@@ -9,7 +9,7 @@ Located in app > HTTP > Controller
 You will see Admin folder and Customer folder.
 
 
-To create within the folder, you can use "php artisan make:controller Admin/testController". Folder then followed by controller with '/'.
+To create within the folder, you can use "*php artisan make:controller Admin/testController*". Folder then followed by controller with '/'.
 
 ## Model
 
