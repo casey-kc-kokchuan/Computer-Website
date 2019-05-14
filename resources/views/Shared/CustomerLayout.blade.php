@@ -17,7 +17,7 @@
     </head>
     <body>
 
-      
+        <p>Customer Layout</p>
        @yield('body')
        
 
