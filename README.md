@@ -20,6 +20,7 @@ Located in app > Providers
 Located in resources > views
 
 You will see Admin folder and Customer folder.
+
 ---
 *For some tutorial on blade layout, routing to controller method and ajax request response example. You may refer to Laravel Tutorial.*
 
