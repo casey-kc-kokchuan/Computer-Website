@@ -1,0 +1,24 @@
+@media screen and (min-width: 992px)
+{
+
+	.productList, .cartList
+	{	
+
+		height:90%;
+		overflow-y: auto;
+	}
+
+	#shoppingCart
+	{
+		height:90vh;
+	}
+
+	.cart
+	{
+		width: 30%;
+		display: inline-block;
+		border : 1px solid black;
+	}
+
+
+}

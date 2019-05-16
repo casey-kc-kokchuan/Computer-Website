@@ -9,7 +9,16 @@
 @section('head')
 
 <style type="text/css">
-	
+	#shoppingCart
+	{
+		height:90vh;
+	}
+
+	.cart, .product
+	{
+		border : 1px solid black;
+	}
+
 </style>
 @endsection
 
@@ -17,10 +26,11 @@
 
 @section('body')
 
-<div class="container">
-	<div class="row" id="shoppingCart" >
-		
-		<div class="col-12" >
+<div class="container" >
+	<div class="row" id="shoppingCart">
+
+
+		<div class="col-12" style="height:5%;">
 			
 			<label for="sortby">Sort By: </label>
 			<select class="form-control" @change="sort($event)" style="width:30%;display: inline-block;">
@@ -28,46 +38,47 @@
 				<option value="Keyboard">Keyboard</option>
 				<option value="Mouse">Mouse</option>
 			</select>
-			<input type="text" name="search" placeholder="Search" class="form-control" style="width:50%;display: inline-block;">
+			<input type="text" name="search" placeholder="Search" class="form-control" style="width:40%;display: inline-block;">
 		</div>
 
-		<div class="col-12 col-lg-4">
-			<div class="productList">
+		<div class="col-12 col-lg-4 productList"  >
+			
 				
-				<div v-for="(product, index) in productList">
-					<div class="product" id="product" style="border : 1px solid black">
+				<div v-for="(product, index) in productList" class="product" id="product">
+					
 
-						<p>@{{product.name}}</p>
-						<img :src="product.img" style="width:100px;height:100px">
-						<p>@{{product.price}}</p>
+					<p>@{{product.name}}</p>
+					<img :src="product.img" style="width:100px;height:100px">
+					<p>@{{product.price}}</p>
 
 
-						<button @click="addToCart(index)">+</button>
-						<button>About</button>
-					</div>
-				</div>
-
-			</div>
-
-		</div>
-
-		<div class="col-12 col-lg-8">
-			<div class="cart"></div>
-
-			<div v-for="(cart, index) in cartList">
-				<div class="cart" id="cart" style="border : 1px solid black">
-
-					<p>@{{cart.name}}</p>
-					<img :src="cart.img" style="width:100px;height:100px">
-					<p>@{{cart.price}}</p>
-					<p>Qty: @{{cart.qty}}</p>
-					<button @click="removeFromCart(index)">-</button>
+					<button @click="addToCart(index)">+</button>
 					<button>About</button>
+					
 				</div>
+
+			
+		</div>
+
+		<div class="col-12 col-lg-8 cartList">
+
+			<div v-for="(cart, index) in cartList" class="cart" id="cart" >
+
+
+				<p>@{{cart.name}}</p>
+				<img :src="cart.img" style="width:100px;height:100px">
+				<p>@{{cart.price}}</p>
+				<p>Qty: @{{cart.qty}}</p>
+				<button @click="removeFromCart(index)">-</button>
+
 			</div>
+
+
 
 		</div>
 
+
+		
 	</div>
 </div>
 
