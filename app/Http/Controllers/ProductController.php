@@ -16,6 +16,7 @@ class ProductController extends Controller
     {
         $product = Products::all()->toArray(); 
         return view('Admin.AdminInventory', compact('product'));
+        //return view('Customer.ShoppingCart', compact('product'));
     }
 
     /**

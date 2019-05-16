@@ -15,9 +15,10 @@ Route::get('/', function () {
     return view('Customer/CustomerPage');
 });
 
-Route::get('/Admin', function () {
-    return view('Admin/AdminPage');
-});
+Route::resource('Admin','ProductController');
+
+//Route::resource('Customer','ProductController');
+
 
 Route::get('/ShoppingCart', function ()
 {
