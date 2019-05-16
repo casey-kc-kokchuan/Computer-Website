@@ -69,7 +69,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Products::find($id);
+        return view('Admin.AdminEdit', compact('product','id'));
     }
 
     /**
@@ -81,7 +82,17 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'product_name'  => 'required',
+            'product_type'  => 'required',
+            'product_price' => 'required'
+        ]);
+        $product = Products::find($id);
+        $product->product_name = $request->get('product_name');
+        $product->product_type = $request->get('product_type');
+        $product->product_price = $request->get('product_price');
+        $product->save();
+        return redirect()->route('Admin.index')->with('success', 'Data Updated');
     }
 
     /**
@@ -92,6 +103,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Products::find($id);
+        $product->delete();
+        return redirect()->route('Admin.index')->with('success', 'Data Deleted');
     }
 }

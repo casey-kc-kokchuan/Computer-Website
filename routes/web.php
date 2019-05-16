@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('Customer/CustomerPage');
 });
 
+//Route::get('Admin/AdminInventory','ProductController@getdata')->mame('ProductController.getdata');
 Route::resource('Admin','ProductController');
 
 /*Route::get('/Admin', function () {

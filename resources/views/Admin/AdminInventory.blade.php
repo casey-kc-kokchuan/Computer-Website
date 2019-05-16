@@ -19,7 +19,7 @@
 		<br />
 		<br />
 		</div>
-		<table class="table table-bordered">
+		<table id="inventory_table" class="table table-bordered">
 			<tr>
 				<th>ID</th>
 				<th>Product Name</th>
@@ -34,12 +34,30 @@
 				<td>{{$row['product_name']}}</td>
 				<td>{{$row['product_type']}}</td>
 				<td>{{$row['product_price']}}</td>
-				<td></td>
-				<td></td>
+				<td><a class="btn btn-warning" href="{{action('ProductController@edit',$row['id'])}}">Edit</a></td>
+				<td>
+					<form method="post" class="delete_form" action="{{action('ProductController@destroy', $row['id'])}}">
+						{{csrf_field()}}
+						<input type="hidden" name="_method" value="DELETE">
+						<button type="submit" class="btn btn-danger">Delete</button>
+					</form>
+				</td>
 			</tr>
 			@endforeach
 		</table>
 	</div>
 </div>
-
+<script>
+$(document).ready(function(){
+	$('.delete_form').on('submit',function(){
+		if(confirm("Are you sure you want to delete it?"))
+		{
+			return true;
+		}
+		{
+			return false;
+		}
+	})
+});
+</script>
 @endsection
