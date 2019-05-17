@@ -5,19 +5,15 @@
 	{	
 
 		height:90%;
-		overflow-y: auto;
+		overflow-y: scroll;
 	}
 
-	#shoppingCart
-	{
-		height:90vh;
-	}
 
 	.cart
 	{
 		width: 30%;
 		display: inline-block;
-		border : 1px solid black;
+
 	}
 
 
