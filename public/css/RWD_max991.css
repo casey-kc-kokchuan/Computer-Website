@@ -1,0 +1,23 @@
+@media screen and (max-width: 991px)
+{
+
+	.productList, .cartList
+	{	
+
+
+		height:40%;
+		width:100%;
+		overflow-x: auto;
+		overflow-y: hidden;
+		white-space: nowrap;
+	}
+
+	.product, .cart
+	{
+
+		width:200px;
+		display: inline-block;
+	}
+
+
+}

@@ -11,12 +11,22 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/app.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_max991.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_min992.css')}}">
         <script src="{{ URL::asset('js/app.js')}}"></script>
         <script src="{{ URL::asset('js/utility.js')}}"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         @yield('head')
 
+        <style type="text/css">
+           
+           html, body
+           {
+                height:100%;
+           } 
+
+        </style>
 
     </head>
     <body>

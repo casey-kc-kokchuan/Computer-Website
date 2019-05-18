@@ -20,7 +20,15 @@ Route::resource('Admin','ProductController');
 //Route::resource('Customer','ProductController');
 
 
+// Route::get('/Admin/show', 'ProductController@index');
+
+
+
+
 Route::get('/ShoppingCart', function ()
 {
 	return view('Customer/ShoppingCart');
 });
+
+Route::get('/Product/search', 'ProductController@search');
+
