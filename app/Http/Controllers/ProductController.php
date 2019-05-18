@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Products;
 
+
 class ProductController extends Controller
 {
     /**
@@ -58,7 +59,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        dd('hi');
     }
 
     /**
@@ -93,5 +94,57 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function shoppingCart()
+    {
+
+        return view('Customer/ShoppingCart');
+    }
+
+    public function search(Request $request)
+    {
+        
+        //default value to empty string if no value is passed in
+
+        $type = empty($request->type)? "": $request->type;
+        $name = empty($request->name)? "": $request->name;
+
+
+        //Example 1
+
+        // $object1 = [];
+        // $object1["id"] = 1;
+        // $object1["name"] = "Logitech G502";
+        // $object1["img"] = "/img/g502.jpg";
+        // $object1["price"] = "500";
+
+        // $object2 = [];
+        // $object2["id"] = 2;
+        // $object2["name"] = "Corsair Scimitar";
+        // $object2["img"] = "/img/scimitar.jpg";
+        // $object2["price"] = "420";
+
+
+        //Example 2
+        $object1= [
+            "id"=>1,
+            "name"=> "Logitech G502",
+            "img"=> "/img/g502.jpg",
+            "price"=>"500"
+        ];
+
+        $object2= [
+            "id"=>1,
+            "name"=> "Corsair Scimitar",
+            "img"=> "/img/scimitar.jpg",
+            "price"=> "420"
+        ];
+
+        $data = [$object1, $object2];
+
+
+        return response()->json($data);
     }
 }

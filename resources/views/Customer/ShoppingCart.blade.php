@@ -33,12 +33,13 @@
 		<div class="col-12" style="height:5%;">
 			
 			<label for="sortby">Sort By: </label>
-			<select class="form-control" @change="sort($event)" style="width:30%;display: inline-block;">
-				<option value="All">All</option>
+			<select class="form-control" @change="sort($event)" v-model="type" style="width:30%;display: inline-block;">
+				<option value="">All</option>
 				<option value="Keyboard">Keyboard</option>
 				<option value="Mouse">Mouse</option>
 			</select>
-			<input type="text" name="search" placeholder="Search" class="form-control" style="width:40%;display: inline-block;">
+			<input type="text" v-model="name" placeholder="Search" class="form-control" style="width:40%;display: inline-block;">
+			<button @click="search" type="button">Search</button>
 		</div>
 
 		<div class="col-12 col-lg-4 productList"  >
@@ -46,7 +47,6 @@
 				
 				<div v-for="(product, index) in productList" class="product" id="product">
 					
-
 					<p>@{{product.name}}</p>
 					<img :src="product.img" style="width:100px;height:100px">
 					<p>@{{product.price}}</p>
@@ -136,6 +136,7 @@ var keyboardList =
 	{id: 4, name: "Razer Blackwidow", img: "/img/blackwidow.jpg", price: "600" }
 ];
 	
+array = []
 
 
 var shoppingCart = new Vue(
@@ -145,6 +146,8 @@ var shoppingCart = new Vue(
 	{	
 		productList: allList,
 		cartList: [],
+		type: "",
+		name: "",
 	},
 	methods:
 	{
@@ -196,6 +199,13 @@ var shoppingCart = new Vue(
 				this.productList = allList;
 			}
 
+		},
+
+		search()
+		{
+
+			var url = "/Product/search?type=" + this.type + "&brand=&name=" + this.name;
+			jsonAjax(url, "GET", "", function(response) {shoppingCart.productList = response;}, function() {alert("Server Error")});
 		}
 	}
 })
