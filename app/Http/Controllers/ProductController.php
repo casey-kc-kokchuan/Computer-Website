@@ -39,14 +39,14 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'product_name'  => 'required',
-            'product_type'  => 'required',
-            'product_price' => 'required'
+            'name'  => 'required',
+            'type'  => 'required',
+            'price' => 'required'
         ]);  
         $product = new products([
-            'product_name'  => $request->get('product_name'),
-            'product_type'  => $request->get('product_type'),
-            'product_price'  => $request->get('product_price')
+            'name'  => $request->get('name'),
+            'type'  => $request->get('type'),
+            'price'  => $request->get('price')
         ]);  
         $product->save(); 
         return redirect()->route('Admin.index')->with('success', 'Data Added');
@@ -85,14 +85,14 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'product_name'  => 'required',
-            'product_type'  => 'required',
-            'product_price' => 'required'
+            'name'  => 'required',
+            'type'  => 'required',
+            'price' => 'required'
         ]);
         $product = Products::find($id);
-        $product->product_name = $request->get('product_name');
-        $product->product_type = $request->get('product_type');
-        $product->product_price = $request->get('product_price');
+        $product->name = $request->get('name');
+        $product->type = $request->get('type');
+        $product->price = $request->get('price');
         $product->save();
         return redirect()->route('Admin.index')->with('success', 'Data Updated');
     }
@@ -124,7 +124,9 @@ class ProductController extends Controller
 
         $type = empty($request->type)? "": $request->type;
         $name = empty($request->name)? "": $request->name;
-
+        $product = Products::all();
+        $product = collect($product);
+       // return $product->where('type', 'CPU');
 
         //Example 1
 
@@ -158,7 +160,18 @@ class ProductController extends Controller
 
         $data = [$object1, $object2];
 
+        return response()->json($product->where('type', $type)->where('name', $name));
+        //return response()->json($data);
+    }
 
-        return response()->json($data);
+    public function check(Request $request)
+    {
+        $variable = 'Intel I5';
+        $type = empty($request->type)? "": $request->type;
+        $product = Products::all();
+        $product = collect($product);
+        return $product->where('name', 'LIKE', "%Intel%");
+
+        //return response()->json($product->where('name', 'like', '%'.'Intel I5'.'%'));
     }
 }

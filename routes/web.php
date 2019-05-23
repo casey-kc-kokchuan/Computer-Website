@@ -22,7 +22,7 @@ Route::resource('Admin','ProductController');
 
 // Route::get('/Admin/show', 'ProductController@index');
 
-
+Route::get('/check', 'ProductController@check');
 
 
 Route::get('/ShoppingCart', function ()

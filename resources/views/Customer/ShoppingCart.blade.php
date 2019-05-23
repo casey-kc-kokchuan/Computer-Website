@@ -23,7 +23,7 @@
 @endsection
 
 
-
+<!--@change="sort($event)"-->
 @section('body')
 
 <div class="container" >
@@ -33,7 +33,7 @@
 		<div class="col-12" style="height:5%;">
 			
 			<label for="sortby">Sort By: </label>
-			<select class="form-control" @change="sort($event)" v-model="type" style="width:30%;display: inline-block;">
+			<select class="form-control" v-model="type" style="width:30%;display: inline-block;">
 				<option value="">All</option>
 				<option value="Keyboard">Keyboard</option>
 				<option value="Mouse">Mouse</option>

@@ -19,6 +19,13 @@
 		<br />
 		<br />
 		</div>
+		<div class="form-group">
+				<select name="p_id" id="p_id">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+				</select>
+			</div>
 		<table id="inventory_table" class="table table-bordered">
 			<tr>
 				<th>ID</th>
@@ -31,9 +38,9 @@
 			@foreach($product as $row)
 			<tr>
 				<td>{{$row['id']}}</td>
-				<td>{{$row['product_name']}}</td>
-				<td>{{$row['product_type']}}</td>
-				<td>{{$row['product_price']}}</td>
+				<td>{{$row['name']}}</td>
+				<td>{{$row['type']}}</td>
+				<td>{{$row['price']}}</td>
 				<td><a class="btn btn-warning" href="{{action('ProductController@edit',$row['id'])}}">Edit</a></td>
 				<td>
 					<form method="post" class="delete_form" action="{{action('ProductController@destroy', $row['id'])}}">
@@ -59,5 +66,8 @@ $(document).ready(function(){
 		}
 	})
 });
+$(document).ready(function(){
+	
+})
 </script>
 @endsection

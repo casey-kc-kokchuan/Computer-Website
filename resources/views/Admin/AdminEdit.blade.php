@@ -22,13 +22,13 @@
 			{{csrf_field()}}
 			<input type="hidden" name="_method" value="PATCH" />
 			<div class="form-group">
-				<input type="text" name="product_name" class="form-control" value="{{$product->product_name}}" placeholder="Enter Product Name" />
+				<input type="text" name="name" class="form-control" value="{{$product->name}}" placeholder="Enter Product Name" />
 			</div>
 			<div class="form-group">
-				<input type="text" name="product_price" class="form-control" value="{{$product->product_price}}" placeholder="Enter Product Price" />
+				<input type="text" name="price" class="form-control" value="{{$product->price}}" placeholder="Enter Product Price" />
 			</div>
 			<div class="form-group">
-				<select name="product_type">
+				<select name="type">
 					<option value="CPU">CPU</option>
 					<option value="RAM">RAM</option>
 					<option value="Motherboard">MotherBoard</option>
