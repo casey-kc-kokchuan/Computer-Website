@@ -15,17 +15,10 @@
 			</div>
 		@endif
 		<div align="right">
-			<a href="{{route('Admin.create')}}" class="btn btn-primary">Add Data</a>
+			<a href="{{route('create')}}" class="btn btn-primary">Add Data</a>
 		<br />
 		<br />
 		</div>
-		<div class="form-group">
-				<select name="p_id" id="p_id">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-				</select>
-			</div>
 		<table id="inventory_table" class="table table-bordered">
 			<tr>
 				<th>ID</th>
@@ -41,13 +34,14 @@
 				<td>{{$row['name']}}</td>
 				<td>{{$row['type']}}</td>
 				<td>{{$row['price']}}</td>
-				<td><a class="btn btn-warning" href="{{action('ProductController@edit',$row['id'])}}">Edit</a></td>
-				<td>
-					<form method="post" class="delete_form" action="{{action('ProductController@destroy', $row['id'])}}">
+				<td><a>edit button</a></td>
+				<!-- <td><a class="btn btn-warning" href="{{action('ProductController@edit',$row['id'])}}">Edit</a></td> -->
+				<td><a>delete button</a>
+					<!-- <form method="post" class="delete_form" action="{{action('ProductController@destroy', $row['id'])}}">
 						{{csrf_field()}}
 						<input type="hidden" name="_method" value="DELETE">
 						<button type="submit" class="btn btn-danger">Delete</button>
-					</form>
+					</form> -->
 				</td>
 			</tr>
 			@endforeach

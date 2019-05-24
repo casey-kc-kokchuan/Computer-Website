@@ -15,7 +15,15 @@ Route::get('/', function () {
     return view('Customer/CustomerPage');
 });
 
-Route::resource('Admin','ProductController');
+//Route::resource('Admin','ProductController');
+
+Route::get('/Admin', function () {
+    return view('Admin.AdminInventory');
+});
+Route::get('/inventory', 'ProductController@index');
+Route::get('/create', 'ProductController@create')->name('create');
+Route::get('/edit', 'ProductController@edit')->name('edit');
+Route::get('/destroy', 'ProductController@destroy')->name('destroy');
 
 //Route::resource('Customer','ProductController');
 

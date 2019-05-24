@@ -124,8 +124,7 @@ class ProductController extends Controller
 
         $type = empty($request->type)? "": $request->type;
         $name = empty($request->name)? "": $request->name;
-        $product = Products::all();
-        $product = collect($product);
+    
        // return $product->where('type', 'CPU');
 
         //Example 1
@@ -160,17 +159,46 @@ class ProductController extends Controller
 
         $data = [$object1, $object2];
 
-        return response()->json($product->where('type', $type)->where('name', $name));
+        if ( $name=='' && $type=='' || $name!=null && $type==''){
+            $product = Products::where('name', 'LIKE', '%'.$name.'%')
+                                ->orWhere('type', $type)
+                                ->get();
+        }elseif( $name!=null && $type!=null || $name=='' && $type!=null ){
+            $product = Products::where('name', 'LIKE', '%'.$name.'%')
+                                ->where('type', $type)
+                                ->get();
+                           
+        }else{
+            $product = Products::all();
+        }
+
+        return response()->json($product);
         //return response()->json($data);
     }
 
     public function check(Request $request)
     {
-        $variable = 'Intel I5';
-        $type = empty($request->type)? "": $request->type;
-        $product = Products::all();
-        $product = collect($product);
-        return $product->where('name', 'LIKE', "%Intel%");
+        //$type = empty($request->type)? "": $request->type;
+        //$product = Products::all();
+        //$product = collect($product);
+        //return $product->where('name', 'LIKE', "%Intel%");
+        $name='';
+        $type='';
+
+        if ( $name=='' && $type=='' || $name!=null && $type==''){
+            $product = Products::where('name', 'LIKE', '%'.$name.'%')
+                                ->orWhere('type', $type)
+                                ->get();
+        }elseif( $name!=null && $type!=null || $name=='' && $type!=null ){
+            $product = Products::where('name', 'LIKE', '%'.$name.'%')
+                                ->where('type', $type)
+                                ->get();
+                           
+        }else{
+            $product = Products::all();
+        }
+        
+        return response()->json($product);             
 
         //return response()->json($product->where('name', 'like', '%'.'Intel I5'.'%'));
     }
