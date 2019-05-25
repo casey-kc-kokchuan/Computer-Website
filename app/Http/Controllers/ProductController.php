@@ -122,45 +122,17 @@ class ProductController extends Controller
         
         //default value to empty string if no value is passed in
 
-        $type = empty($request->type)? "": $request->type;
         $name = empty($request->name)? "": $request->name;
+        $type = empty($request->type)? "": $request->type;
+        $brand = empty($request->name)? "": $request->brand;
         $product = Products::all();
-        $product = collect($product);
+        // $product = collect($product);
        // return $product->where('type', 'CPU');
 
-        //Example 1
 
-        // $object1 = [];
-        // $object1["id"] = 1;
-        // $object1["name"] = "Logitech G502";
-        // $object1["img"] = "/img/g502.jpg";
-        // $object1["price"] = "500";
+  
 
-        // $object2 = [];
-        // $object2["id"] = 2;
-        // $object2["name"] = "Corsair Scimitar";
-        // $object2["img"] = "/img/scimitar.jpg";
-        // $object2["price"] = "420";
-
-
-        //Example 2
-        $object1= [
-            "id"=>1,
-            "name"=> "Logitech G502",
-            "img"=> "/img/g502.jpg",
-            "price"=>"500"
-        ];
-
-        $object2= [
-            "id"=>1,
-            "name"=> "Corsair Scimitar",
-            "img"=> "/img/scimitar.jpg",
-            "price"=> "420"
-        ];
-
-        $data = [$object1, $object2];
-
-        return response()->json($product->where('type', $type)->where('name', $name));
+        return response()->json($product);
         //return response()->json($data);
     }
 
@@ -169,8 +141,8 @@ class ProductController extends Controller
         $variable = 'Intel I5';
         $type = empty($request->type)? "": $request->type;
         $product = Products::all();
-        $product = collect($product);
-        return $product->where('name', 'LIKE', "%Intel%");
+        // $product = collect($product);
+        // return $product->where('name', 'LIKE', "%Intel%");
 
         //return response()->json($product->where('name', 'like', '%'.'Intel I5'.'%'));
     }

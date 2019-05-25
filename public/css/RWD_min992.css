@@ -1,7 +1,7 @@
 @media screen and (min-width: 992px)
 {
 
-	.productList, .cartList
+	.productList, .cartList, .productManagerList
 	{	
 
 		height:90%;
@@ -9,7 +9,7 @@
 	}
 
 
-	.cart
+	.cart, .productManagerList .product
 	{
 		width: 30%;
 		display: inline-block;

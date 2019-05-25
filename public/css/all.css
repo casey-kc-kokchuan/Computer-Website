@@ -1,0 +1,9 @@
+#shoppingCart, #productManager
+{
+	height:90vh;
+}
+
+.cart, .product
+{
+	border : 1px solid black;
+}

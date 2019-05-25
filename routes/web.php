@@ -11,24 +11,48 @@
 |
 */
 
-Route::get('/', function () {
-    return view('Customer/CustomerPage');
-});
 
-Route::resource('Admin','ProductController');
+/*
+--------------------------------------------------------------------------
+Page Controller
+--------------------------------------------------------------------------
+*/
+Route::get('/', 'PageController@showShoppingCart');
 
-//Route::resource('Customer','ProductController');
+Route::get('/Admin/ProductManager', 'PageController@showProductManager');
 
-
-// Route::get('/Admin/show', 'ProductController@index');
+/*
+--------------------------------------------------------------------------
+Product Controller
+--------------------------------------------------------------------------
+*/
+Route::resource('Admin','ProductController');	
 
 Route::get('/check', 'ProductController@check');
 
-
-Route::get('/ShoppingCart', function ()
-{
-	return view('Customer/ShoppingCart');
-});
-
 Route::get('/Product/search', 'ProductController@search');
+/*
+--------------------------------------------------------------------------
+Order Controller
+--------------------------------------------------------------------------
+*/
+
+
+/*
+--------------------------------------------------------------------------
+Account Controller
+--------------------------------------------------------------------------
+*/
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -8,18 +8,7 @@
 
 @section('head')
 
-<style type="text/css">
-	#shoppingCart
-	{
-		height:90vh;
-	}
 
-	.cart, .product
-	{
-		border : 1px solid black;
-	}
-
-</style>
 @endsection
 
 
@@ -35,8 +24,9 @@
 			<label for="sortby">Sort By: </label>
 			<select class="form-control" v-model="type" style="width:30%;display: inline-block;">
 				<option value="">All</option>
-				<option value="Keyboard">Keyboard</option>
-				<option value="Mouse">Mouse</option>
+				@foreach ($types as $type)
+					<option value="{{$type->type}}">{{$type->type}}</option>
+				@endforeach
 			</select>
 			<input type="text" v-model="name" placeholder="Search" class="form-control" style="width:40%;display: inline-block;">
 			<button @click="search" type="button">Search</button>
@@ -56,6 +46,7 @@
 					<button>About</button>
 					
 				</div>
+
 
 			
 		</div>
@@ -91,27 +82,6 @@
 <script type="text/javascript">
 
 
-// Test Data	
-// var allList =
-// {
-// 	"1": {id: 1, name: "Logitech G502", img: "/img/g502.jpg", price: "500" },
-// 	"2": {id: 2, name: "Corsair Scimitar", img: "/img/scimitar.jpg", price: "420" },
-// 	"3": {id: 3, name: "Corsair K70", img: "/img/k70.jpg", price: "300" },
-// 	"4": {id: 4, name: "Razer Blackwidow", img: "/img/blackwidow.jpg", price: "600" }
-// }
-
-// var mouseList =
-// {
-// 	1: {id: 1, name: "Logitech G502", img: "/img/g502.jpg", price: "500" },
-// 	2: {id: 2, name: "Corsair Scimitar", img: "/img/scimitar.jpg", price: "420" }
-// };
-
-// var keyboardList = 
-// {
-// 	1: {id: 1, name: "Corsair K70", img: "/img/k70.jpg", price: "300" },
-// 	2: {id: 2, name: "Razer Blackwidow", img: "/img/blackwidow.jpg", price: "600" }
-// }
-
 var allList =
 [
 	{id: 1, name: "Logitech G502", img: "/img/g502.jpg", price: "500" },
@@ -136,7 +106,6 @@ var keyboardList =
 	{id: 4, name: "Razer Blackwidow", img: "/img/blackwidow.jpg", price: "600" }
 ];
 	
-array = []
 
 
 var shoppingCart = new Vue(
@@ -144,7 +113,7 @@ var shoppingCart = new Vue(
 	el: "#shoppingCart",
 	data: 
 	{	
-		productList: allList,
+		productList: {!! json_encode($products) !!},
 		cartList: [],
 		type: "",
 		name: "",

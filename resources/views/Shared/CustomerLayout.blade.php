@@ -11,6 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/app.css') }}">
+        <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/all.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_max991.css')}}">
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_min992.css')}}">
         <script src="{{ URL::asset('js/app.js')}}"></script>
