@@ -151,25 +151,6 @@ var shoppingCart = new Vue(
 
 		},
 
-		sort(event)
-		{
-			var type = event.target.value;
-
-			if (type == "Keyboard") 
-			{
-				this.productList = keyboardList;
-			}
-			else if ( type == "Mouse")
-			{
-				this.productList = mouseList;
-			}
-			else
-			{
-				this.productList = allList;
-			}
-
-		},
-
 		search()
 		{
 
@@ -180,10 +161,7 @@ var shoppingCart = new Vue(
 })
 
 
-
-
-
 </script>
 
-<script type=""></script>
+
 @endsection

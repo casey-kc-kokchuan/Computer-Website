@@ -38,18 +38,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name'  => 'required',
-            'type'  => 'required',
-            'price' => 'required'
-        ]);  
-        $product = new products([
-            'name'  => $request->get('name'),
-            'type'  => $request->get('type'),
-            'price'  => $request->get('price')
-        ]);  
-        $product->save(); 
-        return redirect()->route('Admin.index')->with('success', 'Data Added');
+        // $this->validate($request, [
+        //     'name'  => 'required',
+        //     'type'  => 'required',
+        //     'price' => 'required'
+        // ]);  
+        // $product = new products([
+        //     'name'  => $request->get('name'),
+        //     'type'  => $request->get('type'),
+        //     'price'  => $request->get('price')
+        // ]);  
+        // $product->save(); 
+        // return redirect()->route('Admin.index')->with('success', 'Data Added');
+
+
+
+        //To store image
+        // $file =  $request->img;
+        // $file->move(public_path('/img'),'test.jpg');
+
+
+        return response()->json(['status' => "Success", "Data" => "Some data"]);
     }
 
     /**
@@ -111,33 +120,15 @@ class ProductController extends Controller
     }
 
 
-    public function shoppingCart()
-    {
-
-        return view('Customer/ShoppingCart');
-    }
-
     public function search(Request $request)
     {
         
         //default value to empty string if no value is passed in
 
-        $name = empty($request->name)? "": $request->name;
-<<<<<<< HEAD
         $type = empty($request->type)? "": $request->type;
-        $brand = empty($request->name)? "": $request->brand;
-        $product = Products::all();
-        // $product = collect($product);
-=======
+        $name = empty($request->name)? "": $request->name;
     
->>>>>>> 57a097de873a76103d963223d297e191a395e098
-       // return $product->where('type', 'CPU');
 
-
-  
-
-<<<<<<< HEAD
-=======
         if ( $name=='' && $type=='' || $name!=null && $type==''){
             $product = Products::where('name', 'LIKE', '%'.$name.'%')
                                 ->orWhere('type', $type)
@@ -151,20 +142,12 @@ class ProductController extends Controller
             $product = Products::all();
         }
 
->>>>>>> 57a097de873a76103d963223d297e191a395e098
         return response()->json($product);
         //return response()->json($data);
     }
 
     public function check(Request $request)
     {
-<<<<<<< HEAD
-        $variable = 'Intel I5';
-        $type = empty($request->type)? "": $request->type;
-        $product = Products::all();
-        // $product = collect($product);
-        // return $product->where('name', 'LIKE', "%Intel%");
-=======
         //$type = empty($request->type)? "": $request->type;
         //$product = Products::all();
         //$product = collect($product);
@@ -186,8 +169,9 @@ class ProductController extends Controller
         }
         
         return response()->json($product);             
->>>>>>> 57a097de873a76103d963223d297e191a395e098
 
         //return response()->json($product->where('name', 'like', '%'.'Intel I5'.'%'));
     }
+
+
 }
