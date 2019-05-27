@@ -12,7 +12,7 @@
 @endsection
 
 
-<!--@change="sort($event)"-->
+
 @section('body')
 
 <div class="container" >
@@ -82,32 +82,6 @@
 <script type="text/javascript">
 
 
-var allList =
-[
-	{id: 1, name: "Logitech G502", img: "/img/g502.jpg", price: "500" },
-	{id: 2, name: "Corsair Scimitar", img: "/img/scimitar.jpg", price: "420" },
-	{id: 3, name: "Corsair K70", img: "/img/k70.jpg", price: "300" },
-	{id: 4, name: "Razer Blackwidow", img: "/img/blackwidow.jpg", price: "600" }
-];
-
-
-
-var mouseList =
-[
-	{id: 1, name: "Logitech G502", img: "/img/g502.jpg", price: "500" },
-	{id: 2, name: "Corsair Scimitar", img: "/img/scimitar.jpg", price: "420" }
-];
-
-
-
-var keyboardList = 
-[
-	{id: 3, name: "Corsair K70", img: "/img/k70.jpg", price: "300" },
-	{id: 4, name: "Razer Blackwidow", img: "/img/blackwidow.jpg", price: "600" }
-];
-	
-
-
 var shoppingCart = new Vue(
 {
 	el: "#shoppingCart",
@@ -136,6 +110,7 @@ var shoppingCart = new Vue(
 			{
 				this.cartList[matchingIndex].qty += 1;
 			}
+			t
 		},
 
 		removeFromCart(index)

@@ -1,11 +1,16 @@
 @media screen and (min-width: 992px)
 {
 
-	.productList, .cartList, .product-manager-list
+	.productList, .cartList, 
 	{	
 
 		height:90%;
-		overflow-y: scroll;
+		overflow-y: auto;
+	}
+
+	.product-manager-list
+	{
+		overflow-y: auto;
 	}
 
 

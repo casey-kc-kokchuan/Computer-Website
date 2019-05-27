@@ -10,17 +10,34 @@
 
 <style type="text/css">
 	
-#product-detail-overlay, #product-setting-overlay
+#product-setting-overlay
 {
-	height: 100vh;
-	width: 100vh;
+	height: 100%;
+	width: 100%;
 	position: fixed;
 	background: white;
 	top:0;
-	z-index: 99999999;
+	z-index: 9999999;
 	display: none;	
 	overflow-y: auto;
 }
+
+#product-detail-overlay
+{
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	background: white;
+	top:0;
+	margin-top:-90%;
+	z-index: 9999999;
+	display: block;	
+	overflow-y: auto;
+	transition: margin-top 1s linear;
+}
+
+
+
 
 </style>
 
@@ -30,151 +47,158 @@
 
 @section('body')
 
+
+
 <div class="container">
-	<div id="product-detail-overlay">
-
-		<div id="product-detail">
+	
+	<div id="product-manager">
+		<div class="row">
+			<div class="col-12 col-md-4">
 			
-			<form id="myForm" @submit.prevent="handleSubmit">
-			@csrf
-			<div class="row">
-				
-				<div class="offset-2 col-8">
-					<input type="hidden" name="id" value="">
-
-					<div class="form-group">
-						<img src="#" id="img" style="height:200px;width:200px;">	
-						<input type="file" name="img" @change="previewImg">
-					</div>
-
-					<div class="form-group">
-						<label for="name">Name</label>	
-						<input type="text" name="name" class="form-control">
-					</div>
-
-
-					<div class="form-group">
-						<label for="type">Type</label>	
-						<select name="type" class="form-control">
-							<option value="">Select Type</option>
-							<option v-for="type in types" :value="type.type">@{{type.type}}</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label for="brand">Brand</label>
-						<select name="brand" class="form-control">
-							<option value="">Select Brand</option>
-							<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
-						</select>	
-					</div>
-
-					<div class="form-group">
-						<label for="price">Price</label>	
-						<input type="text" name="price" class="form-control">
-					</div>
-
-					<div class="form-group">
-						<label for="qty">Qty in Stock</label>	
-						<input type="text" name="qty" class="form-control">
-					</div>
-
-					<div class="form-group">
-						<label for="imgDetail">Product Detail Image</label>	
-						<br>
-						<input type="file" name="imgDetail" @change="previewImgDetail">
-						<br>
-						<img src="#" id="imgDetail" style="height:400px;width:400px;">
-					</div>
-
-					<button type="submit">Submit</button>
-					<button type="button" onclick="hideOverlay('product-detail-overlay')">Close</button>
-				</div>
-
-			</div>
-
-			</form>
-		</div>
-		
-	</div>
-
-	<div id="product-setting-overlay">
-		<div id="product-setting">
-			<button type="button" onclick="hideOverlay('product-setting-overlay')">Close</button>
-			<br>
-			<h2>Types</h2>
-
-			<input type="text" name="type" v-model="newType">
-			<button type="button" @click="addType()">Add</button>
-			<button type="button" @click="newType=''">Clear</button>
-
-			<h4>Exisiting Types</h4>
-			<table style="border:1px solid black">
-				<tr v-for="type in types">
-					<td>@{{type.type}}</td>
-					<td><button type="button" @click="removeType(type.type)">Remove</button></td>
-				</tr>
-			</table>
-
-			<br><br>
-			<h2>Brands</h2>
-
-			<input type="text" name="type" v-model="newBrand">
-			<button type="button" @click="addBrand()">Add</button>
-			<button type="button" @click="newBrand=''">Clear</button>
-
-			<h4>Exisiting Brands</h4>
-			<table style="border:1px solid black">
-				<tr v-for="brand in brands">
-					<td>@{{brand.brand}}</td>
-					<td><button type="button" @click="removeType(brand.brand)">Remove</button></td>
-				</tr>
-			</table>
-
-
-		</div>	
-	</div>
-
-
-	<div class="row" id="product-manager">
-		
-		<div class="col-12 col-md-4">
-			
-			<input type="text" v-model="name" placeholder="search"><button @click="search()">Search</button>
-			<br><br>
-			<button onclick="showOverlay('product-detail-overlay')">Add item</button>
-			<button onclick="showOverlay('product-setting-overlay')"><i class="fas fa-cog"></i></button>
-			<br><br>
-			<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
-				
-				<a class="nav-link active" id="pills-all-tab" data-toggle="pill"  aria-controls="pills-all" aria-selected="true" href="#" @click="typeSearch('')">All</a>
-
-				<a v-for="type in types" class="nav-link" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="typeSearch(type.type)">@{{type.type}}</a>
-
-
-			</div>
-		</div>
-		<div class="col-12 col-md-8">
-			
-			<div class="product-manager-list">
-				<div v-for="(product, index) in productList" class="product" id="product">
+				<input type="text" v-model="name" placeholder="search"><button @click="search()">Search</button>
+				<br><br>
+				<button onclick="showOverlay('product-detail-overlay', productDetailOverlay)">Add item</button>
+				<button onclick="showOverlay('product-setting-overlay')"><i class="fas fa-cog"></i></button>
+				<br><br>
+				<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
 					
-					<p>@{{product.name}}</p>
-					<img :src="product.img" style="width:100px;height:100px">
-					<p>@{{product.price}}</p>
+					<a class="nav-link" v-bind:class="[ activetab === -1 ? 'active' : '' ]" id="pills-all-tab" data-toggle="pill"  aria-controls="pills-all" aria-selected="true" href="#" @click="activetab=-1;typeSearch('')">All</a>
+					<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a>
 
 
-					<button @click="edit(index)">Edit</button>
-					
 				</div>
 			</div>
+			<div class="col-12 col-md-8">
+				
+				<div class="product-manager-list">
+					<div v-for="(product, index) in productList" class="product" id="product">
+						
+						<p>@{{product.name}}</p>
+						<img :src="product.img" style="width:100px;height:100px">
+						<p>@{{product.price}}</p>
 
 
+						<button @click="edit(index)">Edit</button>
+						
+					</div>
+				</div>
+			</div>
 		</div>
-
 	</div>
-
 </div>
+
+
+
+<div id="product-detail-overlay" >
+	<div id="product-detail">
+		
+		<form id="myForm" @submit.prevent="handleSubmit">
+		@csrf
+		<div class="row">
+			
+			<div class="offset-2 col-8">
+				<input type="hidden" name="id" v-model="productDetail.id">
+
+				<div class="form-group">
+					<img :src="productDetail.img" id="img" style="height:200px;width:200px;">	
+					<input type="file" name="img" @change="previewImg">
+				</div>
+
+				<div class="form-group">
+					<label for="name">Name</label>	
+					<input type="text" v-model="productDetail.name" name="name" class="form-control">
+				</div>
+
+
+				<div class="form-group">
+					<label for="type">Type</label>	
+					<select name="type" class="form-control" v-model="productDetail.type">
+						<option value="">Select Type</option>
+						<option v-for="type in types" :value="type.type">@{{type.type}}</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="brand">Brand</label>
+					<select name="brand" class="form-control" v-model="productDetail.brand">
+						<option value="">Select Brand</option>
+						<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
+					</select>	
+				</div>
+
+				<div class="form-group">
+					<label for="price">Price</label>	
+					<input type="text" name="price" class="form-control" v-model="productDetail.price">
+				</div>
+
+				<div class="form-group">
+					<label for="qty">Qty in Stock</label>	
+					<input type="text" name="qty" class="form-control" v-model="productDetail.qty">
+				</div>
+
+				<div class="form-group">
+					<label for="imgDetail">Product Detail Image</label>	
+					<br>
+					<input type="file" name="imgDetail" @change="previewImgDetail">
+					<br>
+					<img src="#" id="imgDetail" style="height:400px;width:400px;">
+				</div>
+
+				<button type="submit">Submit</button>
+				<button type="button" onclick="hideOverlay('product-detail-overlay')">Close</button>
+			</div>
+
+		</div>
+
+		</form>
+	</div>
+	
+</div>
+
+
+
+
+
+
+<div id="product-setting-overlay">
+	<div id="product-setting">
+		<button type="button" onclick="hideOverlay('product-setting-overlay')">Close</button>
+		<br>
+		<h2>Types</h2>
+
+		<input type="text" name="type" v-model="newType">
+		<button type="button" @click="addType()">Add</button>
+		<button type="button" @click="newType=''">Clear</button>
+
+		<h4>Exisiting Types</h4>
+		<table style="border:1px solid black">
+			<tr v-for="type in types">
+				<td>@{{type.type}}</td>
+				<td><button type="button" @click="removeType(type.type)">Remove</button></td>
+			</tr>
+		</table>
+
+		<br><br>
+		<h2>Brands</h2>
+
+		<input type="text" name="type" v-model="newBrand">
+		<button type="button" @click="addBrand()">Add</button>
+		<button type="button" @click="newBrand=''">Clear</button>
+
+		<h4>Exisiting Brands</h4>
+		<table style="border:1px solid black">
+			<tr v-for="brand in brands">
+				<td>@{{brand.brand}}</td>
+				<td><button type="button" @click="removeType(brand.brand)">Remove</button></td>
+			</tr>
+		</table>
+
+
+	</div>	
+</div>
+
+
+
 
 
 @endsection
@@ -193,9 +217,10 @@ var productManager = new Vue(
 		productList:{!! json_encode($products) !!},
 		types: {!! json_encode($types) !!},
 		brands: {!! json_encode($brands) !!},
-		name:'',
-		type:'',
-		img: '#'
+		name:"",
+		type:"",
+		img: "#",
+		activetab: -1,
 	},
 	methods:
 	{
@@ -208,30 +233,43 @@ var productManager = new Vue(
 
 		typeSearch(type)
 		{
-			this.name='';
+			this.name="";
 			this.type = type;
 			var url = "/Product/search?type=" + this.type + "&brand=&name=";
 
 			jsonAjax(url, "GET", "", function(response) {productManager.productList = response;}, function() {alert("Server Error")});
 		},
 
-		showOverlay()
+		edit(index)
 		{
-			document.getElementById("product-detail-overlay").style.display = "block";
+			showOverlay("product-detail-overlay");
+			productDetail.productDetail = this.productList[index];
 		},
 
-		hideOverlay()
+	},
+
+	watch: 
+	{
+		types: function()
 		{
-			document.getElementById("product-detail-overlay").style.display = "none";	
+			productDetail.types = this.types;
+			productSetting.types = this.types;
+			this.activetab = -1;
+			this.type = "";
 		},
 
+		brands: function()
+		{
+			productDetail.brands = this.brands;
+			productSetting.brands = this.brands;
+		}
 	}
 
 })
 
 var productDetail = new Vue(
 {
-	el: "#product-detail",
+	el: "#product-detail-overlay",
 	data:
 	{
 		productDetail: 
@@ -246,8 +284,8 @@ var productDetail = new Vue(
 			qty: ""
 		},
 		types: productManager.types,
-		brands: productManager.brands
-
+		brands: productManager.brands,
+		show :false,
 	},
 	methods:
 	{
@@ -255,9 +293,7 @@ var productDetail = new Vue(
 		{
 
 			var form = new FormData(event.target);
-			// form.append('id', event.target.elements.namedItem('id').value);
-
-			formAjax("/Product/AddProduct", "POST", form , this.manageProductList, alertError);
+			formAjax("/Admin", "POST", form , this.manageProductList, alertError);
 		},
 
 		previewImg(event)
@@ -313,7 +349,7 @@ var productDetail = new Vue(
 
 var productSetting = new Vue(
 {
-	el: "#product-setting",
+	el: "#product-setting-overlay",
 	data:
 	{
 		types: productManager.types,
@@ -327,7 +363,7 @@ var productSetting = new Vue(
 		addType()
 		{
 			var obj = {type: this.newType};
-			jsonAjax("/Product/AddType", "POST", JSON.stringify(obj), this.manageType, alertError);
+			jsonAjax("/Admin", "POST", JSON.stringify(obj), this.manageType, alertError);
 		},
 
 		removeType(val)
@@ -354,8 +390,8 @@ var productSetting = new Vue(
 			{
 
 				productManager.types = response.Data;
-				productDetail.types = response.Data;
-				this.types = response.Data;
+				// productDetail.types = response.Data;
+				// this.types = response.Data;
 				alert("success")
 				return 0;
 			}
@@ -396,7 +432,8 @@ var productSetting = new Vue(
 				return 0;
 			}
 		}
-	}
+	},
+
 
 })
 

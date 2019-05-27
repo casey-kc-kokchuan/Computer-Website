@@ -65,20 +65,15 @@ function hideOverlay(name)
   document.getElementById(name).style.display = "none";
 }
 
-function showOverlay(name)
+function showOverlay(name, callback)
 {
-  document.getElementById(name).style.display = "block";
+ 
+  callback(document.getElementById(name));
 }
 
-function firstLetterToUpperE(element)
+function productDetailOverlay(element)
 {
-  var text = element.value.trim();
-
-  if(text.length >= 1)
-  {
-
-    element.value = text.charAt(0).toUpperCase() + text.substring(1).toLowerCase();
-    element.dispatchEvent(new Event('input'));
-  } 
+  element.style.display = "block";
+  element.style.marginTop = "0";
 }
 

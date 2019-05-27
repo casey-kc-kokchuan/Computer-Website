@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\Products;
 
@@ -57,8 +58,17 @@ class ProductController extends Controller
         // $file =  $request->img;
         // $file->move(public_path('/img'),'test.jpg');
 
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required',
+        // ]);
 
-        return response()->json(['status' => "Success", "Data" => "Some data"]);
+        // if($validator->fails())
+        // {
+        //     return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+
+        // }
+
+        return response()->json(['Status' => "Success", "Data" => [['type' => 'A'],['type' => 'B']]]);
     }
 
     /**
