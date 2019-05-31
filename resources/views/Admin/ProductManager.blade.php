@@ -48,13 +48,13 @@
 @section('body')
 
 
+<<<<<<< Updated upstream
 
 <div class="container">
 	
 	<div id="product-manager">
 		<div class="row">
 			<div class="col-12 col-md-4">
-			
 				<input type="text" v-model="name" placeholder="search"><button @click="search()">Search</button>
 				<br><br>
 				<button onclick="showOverlay('product-detail-overlay', productDetailOverlay)">Add item</button>

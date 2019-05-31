@@ -28,23 +28,6 @@
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
-			@foreach($product as $row)
-			<tr>
-				<td>{{$row['id']}}</td>
-				<td>{{$row['name']}}</td>
-				<td>{{$row['type']}}</td>
-				<td>{{$row['price']}}</td>
-				<td><a>edit button</a></td>
-				<!-- <td><a class="btn btn-warning" href="{{action('ProductController@edit',$row['id'])}}">Edit</a></td> -->
-				<td><a>delete button</a>
-					<!-- <form method="post" class="delete_form" action="{{action('ProductController@destroy', $row['id'])}}">
-						{{csrf_field()}}
-						<input type="hidden" name="_method" value="DELETE">
-						<button type="submit" class="btn btn-danger">Delete</button>
-					</form> -->
-				</td>
-			</tr>
-			@endforeach
 		</table>
 	</div>
 </div>
