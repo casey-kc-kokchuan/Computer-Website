@@ -47,9 +47,6 @@
 
 @section('body')
 
-
-<<<<<<< Updated upstream
-
 <div class="container">
 	
 	<div id="product-manager">
@@ -293,7 +290,7 @@ var productDetail = new Vue(
 		{
 
 			var form = new FormData(event.target);
-			formAjax("/Admin", "POST", form , this.manageProductList, alertError);
+			formAjax("/Product/AddProduct", "POST", form , this.manageProductList, alertError);
 		},
 
 		previewImg(event)

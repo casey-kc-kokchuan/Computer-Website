@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Products;
+
 
 
 class ProductController extends Controller
@@ -104,71 +106,83 @@ class ProductController extends Controller
 
     public function AddProduct(Request $request)
     {
-        // $this->validate($request, [
-        //     'name'  => 'required',
-        //     'type'  => 'required',
-        //     'price' => 'required'
-        // ]);
+         $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'type' => 'required',
+            'brand' => 'required',
+            'price' => 'required',
+            'qty' => 'required',
+        ]);
 
-        $max_id = Products::max('id'); 
-        $new_id = $max_id + 1; 
+        if($validator->fails()) 
+        {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        }
 
-        //$img = $request->img;//find for rename, filetype
-        $image = $request->img;
-        $imgDetail = $request->imgDetail;
-        $new_name_1 = $new_id.'_product'.'.'.$image->getClientOriginalExtension();
-        $new_name_2 = $new_id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
-        $image->move(public_path('img'), $new_name_1);
-        $imgDetail->move(public_path('img'), $new_name_2);
+        try {
 
-        $db_name_1 = '/img/'.$new_name_1;
-        $db_name_2 = '/img/'.$new_name_2;
-        // return back()->with('success','Image Uploaded Successfully')->with('path', $new_name_1);
+            $product = new Products();
+            $product->name = $request->name;
+            $product->type = $request->type;
+            $product->brand = $request->brand;
+            $product->price = $request->price;
+            //$product->img = $db_name_1;
+            //$product->imgDetail = $db_name_2;
+            $product->qty = $request->qty;
+            $product->save();
+            $id = $product->id;
 
-        $product = new Products();
-        $product->name = $request->name;
-        $product->type = $request->type;
-        $product->brand = $request->brand;
-        $product->price = $request->price;
-        $product->img = $db_name_1;
-        $product->imgDetail = $db_name_2;
-        $product->qty = $request->qty;
-        $product->save();
+            if($product->fails()) {
+                return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
+            }
 
-        $result->status = "Success";
-        $result->data = "something";
+        } catch (Exception $e) {
 
+            return $e->$getMessage();
+        }
 
-        //To store image
-        // $file =  $request->img;
-        // $file->move(public_path('/img'),'test.jpg');
+        $db_name_1 = '/img/default.jpg';
+        $db_name_2 = '/img/default.jpg';
 
+        if($request->hasFile('img')){
+            $image = $request->img;
+            $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
+            $image->move(public_path('img'), $new_name_1);
+            $db_name_1 = '/img/'.$new_name_1;
+        }if($request->hasFile('imgDetail')){
+            $imgDetail = $request->imgDetail;
+            $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
+            $imgDetail->move(public_path('img'), $new_name_2);
+            $db_name_2 = '/img/'.$new_name_2;
+        }
 
-        return response()->json(['status' => "Success", "Data" => $name]);
+        // $image = $request->img;
+        // $imgDetail = $request->imgDetail;
+        // $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
+        // $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
+        // $image->move(public_path('img'), $new_name_1);
+        // $imgDetail->move(public_path('img'), $new_name_2);
+
+        // $db_name_1 = '/img/'.$new_name_1;
+        // $db_name_2 = '/img/'.$new_name_2;
+
+        DB::table('products')
+            ->where('id', $id)
+            ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
+
+        return response()->json(['status' => "Success","Data" => Products::all()]);
     }
 
     public function check(Request $request)
     {
-        //$type = empty($request->type)? "": $request->type;
-        //$product = Products::all();
-        //$product = collect($product);
-        //return $product->where('name', 'LIKE', "%Intel%");
+        // $product = new Products();
+        // $product->name = $request->name;
+        // $product->save();
+        // $id = $product->id;
+        // DB::table('products')
+        //     ->where('id', $id)
+        //     ->update(['img' => 'something', 'imgDetail' => 'somethingelse']);
 
-        // $name='';
-        // $type='';
-        // $brand='';
-        
-        // $product = Products::where('name', 'LIKE', '%'.$name.'%')
-        //                     ->where('type', 'LIKE', '%'.$type.'%')
-        //                     ->where('brand', 'LIKE', '%'.$brand.'%')
-        //                     ->get();
-                           
-     
-      
-        
-        // return response()->json($product);      
-
-        //return response()->json($product->where('name', 'like', '%'.'Intel I5'.'%'));
     }
 
 
