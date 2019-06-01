@@ -93,6 +93,7 @@
 @section('body')
 
 
+
 	
 <div id="product-manager" class="max-height">
 	<div class="row max-height">
@@ -106,8 +107,7 @@
 			<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
 				
 				<a class="nav-link" v-bind:class="[ activetab === -1 ? 'active' : '' ]" id="pills-all-tab" data-toggle="pill"  aria-controls="pills-all" aria-selected="true" href="#" @click="activetab=-1;typeSearch('')">All</a>
-				<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a>
-
+				<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a
 
 			</div>
 		</div>
@@ -355,7 +355,7 @@ var productDetail = new Vue(
 		{
 			alert('send')
 			var form = new FormData(event.target);
-			formAjax("/Admin", "POST", form , this.manageProductList, alertError);
+			formAjax("/Product/AddProduct", "POST", form , this.manageProductList, alertError);
 		},
 
 		previewImg(event)

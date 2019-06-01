@@ -28,7 +28,7 @@ Route::post('/Test', 'PageController@testPost');
 Product Controller
 --------------------------------------------------------------------------
 */
-Route::resource('Admin','ProductController');	
+//Route::resource('Admin','ProductController');	
 
 Route::get('/Admin', function () {
     return view('Admin.AdminInventory');
@@ -37,6 +37,7 @@ Route::get('/Admin', function () {
 Route::get('/check', 'ProductController@check');
 
 Route::get('/Product/search', 'ProductController@search');
+Route::post('/Product/AddProduct', 'ProductController@AddProduct');
 
 Route::get('/inventory', 'ProductController@index');
 Route::get('/create', 'ProductController@create')->name('create');

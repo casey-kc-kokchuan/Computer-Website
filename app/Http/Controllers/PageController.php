@@ -24,15 +24,17 @@ class PageController extends Controller
 	{
 		$products = Products::all();
 		$types = Products::select('type')->orderBy('type','asc')->distinct()->get();
+		$brands = Products::select('brand')->orderBy('brand','asc')->distinct()->get();
 
-		return view('Customer/ShoppingCart', ['products' => $products, 'types' => $types]);
+		return view('Customer/ShoppingCart', ['products' => $products, 'types' => $types, 'brands' => $brands]);
 	}
 
 	public function showProductManager()
 	{
 		$products = Products::all();
 		$types = Products::select('type')->orderBy('type','asc')->distinct()->get();
+		$brands = Products::select('brand')->orderBy('brand','asc')->distinct()->get();
 
-		return view('Admin/ProductManager', ['products' => $products, 'types' => $types, 'brands' => [ 0 => ["brand" => "Corsair"], 1 => ["brand"=> "Razer"] ]]);
+		return view('Admin/ProductManager', ['products' => $products, 'types' => $types, 'brands' => $brands]);
 	}
 }
