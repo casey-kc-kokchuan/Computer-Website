@@ -224,6 +224,9 @@
 		<input type="text" name="type" v-model="newType">
 		<button type="button" @click="addType()">Add</button>
 		<button type="button" @click="newType=''">Clear</button>
+		<br>
+		<p class="text-danger" v-if="typeError.type">@{{ typeError.type[0]}}</p>					
+
 
 		<h4>Exisiting Types</h4>
 		<table style="border:1px solid black">
@@ -239,6 +242,9 @@
 		<input type="text" name="type" v-model="newBrand">
 		<button type="button" @click="addBrand()">Add</button>
 		<button type="button" @click="newBrand=''">Clear</button>
+		<br>
+		<p class="text-danger" v-if="brandError.brand">@{{ brandError.brand[0]}}</p>					
+
 
 		<h4>Exisiting Brands</h4>
 		<table style="border:1px solid black">
@@ -427,6 +433,9 @@ var productDetail = new Vue(
 				{
 					SwalSuccess('New product is successfully added.','')
 				}
+
+				this.emptyError();
+				this.hide();
 				return 0;
 			}
 
@@ -478,7 +487,8 @@ var productSetting = new Vue(
 		brands: productManager.brands,
 		newType: '',
 		newBrand: '',
-
+		typeError: [],
+		brandError: [],
 	},
 	methods:
 	{
@@ -512,19 +522,21 @@ var productSetting = new Vue(
 			{
 
 				productManager.types = response.Data;
-				SwalSuccess('New type is successfully added.','')
+				this.typeError = [];
+				SwalSuccess('New type is successfully added.','');
 				return 0;
 			}
 
 			if(response.Status == "Validation Error")
 			{
-				SwalError('Invalid detail. Please check error messages.','')
+				SwalError('Invalid detail. Please check error messages.','');
+				this.typeError = response.Message;
 				return 0;
 			}
 
 			if(response.Status == "Database Error")
 			{
-				SwalError('Database Error. Please contact administrator.','')
+				SwalError('Database Error. Please contact administrator.','');
 			}
 		},
 
@@ -533,24 +545,26 @@ var productSetting = new Vue(
 			if(response.Status == "Success")
 			{
 				productManager.brands = response.Data;
+				this.brandError = [];
 				SwalSuccess('New brand is successfully added.')
 				return 0;
 			}
 
 			if(response.Status == "Validation Error")
 			{
-				SwalError('Invalid detail. Please check error messages.','')
+				SwalError('Invalid detail. Please check error messages.','');
+				this.brandError = response.Message;
 				return 0;
 			}
 
 			if(response.Status == "Database Error")
 			{
-				SwalError('Database Error. Please contact administrator.','')
+				SwalError('Database Error. Please contact administrator.','');
 			}
-		}
+		},
+		
+
 	},
-
-
 })
 
 

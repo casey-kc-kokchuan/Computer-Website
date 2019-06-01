@@ -49,8 +49,15 @@
 
                 <ul class="list-unstyled components">
                     <li><a href="#"><i class="fas fa-home"></i>&nbsp;&nbsp;Home</a></li>
-                    <li><a href="#"><i class="fas fa-store-alt"></i>&nbsp;&nbsp;Product</a></li>
-                    <li><a href="#"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>
+                    <li>
+                        <a href="#productSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-boxes"></i>&nbsp;&nbsp;Product</a>
+                        <ul class="collapse list-unstyled" id="productSubmenu">
+                            <li><a href="#">Manage</a></li>
+                            <li><a href="#">Configuration</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>                
+                    <li><a href="#"><i class="fas fa-receipt"></i>&nbsp;&nbsp;Order</a></li>
                 </ul>
 
             </nav>
