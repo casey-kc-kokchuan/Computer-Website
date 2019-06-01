@@ -22,6 +22,7 @@ Route::get('/', 'PageController@showShoppingCart');
 Route::get('/Admin/ProductManager', 'PageController@showProductManager');
 Route::get('/Test', 'PageController@testGet');
 Route::post('/Test', 'PageController@testPost');
+
 /*
 --------------------------------------------------------------------------
 Product Controller

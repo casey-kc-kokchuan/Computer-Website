@@ -11,7 +11,7 @@ class PageController extends Controller
 
 	public function testGet()
 	{
-
+		return view("Shared/Test");
 	}
 
 	public function testPost()

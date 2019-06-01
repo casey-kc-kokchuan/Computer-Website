@@ -35,7 +35,29 @@
     <body>
 
 
-       @yield('body')
+        <div class="nav-wrapper">
+
+            <nav id="sidebar">
+                
+                 <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="toggleSidebar()">
+                    <i class="fas fa-angle-left" id="arrow"></i>
+                 </button>
+                <div class="sidebar-header">
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li><a href="#"><i class="fas fa-home"></i>&nbsp;&nbsp;Home</a></li>
+                    <li><a href="#"><i class="fas fa-store-alt"></i>&nbsp;&nbsp;Product</a></li>
+                    <li><a href="#"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>
+                </ul>
+
+            </nav>
+
+            <div id="main">
+                @yield('body')
+
+            </div>
+        </div>
 
        @yield('script')
     </body>

@@ -45,6 +45,14 @@ function formAjax(path, type, data, onSuccess, onError)
         });
 }
 
+function toggleSidebar()
+{
+  $('#sidebar').toggleClass('active');
+  $('#main').toggleClass('active');
+  $('#arrow').toggleClass('fa-angle-right fa-angle-left');
+
+}
+
 function alertSuccess()
 {
   alert("success")
@@ -60,20 +68,52 @@ function checkResponse(response)
     alert(response.status)
 }
 
-function hideOverlay(name)
+function hideOverlay(name, callback)
 {
-  document.getElementById(name).style.display = "none";
+ 
+  var element = document.getElementById(name);
+  if(callback == "")
+  {
+      element.style.display="none";
+  }
+  else
+  {
+      callback(element, "hide");  
+  }
 }
 
 function showOverlay(name, callback)
 {
  
-  callback(document.getElementById(name));
+  var element = document.getElementById(name);
+  if(callback == "")
+  {
+      element.style.display="block"
+  }
+  else
+  {
+      callback(element, "show");  
+  }
 }
 
-function productDetailOverlay(element)
+
+function toggleOverlay(name)
 {
-  element.style.display = "block";
-  element.style.marginTop = "0";
+    $(name).toggleClass('active');
 }
+function productDetailOverlay(element, type)
+{
+  if(type == "show")
+  {
+    element.style.display = "block";
+    element.style.marginTop = "0";    
+  }
+  else
+  {
+    element.style.marginTop = "-90%";        
+    element.style.display = "none";
+  }
+}
+
+
 

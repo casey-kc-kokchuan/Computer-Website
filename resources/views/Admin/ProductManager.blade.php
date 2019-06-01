@@ -17,7 +17,7 @@
 	position: fixed;
 	background: white;
 	top:0;
-	z-index: 9999999;
+	z-index: 10;
 	display: none;	
 	overflow-y: auto;
 }
@@ -27,14 +27,59 @@
 	height: 100%;
 	width: 100%;
 	position: fixed;
-	background: white;
 	top:0;
-	margin-top:-90%;
-	z-index: 9999999;
-	display: block;	
-	overflow-y: auto;
-	transition: margin-top 1s linear;
+	right: -100vw; 	
+	/*display:none;*/
+	z-index: 1;
+	transition: right 0.3s linear;
+
 }
+
+#product-detail-overlay.active/*, #product-detail-overlay.active #product-detail*/
+
+{
+	/*margin-left:0;*/
+	/*height:0%;*/
+	right: 0;
+	/*display:block;*/
+
+}
+
+#product-detail
+{
+	border-top:5px solid black;
+	border-left:5px solid black;
+	width:calc(100% - 250px - 5%);
+
+	height:95%;
+	position: absolute;
+	background: white;
+	right:0;
+	top:2%;
+	overflow-y: auto;
+	overflow-x: hidden;   
+
+}
+
+
+
+#main.active
+{
+	width: 100%;
+}
+
+
+.nav a.active
+{
+  background:  #5D8AA8 !important;
+}
+
+#main
+{
+	padding-top:0;
+	padding-bottom:0;
+}
+
 
 
 
@@ -48,39 +93,36 @@
 @section('body')
 
 
-
-<div class="container">
 	
-	<div id="product-manager">
-		<div class="row">
-			<div class="col-12 col-md-4">
-			
-				<input type="text" v-model="name" placeholder="search"><button @click="search()">Search</button>
-				<br><br>
-				<button onclick="showOverlay('product-detail-overlay', productDetailOverlay)">Add item</button>
-				<button onclick="showOverlay('product-setting-overlay')"><i class="fas fa-cog"></i></button>
-				<br><br>
-				<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
-					
-					<a class="nav-link" v-bind:class="[ activetab === -1 ? 'active' : '' ]" id="pills-all-tab" data-toggle="pill"  aria-controls="pills-all" aria-selected="true" href="#" @click="activetab=-1;typeSearch('')">All</a>
-					<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a>
-
-
-				</div>
-			</div>
-			<div class="col-12 col-md-8">
+<div id="product-manager" class="max-height">
+	<div class="row max-height">
+		<div class="col-12 col-md-4 product-left-pane">
+		
+			<input type="text" v-model="name"  class="form-control d-inline" style="width:50%;"placeholder="Search"><button @click="search()" class="btn-blue btn-size-form">Search</button>
+			<br><br>
+			<button  @click="addItem" >Add item</button>
+			<button onclick="showOverlay('#product-setting-overlay')"><i class="fas fa-cog"></i></button>
+			<br><br>
+			<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
 				
-				<div class="product-manager-list">
-					<div v-for="(product, index) in productList" class="product" id="product">
-						
-						<p>@{{product.name}}</p>
-						<img :src="product.img" style="width:100px;height:100px">
-						<p>@{{product.price}}</p>
+				<a class="nav-link" v-bind:class="[ activetab === -1 ? 'active' : '' ]" id="pills-all-tab" data-toggle="pill"  aria-controls="pills-all" aria-selected="true" href="#" @click="activetab=-1;typeSearch('')">All</a>
+				<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a>
 
 
-						<button @click="edit(index)">Edit</button>
-						
-					</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-8" style="background: #E0E0E0;">
+			
+			<div class="product-manager-list product-right-pane">
+				<div v-for="(product, index) in productList" class="product" id="product">
+					
+					<p>@{{product.name}}</p>
+					<img :src="product.img" style="width:150px;height:100px">
+					<p>@{{product.price}}</p>
+
+
+					<button @click="edit(index)">Edit</button>
+					
 				</div>
 			</div>
 		</div>
@@ -89,7 +131,8 @@
 
 
 
-<div id="product-detail-overlay" >
+
+<div id="product-detail-overlay" on-click="toggleOverlay('#product-detail-overlay')">
 	<div id="product-detail">
 		
 		<form id="myForm" @submit.prevent="handleSubmit">
@@ -100,8 +143,8 @@
 				<input type="hidden" name="id" v-model="productDetail.id">
 
 				<div class="form-group">
-					<img :src="productDetail.img" id="img" style="height:200px;width:200px;">	
-					<input type="file" name="img" @change="previewImg">
+					<img :src=productDetail.img id="img" style="height:200px;width:200px;">	
+					<input type="file" name="img" @change="previewImg" ref="img">
 				</div>
 
 				<div class="form-group">
@@ -141,11 +184,12 @@
 					<br>
 					<input type="file" name="imgDetail" @change="previewImgDetail">
 					<br>
-					<img src="#" id="imgDetail" style="height:400px;width:400px;">
+					<img :src="productDetail.imgDetail" id="imgDetail" style="height:400px;width:400px;">
 				</div>
 
-				<button type="submit">Submit</button>
-				<button type="button" onclick="hideOverlay('product-detail-overlay')">Close</button>
+				<button type="submit" v-if="isEdit">Save</button>
+				<button type="submit" v-else>Add</button>
+				<button type="button" @click="hide">Close</button>
 			</div>
 
 		</div>
@@ -162,7 +206,7 @@
 
 <div id="product-setting-overlay">
 	<div id="product-setting">
-		<button type="button" onclick="hideOverlay('product-setting-overlay')">Close</button>
+		<button type="button" onclick="hideOverlay('product-setting-overlay', '')">Close</button>
 		<br>
 		<h2>Types</h2>
 
@@ -242,9 +286,27 @@ var productManager = new Vue(
 
 		edit(index)
 		{
-			showOverlay("product-detail-overlay");
+			showOverlay("product-detail-overlay",productDetailOverlay);
 			productDetail.productDetail = this.productList[index];
+			productDetail.isEdit = true;
 		},
+
+		addItem()
+		{
+			productDetail.productDetail =
+			{
+				id: "", 
+				name: "", 
+				type: "",
+				brand: "",
+				price: "",
+				img: "#", 
+				imgDetail: "#",
+				qty: ""
+			};
+			productDetail.isEdit = false;
+			toggleOverlay('#product-detail-overlay',);
+		}
 
 	},
 
@@ -279,19 +341,19 @@ var productDetail = new Vue(
 			type: "",
 			brand: "",
 			price: "",
-			img: "", 
-			imgDetail: "",
+			img: "#", 
+			imgDetail: "#",
 			qty: ""
 		},
 		types: productManager.types,
 		brands: productManager.brands,
-		show :false,
+		isEdit: true
 	},
 	methods:
 	{
 		handleSubmit(event)
 		{
-
+			alert('send')
 			var form = new FormData(event.target);
 			formAjax("/Admin", "POST", form , this.manageProductList, alertError);
 		},
@@ -321,6 +383,14 @@ var productDetail = new Vue(
 
 		},
 
+		hide()
+		{
+			this.$refs.img.value = '';	
+			$("#img").attr('src', '#');
+			$("#imgDetail").attr('src', '#');
+			toggleOverlay('#product-detail-overlay');
+		},
+
 		manageProductList(response)
 		{
 			if(response.Status == "Success")
@@ -343,6 +413,14 @@ var productDetail = new Vue(
 			}
 		},
 
+	},
+
+	watch:
+	{
+		productDetail: function ()
+		{
+			this.productDetail.img = this.productDetail.img;
+		},
 	}
 })
 
