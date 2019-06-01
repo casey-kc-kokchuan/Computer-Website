@@ -107,7 +107,8 @@ class ProductController extends Controller
 
     public function AddProduct(Request $request)
     {
-         $validator = Validator::make($request->all(), [
+        try {
+            $validator = Products::make($request->all(), [
             'name' => 'required',
             'type' => 'required',
             'brand' => 'required',
@@ -116,10 +117,14 @@ class ProductController extends Controller
 
         ]);
 
-        if($validator->fails()) 
-        {
+        } catch (Exception $e) {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
+       
+        // if($validator->fails()) 
+        // {
+            
+        // }
 
         try 
         {
@@ -135,14 +140,14 @@ class ProductController extends Controller
             $product->save();
             $id = $product->id;
 
-            if($product->fails()) {
-                return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
-            }
+            // if($product->fails()) {
+            //     return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
+            // }
 
         } catch (QueryException $e) {
 
 
-            return response()->json(['Status' => "Database Error", "Message" => '']);
+            return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
         }
 
         $db_name_1 = '/img/default.jpg';
