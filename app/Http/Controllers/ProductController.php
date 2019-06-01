@@ -6,6 +6,7 @@ use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Products;
+use \Illuminate\Database\QueryException;
 
 
 
@@ -112,6 +113,7 @@ class ProductController extends Controller
             'brand' => 'required',
             'price' => 'required',
             'qty' => 'required',
+
         ]);
 
         if($validator->fails()) 
@@ -119,7 +121,8 @@ class ProductController extends Controller
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
 
-        try {
+        try 
+        {
 
             $product = new Products();
             $product->name = $request->name;
@@ -136,9 +139,10 @@ class ProductController extends Controller
                 return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
             }
 
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
 
-            return $e->$getMessage();
+
+            return response()->json(['Status' => "Database Error", "Message" => '']);
         }
 
         $db_name_1 = '/img/default.jpg';

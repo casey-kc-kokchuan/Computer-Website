@@ -15,11 +15,27 @@
 	height: 100%;
 	width: 100%;
 	position: fixed;
-	background: white;
 	top:0;
-	z-index: 10;
-	display: none;	
+	right: -100vw; 
+	z-index: 1;
+	transition: right 0.3s linear;
+}
+
+#product-setting
+{
+	width:calc(100% - 250px - 5%);
+	height: 100%;	
+
+	position: absolute;
+
+	background: white;
+
+	right:0;
+	top:0;
+
+	padding:10px;
 	overflow-y: auto;
+	overflow-x: hidden;   
 }
 
 #product-detail-overlay
@@ -29,19 +45,16 @@
 	position: fixed;
 	top:0;
 	right: -100vw; 	
-	/*display:none;*/
 	z-index: 1;
 	transition: right 0.3s linear;
 
 }
 
-#product-detail-overlay.active/*, #product-detail-overlay.active #product-detail*/
+#product-detail-overlay.active, #product-setting-overlay.active/*, #product-detail-overlay.active #product-detail*/
 
 {
-	/*margin-left:0;*/
-	/*height:0%;*/
+
 	right: 0;
-	/*display:block;*/
 
 }
 
@@ -63,10 +76,6 @@
 
 
 
-#main.active
-{
-	width: 100%;
-}
 
 
 .nav a.active
@@ -79,10 +88,6 @@
 	padding-top:0;
 	padding-bottom:0;
 }
-
-
-
-
 
 </style>
 
@@ -102,13 +107,12 @@
 			<input type="text" v-model="name"  class="form-control d-inline" style="width:50%;"placeholder="Search"><button @click="search()" class="btn-blue btn-size-form">Search</button>
 			<br><br>
 			<button  @click="addItem" >Add item</button>
-			<button onclick="showOverlay('#product-setting-overlay')"><i class="fas fa-cog"></i></button>
+			<button onclick="toggleOverlay('#product-setting-overlay')"><i class="fas fa-cog"></i></button>
 			<br><br>
 			<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
 				
 				<a class="nav-link" v-bind:class="[ activetab === -1 ? 'active' : '' ]" id="pills-all-tab" data-toggle="pill"  aria-controls="pills-all" aria-selected="true" href="#" @click="activetab=-1;typeSearch('')">All</a>
-				<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a
-
+				<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a>
 			</div>
 		</div>
 		<div class="col-12 col-md-8" style="background: #E0E0E0;">
@@ -126,13 +130,13 @@
 				</div>
 			</div>
 		</div>
-	</div>
+
+    </div>
 </div>
 
 
 
-
-<div id="product-detail-overlay" on-click="toggleOverlay('#product-detail-overlay')">
+<div id="product-detail-overlay" {{-- on-click="toggleOverlay('#product-detail-overlay')" --}}>
 	<div id="product-detail">
 		
 		<form id="myForm" @submit.prevent="handleSubmit">
@@ -145,11 +149,13 @@
 				<div class="form-group">
 					<img :src=productDetail.img id="img" style="height:200px;width:200px;">	
 					<input type="file" name="img" @change="previewImg" ref="img">
+					<p class="text-danger" v-if="error.img">@{{ error.img[0]}}</p>
 				</div>
 
 				<div class="form-group">
 					<label for="name">Name</label>	
 					<input type="text" v-model="productDetail.name" name="name" class="form-control">
+					<p class="text-danger" v-if="error.name">@{{ error.name[0]}}</p>
 				</div>
 
 
@@ -159,6 +165,7 @@
 						<option value="">Select Type</option>
 						<option v-for="type in types" :value="type.type">@{{type.type}}</option>
 					</select>
+						<p class="text-danger" v-if="error.type">@{{ error.type[0]}}</p>					
 				</div>
 
 				<div class="form-group">
@@ -167,22 +174,26 @@
 						<option value="">Select Brand</option>
 						<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
 					</select>	
+						<p class="text-danger" v-if="error.brand">@{{ error.brand[0]}}</p>
 				</div>
 
 				<div class="form-group">
 					<label for="price">Price</label>	
 					<input type="text" name="price" class="form-control" v-model="productDetail.price">
+					<p class="text-danger" v-if="error.price">@{{ error.price[0]}}</p>
 				</div>
 
 				<div class="form-group">
 					<label for="qty">Qty in Stock</label>	
 					<input type="text" name="qty" class="form-control" v-model="productDetail.qty">
+					<p class="text-danger" v-if="error.qty">@{{ error.qty[0]}}</p>
 				</div>
 
 				<div class="form-group">
 					<label for="imgDetail">Product Detail Image</label>	
 					<br>
 					<input type="file" name="imgDetail" @change="previewImgDetail">
+					<p class="text-danger" v-if="error.imgDetail">@{{ error.imgDetail[0]}}</p>
 					<br>
 					<img :src="productDetail.imgDetail" id="imgDetail" style="height:400px;width:400px;">
 				</div>
@@ -206,7 +217,7 @@
 
 <div id="product-setting-overlay">
 	<div id="product-setting">
-		<button type="button" onclick="hideOverlay('product-setting-overlay', '')">Close</button>
+		<button type="button" onclick="toggleOverlay('#product-setting-overlay')">Close</button>
 		<br>
 		<h2>Types</h2>
 
@@ -286,7 +297,7 @@ var productManager = new Vue(
 
 		edit(index)
 		{
-			showOverlay("product-detail-overlay",productDetailOverlay);
+			toggleOverlay("#product-detail-overlay");
 			productDetail.productDetail = this.productList[index];
 			productDetail.isEdit = true;
 		},
@@ -327,11 +338,11 @@ var productManager = new Vue(
 		}
 	}
 
-})
+});
 
 var productDetail = new Vue(
 {
-	el: "#product-detail-overlay",
+	el: "#product-detail",
 	data:
 	{
 		productDetail: 
@@ -345,15 +356,25 @@ var productDetail = new Vue(
 			imgDetail: "#",
 			qty: ""
 		},
+		error:
+		{
+			name: [], 
+			type: [],
+			brand: [],
+			price: [],
+			img: [], 
+			imgDetail: [],
+			qty: []
+		},
 		types: productManager.types,
 		brands: productManager.brands,
-		isEdit: true
+		isEdit: true,
 	},
 	methods:
 	{
 		handleSubmit(event)
 		{
-			alert('send')
+		
 			var form = new FormData(event.target);
 			formAjax("/Product/AddProduct", "POST", form , this.manageProductList, alertError);
 		},
@@ -388,6 +409,7 @@ var productDetail = new Vue(
 			this.$refs.img.value = '';	
 			$("#img").attr('src', '#');
 			$("#imgDetail").attr('src', '#');
+			this.emptyError();
 			toggleOverlay('#product-detail-overlay');
 		},
 
@@ -396,21 +418,43 @@ var productDetail = new Vue(
 			if(response.Status == "Success")
 			{
 				productManager.typeSearch(productManager.type);
-				alert("success")
+
+				if(isEdit)
+				{
+					SwalSuccess('Product is successfully editted.','')
+				}
+				else
+				{
+					SwalSuccess('New product is successfully added.','')
+				}
 				return 0;
 			}
 
 			if(response.Status == "Validation Error")
 			{
-				alert(response.Message);
+				this.error = response.Message;
+				SwalError('Invalid detail. Please check error messages.','')
 				return 0;
 			}
 
 			if(response.Status == "Database Error")
 			{
-				alert("DB error");
-				return 0;	
+				SwalError('Database Error. Please contact administrator.','')
 			}
+		},
+
+		emptyError()
+		{
+			this.error = 		
+			{
+				name: [], 
+				type: [],
+				brand: [],
+				price: [],
+				img: [], 
+				imgDetail: [],
+				qty: []
+			};
 		},
 
 	},
@@ -427,7 +471,7 @@ var productDetail = new Vue(
 
 var productSetting = new Vue(
 {
-	el: "#product-setting-overlay",
+	el: "#product-setting",
 	data:
 	{
 		types: productManager.types,
@@ -468,22 +512,19 @@ var productSetting = new Vue(
 			{
 
 				productManager.types = response.Data;
-				// productDetail.types = response.Data;
-				// this.types = response.Data;
-				alert("success")
+				SwalSuccess('New type is successfully added.','')
 				return 0;
 			}
 
 			if(response.Status == "Validation Error")
 			{
-				alert(response.Message);
+				SwalError('Invalid detail. Please check error messages.','')
 				return 0;
 			}
 
 			if(response.Status == "Database Error")
 			{
-				alert("DB error");
-				return 0;	
+				SwalError('Database Error. Please contact administrator.','')
 			}
 		},
 
@@ -492,22 +533,19 @@ var productSetting = new Vue(
 			if(response.Status == "Success")
 			{
 				productManager.brands = response.Data;
-				productDetail.brands = response.Data;
-				this.brands = response.Data;
-				alert("success")
+				SwalSuccess('New brand is successfully added.')
 				return 0;
 			}
 
 			if(response.Status == "Validation Error")
 			{
-				alert(response.Message);
+				SwalError('Invalid detail. Please check error messages.','')
 				return 0;
 			}
 
 			if(response.Status == "Database Error")
 			{
-				alert("DB error");
-				return 0;
+				SwalError('Database Error. Please contact administrator.','')
 			}
 		}
 	},

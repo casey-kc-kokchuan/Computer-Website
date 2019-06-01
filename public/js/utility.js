@@ -53,19 +53,36 @@ function toggleSidebar()
 
 }
 
-function alertSuccess()
+
+function SwalError(ttl, txt)
 {
-  alert("success")
+  Swal.fire(
+  {
+    type:'error',
+    title: ttl,
+    text: txt,
+  })
 }
+
+function SwalSuccess(ttl, txt)
+{
+  Swal.fire(
+  {
+    type:'success',
+    title: ttl,
+    text: txt,
+
+  })
+}
+
 
 function alertError()
 {
-  alert("Request Error")
-}
-
-function checkResponse(response)
-{
-    alert(response.status)
+  Swal.fire(
+  {
+    type:'error',
+    title: 'Request Error. Please contact administrator',
+  }) 
 }
 
 function hideOverlay(name, callback)
@@ -101,6 +118,7 @@ function toggleOverlay(name)
 {
     $(name).toggleClass('active');
 }
+
 function productDetailOverlay(element, type)
 {
   if(type == "show")

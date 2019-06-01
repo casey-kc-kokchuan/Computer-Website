@@ -110,7 +110,7 @@ var shoppingCart = new Vue(
 			{
 				this.cartList[matchingIndex].qty += 1;
 			}
-			t
+			
 		},
 
 		removeFromCart(index)
