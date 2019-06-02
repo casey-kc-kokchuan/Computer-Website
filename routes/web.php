@@ -38,6 +38,8 @@ Route::get('/check', 'ProductController@check');
 
 Route::get('/Product/search', 'ProductController@search');
 Route::post('/Product/AddProduct', 'ProductController@AddProduct');
+Route::post('/Product/AddType', 'ProductController@AddType');
+
 
 Route::get('/inventory', 'ProductController@index');
 Route::get('/create', 'ProductController@create')->name('create');
