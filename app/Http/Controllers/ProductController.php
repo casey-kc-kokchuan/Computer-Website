@@ -14,7 +14,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // $product = Products::all()->toArray(); 
+        // $product = Products::all()->toArray();
         // return view('Admin.AdminInventory', compact('product'));
         //return view('Customer.ShoppingCart', compact('product'));
     }
@@ -30,13 +30,13 @@ class ProductController extends Controller
         //     'name'  => 'required',
         //     'type'  => 'required',
         //     'price' => 'required'
-        // ]);  
+        // ]);
         // $product = new products([
         //     'name'  => $request->get('name'),
         //     'type'  => $request->get('type'),
         //     'price'  => $request->get('price')
-        // ]);  
-        // $product->save(); 
+        // ]);
+        // $product->save();
         // return redirect()->route('Admin.index')->with('success', 'Data Added');
 
 
@@ -89,7 +89,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        
+
         //default value to empty string if no value is passed in
 
         $type = empty($request->type)? "": $request->type;
@@ -120,13 +120,13 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
-       
-        // if($validator->fails()) 
+
+        // if($validator->fails())
         // {
-            
+
         // }
 
-        try 
+        try
         {
 
             $product = new Products();
@@ -181,6 +181,49 @@ class ProductController extends Controller
 
         return response()->json(['status' => "Success","Data" => Products::all()]);
     }
+
+    public function AddType(Request $request)
+    {
+        try {
+            $validator = Types::make($request->all(), [
+            'id' => 'required',
+            'type' => 'required',
+        ]);
+
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        }
+
+        // if($validator->fails())
+        // {
+
+        // }
+
+        try
+        {
+
+            $type = new Types();
+            $type->types = $request->types;
+            //$product->img = $db_name_1;
+            //$product->imgDetail = $db_name_2;
+            $type->save();
+            $id = $type->id;
+
+            // if($product->fails()) {
+            //     return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
+            // }
+
+        } catch (QueryException $e) {
+
+
+            return response()->json(['Status' => "Database Error", "Message" => $type->errors()]);
+        }
+
+
+
+        return response()->json(['status' => "Success","Data" => Types::all()]);
+    }
+
 
     public function check(Request $request)
     {
