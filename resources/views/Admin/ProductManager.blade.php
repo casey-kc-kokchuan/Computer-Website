@@ -51,9 +51,7 @@
 }
 
 #product-detail-overlay.active, #product-setting-overlay.active/*, #product-detail-overlay.active #product-detail*/
-
 {
-
 	right: 0;
 
 }
@@ -71,22 +69,20 @@
 	top:2%;
 	overflow-y: auto;
 	overflow-x: hidden;   
-
 }
-
-
-
-
 
 .nav a.active
 {
   background:  #5D8AA8 !important;
 }
 
+
+/*Override default styling*/
 #main
 {
 	padding-top:0;
 	padding-bottom:0;
+	background: white;
 }
 
 </style>
@@ -136,7 +132,7 @@
 
 
 
-<div id="product-detail-overlay" {{-- on-click="toggleOverlay('#product-detail-overlay')" --}}>
+<div id="product-detail-overlay">
 	<div id="product-detail">
 		
 		<form id="myForm" @submit.prevent="handleSubmit">
@@ -322,7 +318,7 @@ var productManager = new Vue(
 				qty: ""
 			};
 			productDetail.isEdit = false;
-			toggleOverlay('#product-detail-overlay',);
+			toggleOverlay('#product-detail-overlay');
 		}
 
 	},
@@ -415,24 +411,25 @@ var productDetail = new Vue(
 			this.$refs.img.value = '';	
 			$("#img").attr('src', '#');
 			$("#imgDetail").attr('src', '#');
-			this.emptyError();
 			toggleOverlay('#product-detail-overlay');
+			this.emptyError();
 		},
 
 		manageProductList(response)
 		{
 			if(response.Status == "Success")
 			{
-				productManager.typeSearch(productManager.type);
+				// productManager.typeSearch(productManager.type);
 
-				if(isEdit)
-				{
-					SwalSuccess('Product is successfully editted.','')
-				}
-				else
-				{
+				// if(isEdit)
+				// {
+				// 	SwalSuccess('Product is successfully editted.','')
+				// }
+				// else
+				// {
+				// 	SwalSuccess('New product is successfully added.','')
+				// }
 					SwalSuccess('New product is successfully added.','')
-				}
 
 				this.emptyError();
 				this.hide();

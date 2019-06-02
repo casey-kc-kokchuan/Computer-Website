@@ -135,10 +135,6 @@ class ProductController extends Controller
             $product->save();
             $id = $product->id;
 
-            if($product->fails()) {
-                return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
-            }
-
         } catch (QueryException $e) {
 
 
