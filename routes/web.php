@@ -28,7 +28,7 @@ Route::post('/Test', 'PageController@testPost');
 Product Controller
 --------------------------------------------------------------------------
 */
-//Route::resource('Admin','ProductController');	
+//Route::resource('Admin','ProductController');
 
 Route::get('/Admin', function () {
     return view('Admin.AdminInventory');
@@ -55,16 +55,3 @@ Order Controller
 Account Controller
 --------------------------------------------------------------------------
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
