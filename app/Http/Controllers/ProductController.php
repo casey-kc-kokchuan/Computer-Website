@@ -137,8 +137,7 @@ class ProductController extends Controller
 
         } catch (QueryException $e) {
 
-
-            return response()->json(['Status' => "Database Error", "Message" => '']);
+            return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
         }
 
         $db_name_1 = '/img/default.jpg';

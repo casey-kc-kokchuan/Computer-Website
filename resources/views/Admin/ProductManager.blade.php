@@ -122,6 +122,7 @@
 
 
 					<button @click="edit(index)">Edit</button>
+					<button @click="remove(index)"><i class="fas fa-times text-danger"></i></button>
 					
 				</div>
 			</div>
@@ -302,6 +303,50 @@ var productManager = new Vue(
 			toggleOverlay("#product-detail-overlay");
 			productDetail.productDetail = this.productList[index];
 			productDetail.isEdit = true;
+		},
+
+		remove(index)
+		{
+			Swal.fire(
+			{
+				type: 'warning',
+				title: 'Are you sure on removing this product?',
+				showCancelButton:true,
+				cancelButtonColor:'#d9534f',
+				cancelButtonText: "No",
+				confirmButtonColor:'#5cb85c',
+				confirmButtonText: 'Yes'
+			}).then((result) =>
+				{
+					if(result.value)
+					{
+
+						jsonAjax("/Product/RemoveProduct", "POST", JSON.stringify({id: this.productList[index].id}), function(response)
+							{
+								if(response.Status == "Success")
+								{
+
+									SwalSuccess('Product is succesfully removed.','');
+									this.productList = response.Data;
+									return 0;
+								}
+
+								// if(response.Status == "Validation Error")
+								// {
+								// 	SwalError('Invalid detail. Please check error messages.','');
+								// 	this.error = response.Message;
+								// 	return 0;
+								// }
+
+								if(response.Status == "Database Error")
+								{
+									SwalError('Database Error. Please contact administrator.','');
+								}
+
+							}, alertError );
+
+					}
+				});
 		},
 
 		addItem()
