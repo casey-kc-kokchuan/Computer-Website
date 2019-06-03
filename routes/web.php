@@ -39,6 +39,7 @@ Route::get('/check', 'ProductController@check');
 Route::get('/Product/search', 'ProductController@search');
 Route::post('/Product/AddProduct', 'ProductController@AddProduct');
 Route::post('/Product/AddType', 'ProductController@AddType');
+Route::post('/Product/AddBrand', 'ProductController@AddBrand');
 
 
 Route::get('/inventory', 'ProductController@index');

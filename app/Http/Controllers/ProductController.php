@@ -180,7 +180,7 @@ class ProductController extends Controller
             ->where('id', $id)
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
-        return response()->json(['status' => "Success","Data" => Types::all()]);
+        return response()->json(['Status' => "Success","Data" => Types::all()]);
     }
 
 
@@ -232,7 +232,58 @@ class ProductController extends Controller
         // $db_name_1 = '/img/'.$new_name_1;
         // $db_name_2 = '/img/'.$new_name_2;
 
-        return response()->json(['status' => "Success","Data" => Types::all()]);
+        return response()->json(['Status' => "Success","Data" => Types::all()]);
+    }
+
+    public function AddBrand(Request $request)
+    {
+        try {
+            $validator = Brands::make($request->all(), [
+            'name' => 'required',
+
+        ]);
+
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        }
+
+        // if($validator->fails())
+        // {
+
+        // }
+
+        try
+        {
+
+            $brands = new Brands();
+            $brands->name = $request->name;
+            //$product->img = $db_name_1;
+            //$product->imgDetail = $db_name_2;
+            $brands->save();
+            $id = $brands->id;
+
+            // if($product->fails()) {
+            //     return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
+            // }
+
+        } catch (QueryException $e) {
+
+
+            return response()->json(['Status' => "Database Error", "Message" => $brands->errors()]);
+        }
+
+
+        // $image = $request->img;
+        // $imgDetail = $request->imgDetail;
+        // $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
+        // $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
+        // $image->move(public_path('img'), $new_name_1);
+        // $imgDetail->move(public_path('img'), $new_name_2);
+
+        // $db_name_1 = '/img/'.$new_name_1;
+        // $db_name_2 = '/img/'.$new_name_2;
+
+        return response()->json(['Status' => "Success","Data" => Brands::all()]);
     }
 
     public function check(Request $request)
