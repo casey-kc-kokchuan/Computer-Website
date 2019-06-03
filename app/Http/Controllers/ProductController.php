@@ -9,8 +9,6 @@ use App\Products;
 use \Illuminate\Database\QueryException;
 use App\Types;
 use App\Brands;
-0
-
 
 class ProductController extends Controller
 {
@@ -240,18 +238,29 @@ class ProductController extends Controller
 
         try
         {
-            $brands = new Brands();
-            $brands->name = $request->name;
-            $brands->save();
-            $id = $brands->id;
+
+            $brand = new Brands();
+            $brand->name = $request->name;
+            $brand->save();
+            $id = $brand->id;
 
 
         } catch (QueryException $e) {
 
 
-            return response()->json(['Status' => "Database Error", "Message" => $brands->errors()]);
+            return response()->json(['Status' => "Database Error", "Message" => $brand->errors()]);
         }
 
+
+        // $image = $request->img;
+        // $imgDetail = $request->imgDetail;
+        // $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
+        // $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
+        // $image->move(public_path('img'), $new_name_1);
+        // $imgDetail->move(public_path('img'), $new_name_2);
+
+        // $db_name_1 = '/img/'.$new_name_1;
+        // $db_name_2 = '/img/'.$new_name_2;
 
         return response()->json(['Status' => "Success","Data" => Brands::all()]);
     }
