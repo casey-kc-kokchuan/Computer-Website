@@ -513,7 +513,7 @@ var productSetting = new Vue(
 		addBrand()
 		{
 			var obj = {brand: this.newBrand};
-			jsonAjax("/Product/AddBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
+		  jsonAjax("/Product/AddBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
 		},
 
 		removeBrand()

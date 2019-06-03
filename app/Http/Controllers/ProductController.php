@@ -9,7 +9,7 @@ use App\Products;
 use \Illuminate\Database\QueryException;
 use App\Types;
 use App\Brands;
-
+0
 
 
 class ProductController extends Controller
@@ -240,16 +240,16 @@ class ProductController extends Controller
 
         try
         {
-            $brand = new Brands();
-            $brand->name = $request->name;
-            $brand->save();
-            $id = $brand->id;
+            $brands = new Brands();
+            $brands->name = $request->name;
+            $brands->save();
+            $id = $brands->id;
 
 
         } catch (QueryException $e) {
 
 
-            return response()->json(['Status' => "Database Error", "Message" => $brand->errors()]);
+            return response()->json(['Status' => "Database Error", "Message" => $brands->errors()]);
         }
 
 
