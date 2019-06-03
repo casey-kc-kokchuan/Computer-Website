@@ -188,8 +188,7 @@ class ProductController extends Controller
     {
         try {
             $validator = Types::make($request->all(), [
-            'id' => 'required',
-            'type' => 'required'
+            'type' => 'required',
 
         ]);
 
@@ -210,7 +209,7 @@ class ProductController extends Controller
             //$product->img = $db_name_1;
             //$product->imgDetail = $db_name_2;
             $types->save();
-            $id = $product->id;
+            $id = $types->id;
 
             // if($product->fails()) {
             //     return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
@@ -232,10 +231,6 @@ class ProductController extends Controller
 
         // $db_name_1 = '/img/'.$new_name_1;
         // $db_name_2 = '/img/'.$new_name_2;
-
-        DB::table('products')
-            ->where('id', $id)
-            ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
         return response()->json(['status' => "Success","Data" => Types::all()]);
     }
