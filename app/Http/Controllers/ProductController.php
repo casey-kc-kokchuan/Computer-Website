@@ -107,24 +107,21 @@ class ProductController extends Controller
 
     public function AddProduct(Request $request)
     {
-        try {
-            $validator = Products::make($request->all(), [
-            'name' => 'required',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique',
             'type' => 'required',
             'brand' => 'required',
-            'price' => 'required',
-            'qty' => 'required',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'qty' => 'required|integer|min:0',
+            'img' => 'required|image',
+            'imgDetail' => 'required|image',
 
         ]);
-
-        } catch (Exception $e) {
+       
+        if($validator->fails()) 
+        {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
-       
-        // if($validator->fails()) 
-        // {
-            
-        // }
 
         try 
         {
@@ -134,8 +131,6 @@ class ProductController extends Controller
             $product->type = $request->type;
             $product->brand = $request->brand;
             $product->price = $request->price;
-            //$product->img = $db_name_1;
-            //$product->imgDetail = $db_name_2;
             $product->qty = $request->qty;
             $product->save();
             $id = $product->id;
@@ -161,21 +156,11 @@ class ProductController extends Controller
             $db_name_2 = '/img/'.$new_name_2;
         }
 
-        // $image = $request->img;
-        // $imgDetail = $request->imgDetail;
-        // $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
-        // $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
-        // $image->move(public_path('img'), $new_name_1);
-        // $imgDetail->move(public_path('img'), $new_name_2);
-
-        // $db_name_1 = '/img/'.$new_name_1;
-        // $db_name_2 = '/img/'.$new_name_2;
-
         DB::table('products')
             ->where('id', $id)
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
-        return response()->json(['status' => "Success","Data" => Products::all()]);
+        return response()->json(['Status' => "Success","Data" => Products::all()]);
     }
 
     public function check(Request $request)

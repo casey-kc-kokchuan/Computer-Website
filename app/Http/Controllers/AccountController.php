@@ -22,8 +22,11 @@ class AccountController extends Controller
     public function AddAccount(Request $request)
     {
     	 $validator = Validator::make($request->all(), [
-    	    'username' => 'required',
+    	    'username' => 'required|unique:accounts|max:255',
     	    'password' => 'required',
+            'full_name' => 'required',
+            'email' => 'required|unique:accounts|max:255|email',
+            'role' => 'required',
     	]);
 
     	if($validator->fails()) 
@@ -36,6 +39,11 @@ class AccountController extends Controller
     		$account = new Accounts();
     		$account->username = $request->username;
     		$account->password = Hash::make($request->password);
+            $account->full_name = $request->full_name;
+            $account->gender = $request->gender;
+            $account->contact = $request->contact;
+            $account->email = $request->email;
+            $account->role = $request->role;
     		$account->save();
     	}
     	catch(QueryException $e)
@@ -43,7 +51,20 @@ class AccountController extends Controller
     		return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
     	}
 
-    	return response()->json(['status' => "Success"]);
+    	return response()->json(['Status' => "Success"]);
+    }
+
+    public function RemoveAccount(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $account = Accounts::find($id);
+            $account->delete();
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Database Error"]);
+        }
+        return response()->json(['Status' => "Success"]);
+
     }
 
     public function Login(Request $request)

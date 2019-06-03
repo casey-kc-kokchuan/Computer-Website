@@ -164,7 +164,7 @@ var table = new Tabulator("#account-table",{
 	[
 		{title:"ID", field:"id"},
 		{title:"Username", field:"username", headerFilter:true},
-		{title:"First Name", field:"name", headerFilter:true},
+		{title:"Full Name", field:"full_name", headerFilter:true},
 		{title:"Role", field:"role", headerFilter:true},
 		{title:"Gender", field:"gender", headerFilter:true},
 		{title:"Contact No", field:"contact", headerFilter:true},
@@ -280,7 +280,7 @@ var accountDetail = new Vue(
 			toggleOverlay('#account-detail-overlay')
 		},
 
-		manageAccount()
+		manageAccount(response)
 		{
 			if(response.Status == "Success")
 			{
