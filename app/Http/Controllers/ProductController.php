@@ -179,51 +179,8 @@ class ProductController extends Controller
             ->where('id', $id)
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
-        return response()->json(['status' => "Success","Data" => Products::all()]);
-    }
-
-    public function AddType(Request $request)
-    {
-        try {
-            $validator = Types::make($request->all(), [
-            'id' => 'required',
-            'type' => 'required',
-        ]);
-
-        } catch (Exception $e) {
-            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
-        }
-
-        // if($validator->fails())
-        // {
-
-        // }
-
-        try
-        {
-
-            $type = new Types();
-            $type->types = $request->types;
-            //$product->img = $db_name_1;
-            //$product->imgDetail = $db_name_2;
-            $type->save();
-            $id = $type->id;
-
-            // if($product->fails()) {
-            //     return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
-            // }
-
-        } catch (QueryException $e) {
-
-
-            return response()->json(['Status' => "Database Error", "Message" => $type->errors()]);
-        }
-
-
-
         return response()->json(['status' => "Success","Data" => Types::all()]);
     }
-
 
     public function check(Request $request)
     {

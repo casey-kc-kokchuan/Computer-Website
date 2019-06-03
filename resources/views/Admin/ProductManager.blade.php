@@ -223,7 +223,7 @@
 		<h2>Types</h2>
 
 		<input type="text" name="type" v-model="newType">
-		<button type="button" @click="addType()">Add</button>
+		<button type="submit" @click="addType()">Add</button>
 		<button type="button" @click="newType=''">Clear</button>
 		<br>
 		<p class="text-danger" v-if="typeError.type">@{{ typeError.type[0]}}</p>
