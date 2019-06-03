@@ -243,7 +243,7 @@
 		<br><br>
 		<h2>Brands</h2>
 
-		<input type="text" name="type" v-model="newBrand">
+		<input type="text" name="name" v-model="newBrand">
 		<button type="button" @click="addBrand()">Add</button>
 		<button type="button" @click="newBrand=''">Clear</button>
 		<br>
@@ -387,8 +387,7 @@ var productDetail = new Vue(
 
 			var form = new FormData(event.target);
 			formAjax("/Product/AddProduct", "POST", form , this.manageProductList, alertError);
-			formAjax("/Product/AddType", "POST", form , this.manageProductList, alertError);
-			formAjax("/Product/AddBrand", "POST", form , this.manageProductList, alertError);
+
 
 		},
 

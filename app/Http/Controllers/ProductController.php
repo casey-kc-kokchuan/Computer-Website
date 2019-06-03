@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Products;
 use \Illuminate\Database\QueryException;
 use App\Types;
+use App\Brands;
 
 
 
@@ -206,31 +207,16 @@ class ProductController extends Controller
 
             $types = new Types();
             $types->type = $request->type;
-            //$product->img = $db_name_1;
-            //$product->imgDetail = $db_name_2;
             $types->save();
             $id = $types->id;
 
-            // if($product->fails()) {
-            //     return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
-            // }
+
 
         } catch (QueryException $e) {
 
 
             return response()->json(['Status' => "Database Error", "Message" => $types->errors()]);
         }
-
-
-        // $image = $request->img;
-        // $imgDetail = $request->imgDetail;
-        // $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
-        // $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
-        // $image->move(public_path('img'), $new_name_1);
-        // $imgDetail->move(public_path('img'), $new_name_2);
-
-        // $db_name_1 = '/img/'.$new_name_1;
-        // $db_name_2 = '/img/'.$new_name_2;
 
         return response()->json(['Status' => "Success","Data" => Types::all()]);
     }
@@ -254,34 +240,18 @@ class ProductController extends Controller
 
         try
         {
+            $brand = new Brands();
+            $brand->name = $request->name;
+            $brand->save();
+            $id = $brand->id;
 
-            $brands = new Brands();
-            $brands->name = $request->name;
-            //$product->img = $db_name_1;
-            //$product->imgDetail = $db_name_2;
-            $brands->save();
-            $id = $brands->id;
-
-            // if($product->fails()) {
-            //     return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
-            // }
 
         } catch (QueryException $e) {
 
 
-            return response()->json(['Status' => "Database Error", "Message" => $brands->errors()]);
+            return response()->json(['Status' => "Database Error", "Message" => $brand->errors()]);
         }
 
-
-        // $image = $request->img;
-        // $imgDetail = $request->imgDetail;
-        // $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
-        // $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
-        // $image->move(public_path('img'), $new_name_1);
-        // $imgDetail->move(public_path('img'), $new_name_2);
-
-        // $db_name_1 = '/img/'.$new_name_1;
-        // $db_name_2 = '/img/'.$new_name_2;
 
         return response()->json(['Status' => "Success","Data" => Brands::all()]);
     }
