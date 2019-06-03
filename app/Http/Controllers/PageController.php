@@ -14,10 +14,9 @@ class PageController extends Controller
 		return view("Shared/Test");
 	}
 
-	public function testPost()
+	public function testPost(Request $request)
 	{
-		$types = Products::select('type')->orderBy('type','asc')->distinct()->get();
-		return response()->json(['Status' => 'Success', 'Data' => [ 0 => ["type" => "Corsair"], 1 => ["type"=> "Razer"] ]]);
+		return response()->json($request->all());
 	}
 
 	public function showShoppingCart()
@@ -36,5 +35,15 @@ class PageController extends Controller
 		$brands = Products::select('brand')->orderBy('brand','asc')->distinct()->get();
 
 		return view('Admin/ProductManager', ['products' => $products, 'types' => $types, 'brands' => $brands]);
+	}
+
+	public function showAccount()
+	{
+		return view('Admin/AccountPage');
+	}
+
+	public function showLogin()
+	{
+		return view('Admin/LoginPage');
 	}
 }
