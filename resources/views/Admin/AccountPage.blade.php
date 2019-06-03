@@ -74,12 +74,14 @@
 
 					<div class="form-group">
 						<label for="">Username</label>
-						<input type="text" name="username" v-model="accountDetail.username">
+						<input type="text" name="username" class="form-control" v-model="accountDetail.username">
+						<p class="text-danger" v-if="error.username">@{{ error.username[0] }}</p>
 					</div>
 
 					<div class="form-group">
 						<label for="">Password</label>
-						<input type="password" name="password" v-model="accountDetail.password">
+						<input type="password" name="password" class="form-control" v-model="accountDetail.password">
+						<p class="text-danger" v-if="error.password">@{{ error.password[0] }}</p>
 					</div>
 
 {{-- 					<div class="form-group">
@@ -88,43 +90,44 @@
 					</div> --}}
 
 					<div class="form-group">
-						<label for="">First Name</label>
-						<input type="text" name="first_name" v-model="accountDetail.first_name">
-					</div>
-
-					<div class="form-group">
-						<label for="">Last Name</label>
-						<input type="text" name="last_name" v-model="accountDetail.last_name">
+						<label for="">Full Name</label>
+						<input type="text" name="full_name" class="form-control" v-model="accountDetail.full_name">
+						<p class="text-danger" v-if="error.full_name">@{{ error.full_name[0] }}</p>
 					</div>
 
 
 					<div class="form-group">
 						<label for="">Gender</label>
-						<select name="username" v-model="accountDetail.username">
+						<select name="gender" v-model="accountDetail.gender">
 							<option value="">Select Gender</option>
-							<option value="male">Male</option>
-							<option value="female">Female</option>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
 						</select>
+						<p class="text-danger" v-if="error.gender">@{{ error.gender[0] }}</p>
 					</div>
 
 					<div class="form-group">
 						<label for="">Contact No</label>
-						<input type="text" name="contact" v-model="accountDetail.contact">
+						<input type="text" name="contact" class="form-control" v-model="accountDetail.contact">
+						<p class="text-danger" v-if="error.contact">@{{ error.contact[0] }}</p>
 					</div>
 
 					<div class="form-group">
 						<label for="">Email Address</label>
-						<input type="text" name="email" v-model="accountDetail.email">
+						<input type="text" name="email" class="form-control" v-model="accountDetail.email">
+						<p class="text-danger" v-if="error.email">@{{ error.email[0] }}</p>
 					</div>
 
 					<div class="form-group">
 						<label for="">Role</label>
 						<select name="role" v-model="accountDetail.role">
 							<option value="">Select Role</option>
+							<option value="Admin">Admin</option>
 							<option value="Store Manager">Store Manager</option>
 							<option value="Product Manager">Product Manager</option>
 							<option value="Sales Assistant">Sales Assistant</option>
 						</select>
+						<p class="text-danger" v-if="error.role">@{{ error.role[0] }}</p>
 					</div>
 
 					<button type="submit">Add Account</button>
@@ -154,13 +157,18 @@ var editIcon = function(cell, formatterParams, onRendered)
 }
 
 var table = new Tabulator("#account-table",{
-	layout: "fitColumns",
+	layout: "fitDataFill",
+	height: "70vh",
 	headerFilterPlaceholder: "Search",
 	columns:
 	[
 		{title:"ID", field:"id"},
 		{title:"Username", field:"username", headerFilter:true},
-		{title:"Name", field:"name", headerFilter:true},
+		{title:"First Name", field:"name", headerFilter:true},
+		{title:"Role", field:"role", headerFilter:true},
+		{title:"Gender", field:"gender", headerFilter:true},
+		{title:"Contact No", field:"contact", headerFilter:true},
+		{title:"Email", field:"email", headerFilter:true},
 		{title:"Edit", formatter:editIcon, align:"center", tooltip:"Edit", 
 			// cellClick(e, cell)
 			// {
@@ -184,13 +192,39 @@ var table = new Tabulator("#account-table",{
 					{
 						if(result.value)
 						{
-							Swal.fire(
-							{
-								type: 'success',
-								title: 'Account Successfully Deleted',
-							})
+
+							jsonAjax("/Account/RemoveAccount", "POST", JSON.stringify({id: cell.getData().id}), function(response)
+								{
+									if(response.Status == "Success")
+									{
+
+										SwalSuccess('Account is succesfully removed.','');
+										table.setData();
+										Swal.fire(
+										{
+											type: 'success',
+											title: 'Account Successfully Deleted',
+										})
+										return 0;
+									}
+
+									// if(response.Status == "Validation Error")
+									// {
+									// 	SwalError('Invalid detail. Please check error messages.','');
+									// 	this.error = response.Message;
+									// 	return 0;
+									// }
+
+									if(response.Status == "Database Error")
+									{
+										SwalError('Database Error. Please contact administrator.','');
+									}
+
+								}, alertError );
+
 						}
 					});
+				
 			}
 		}
 		
@@ -207,22 +241,22 @@ var accountDetail = new Vue(
 		{
 			id:"",
 			username:"",
-			name:"",
 			password: "",
-			first_name: "",
-			last_name: "",
+			full_name:"",
 			gender: "",
 			contact: "",
 			email:"",
 			role:""
-		}
+		},
+
+		error: {},
 	},
 	methods:
 	{
 		handleSubmit(event)
 		{
 			var formData = new FormData(event.target);
-			formAjax("/Account/AddAccount", "POST", formData, function(response){alert(response), alertError});
+			formAjax("/Account/AddAccount", "POST", formData, this.manageAccount, alertError);
 		},
 
 		Edit()
@@ -236,10 +270,8 @@ var accountDetail = new Vue(
 			{
 				id:"",
 				username:"",
-				name:"",
 				password: "",
-				first_name: "",
-				last_name: "",
+				full_name:"",
 				gender: "",
 				contact: "",
 				email:"",
@@ -254,6 +286,7 @@ var accountDetail = new Vue(
 			{
 
 				SwalSuccess('New account is successfully added.','');
+				table.setData();
 				this.Hide();
 				return 0;
 			}
@@ -261,6 +294,7 @@ var accountDetail = new Vue(
 			if(response.Status == "Validation Error")
 			{
 				SwalError('Invalid detail. Please check error messages.','');
+				this.error = response.Message;
 				return 0;
 			}
 
