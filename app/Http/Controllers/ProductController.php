@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Products;
 use \Illuminate\Database\QueryException;
+use App\Types;
 
 
 
@@ -164,6 +165,63 @@ class ProductController extends Controller
             $imgDetail->move(public_path('img'), $new_name_2);
             $db_name_2 = '/img/'.$new_name_2;
         }
+
+        // $image = $request->img;
+        // $imgDetail = $request->imgDetail;
+        // $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
+        // $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
+        // $image->move(public_path('img'), $new_name_1);
+        // $imgDetail->move(public_path('img'), $new_name_2);
+
+        // $db_name_1 = '/img/'.$new_name_1;
+        // $db_name_2 = '/img/'.$new_name_2;
+
+        DB::table('products')
+            ->where('id', $id)
+            ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
+
+        return response()->json(['status' => "Success","Data" => Types::all()]);
+    }
+
+
+    public function AddType(Request $request)
+    {
+        try {
+            $validator = Types::make($request->all(), [
+            'id' => 'required',
+            'type' => 'required'
+
+        ]);
+
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        }
+
+        // if($validator->fails())
+        // {
+
+        // }
+
+        try
+        {
+
+            $types = new Types();
+            $types->type = $request->type;
+            //$product->img = $db_name_1;
+            //$product->imgDetail = $db_name_2;
+            $types->save();
+            $id = $product->id;
+
+            // if($product->fails()) {
+            //     return response()->json(['Status' => "Database Error", "Message" => $product->errors()]);
+            // }
+
+        } catch (QueryException $e) {
+
+
+            return response()->json(['Status' => "Database Error", "Message" => $types->errors()]);
+        }
+
 
         // $image = $request->img;
         // $imgDetail = $request->imgDetail;

@@ -218,12 +218,15 @@
 
 <div id="product-setting-overlay">
 	<div id="product-setting">
+
+		<form id="myForm" @submit.prevent="handleSubmit">
+
 		<button type="button" onclick="toggleOverlay('#product-setting-overlay')">Close</button>
 		<br>
 		<h2>Types</h2>
 
 		<input type="text" name="type" v-model="newType">
-		<button type="submit" @click="addType()">Add</button>
+		<button type="button" @click="addType()">Add</button>
 		<button type="button" @click="newType=''">Clear</button>
 		<br>
 		<p class="text-danger" v-if="typeError.type">@{{ typeError.type[0]}}</p>
@@ -255,7 +258,7 @@
 			</tr>
 		</table>
 
-
+	</form>
 	</div>
 </div>
 
@@ -384,7 +387,7 @@ var productDetail = new Vue(
 
 			var form = new FormData(event.target);
 			formAjax("/Product/AddProduct", "POST", form , this.manageProductList, alertError);
-			formAjax("/Product/AddType", "POST", form , this.manageProductList, alertError);
+
 		},
 
 		previewImg(event)
@@ -497,7 +500,7 @@ var productSetting = new Vue(
 		addType()
 		{
 			var obj = {type: this.newType};
-			jsonAjax("/Admin", "POST", JSON.stringify(obj), this.manageType, alertError);
+			jsonAjax("/Product/AddType", "POST", JSON.stringify(obj), this.manageType, alertError);
 		},
 
 		removeType(val)
