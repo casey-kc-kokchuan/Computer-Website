@@ -71,10 +71,7 @@
 	overflow-x: hidden;   
 }
 
-.nav a.active
-{
-  background:  #5D8AA8 !important;
-}
+
 
 
 /*Override default styling*/
@@ -98,22 +95,55 @@
 	
 <div id="product-manager" class="max-height">
 	<div class="row max-height">
-		<div class="col-12 col-md-4 product-left-pane">
+		<div class="col-12 col-lg-3 product-left-pane">
+			
+			<div class="row" style="width:100%;margin:0">
+				<div class="product-control-box order-2 order-lg-1 col-12 ">
+					<button  @click="addItem" class="btn-green add-btn"><i class="fas fa-plus"></i></button>
+					<button onclick="toggleOverlay('#product-setting-overlay')" class="config-btn mt-lg-3 mt-0"><i class="fas fa-cog pr-lg-1 pr-0"></i><span class="config-txt">Configuration</span></button>		
+				</div>
+				
+				<div class="product-search-box order-1 order-lg-2 col-12 no-gutters">
+					{{-- <h3>Search Box</h3> --}}
+					<div class="form-group">
+						<label for="">Name</label>
+						<input type="text" v-model="name"  class="form-control" placeholder="Search">	
+					</div>
+					<div class="form-group">
+						
+						<label for="">Type</label>
+						<select v-model="type" class="form-control">
+								<option value="">Select Type</option>
+								<option v-for="type in types" :value="type.type">@{{type.type}}</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="">Brand</label>
+						<select v-model="brand" class="form-control">
+							<option value="">Select Brand</option>
+							<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
+						</select>	
+					</div>
+
+
+					<button @click="search()" class="btn-blue btn-size-form">Search</button>
+					<button @click="clear()" class=" btn-size-form btn-red mt-lg-2 mt-0">Clear</button>
+				</div>
+			</div>
+			
+
+
+				
 		
-			<input type="text" v-model="name"  class="form-control d-inline" style="width:50%;"placeholder="Search"><button @click="search()" class="btn-blue btn-size-form">Search</button>
-			<br><br>
-			<button  @click="addItem" >Add item</button>
-			<button onclick="toggleOverlay('#product-setting-overlay')"><i class="fas fa-cog"></i></button>
-			<br><br>
-			<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
+{{-- 			<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
 				
 				<a class="nav-link" v-bind:class="[ activetab === -1 ? 'active' : '' ]" id="pills-all-tab" data-toggle="pill"  aria-controls="pills-all" aria-selected="true" href="#" @click="activetab=-1;typeSearch('')">All</a>
 				<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a>
-			</div>
+			</div> --}}
 		</div>
-		<div class="col-12 col-md-8" style="background: #E0E0E0;">
+		<div class="col-12 col-lg-9 product-right-pane" style="">
 			
-			<div class="product-manager-list product-right-pane">
+			<div class="product-manager-list">
 				<div v-for="(product, index) in productList" class="product" id="product">
 					
 					<p>@{{product.name}}</p>
@@ -121,8 +151,8 @@
 					<p>@{{product.price}}</p>
 
 
-					<button @click="edit(index)">Edit</button>
-					<button @click="remove(index)"><i class="fas fa-times text-danger"></i></button>
+					<button @click="edit(index)" class="btn-blue btn-size-form">Edit</button>
+					<button @click="remove(index)" class="btn-red btn-size-form"><i class="fas fa-times"></i></button>
 					
 				</div>
 			</div>
@@ -138,9 +168,9 @@
 		
 		<form id="myForm" @submit.prevent="handleSubmit">
 		@csrf
-		<div class="row">
+		<div class="row" class="product-detail-form">
 			
-			<div class="offset-2 col-8">
+			<div class="col-8">
 				<input type="hidden" name="id" v-model="productDetail.id">
 
 				<div class="form-group">
@@ -277,16 +307,16 @@ var productManager = new Vue(
 		brands: {!! json_encode($brands) !!},
 		name:"",
 		type:"",
+		brand: "",
 		img: "#",
-		activetab: -1,
 	},
 	methods:
 	{
 		search()
 		{
 
-			var url = "/Product/search?type=" + this.type + "&brand=&name=" + this.name;
-			jsonAjax(url, "GET", "", function(response) {productManager.productList = response;}, function() {alert("Server Error")});
+			var url = "/Product/search?type=" + this.type + "&brand="+ this.brand +"&name=" + this.name;
+			jsonAjax(url, "GET", "", function(response) {productManager.productList = response;}, alertError);
 		},
 
 		typeSearch(type)
@@ -295,7 +325,7 @@ var productManager = new Vue(
 			this.type = type;
 			var url = "/Product/search?type=" + this.type + "&brand=&name=";
 
-			jsonAjax(url, "GET", "", function(response) {productManager.productList = response;}, function() {alert("Server Error")});
+			jsonAjax(url, "GET", "", function(response) {productManager.productList = response;}, alertError);
 		},
 
 		edit(index)
@@ -364,6 +394,14 @@ var productManager = new Vue(
 			};
 			productDetail.isEdit = false;
 			toggleOverlay('#product-detail-overlay');
+		},
+
+		clear()
+		{
+			this.name ="";
+			this.type ="";
+			this.brand ="";
+			this.search();
 		}
 
 	},
@@ -374,7 +412,6 @@ var productManager = new Vue(
 		{
 			productDetail.types = this.types;
 			productSetting.types = this.types;
-			this.activetab = -1;
 			this.type = "";
 		},
 
@@ -382,6 +419,7 @@ var productManager = new Vue(
 		{
 			productDetail.brands = this.brands;
 			productSetting.brands = this.brands;
+			this.brand = ""
 		}
 	}
 

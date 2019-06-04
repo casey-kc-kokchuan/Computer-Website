@@ -1,33 +1,14 @@
+*
+{
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .max-height
 {
     height: 100%;
 }
 
-
-#shoppingCart
-{
-	height:90vh;
-}
-
-.cart, .product
-{
-	margin:10px 10px;
-	box-shadow: 3px 3px 5px black;
-    border-radius: 10px 0 0 0 ;
-    padding:5px 0;
-	background:white;
-    text-align: center;
-
-}
-
-
-.cart:hover, .product:hover
-{
-	transform: scale(1.05,1.05);
-}
-
-
-    
 .nav-wrapper
 {
     display: flex;
@@ -72,10 +53,10 @@
 
 #sidebar ul li a
 {
-	font-family: arial;
-	font-size:1.5em;
-	font-weight: bold;
-	color: #e4eaec;
+    font-family: arial;
+    font-size:1.5em;
+    font-weight: bold;
+    color: #e4eaec;
 }
 
 #sidebar button
@@ -95,18 +76,57 @@
     display: inline-block;
     text-align: center;
     vertical-align: middle;
-    border-radius: 0.25rem;
     border:0;
 
-    transition: all 0.3s linear;
-
-
+    transition: all 0.3s ease-out;
 }
 
 .btn-blue:hover 
 {
     background-color:#74ADD3;
-    font-weight:900;
+    color:black;
+
+
+}
+
+.btn-green
+{
+    background-color:#05A85C;
+    color:white;
+
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    border:0;
+
+    transition: all 0.3s ease-out;
+}
+
+.btn-green:hover
+{
+    background-color:#06D273;
+    color:black;
+}
+
+.btn-red
+{
+    background-color:#f2353c;
+    color:white;
+
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    border:0;
+
+    transition: all 0.3s ease-out;
+}
+
+.btn-red:hover
+{
+    background-color:#ff666b;
+    color:black;
+
+
 }
 
 .btn-size-form
@@ -114,6 +134,150 @@
     padding:3px 10px;    
     font-size: 17px;
     font-weight: 600;
-    margin-left:20px;
-    /*height: calc(1.6em + 0.75rem + 2px);*/
 }
+
+/*------------------------------------------------------------------------------------------------*/
+/*Shopping cart*/
+#shoppingCart
+{
+	height:90vh;
+}
+
+.cart, .productList .product
+{
+	margin:10px 10px;
+	box-shadow: 3px 3px 5px black;
+    border-radius: 10px 0 0 0 ;
+    padding:5px 0;
+	background:white;
+    text-align: center;
+
+}
+
+.productList, .cartList, 
+{   
+
+    height:90%;
+    overflow-y: auto;
+}
+
+
+
+
+.cart
+{
+    width: 25%;
+    display: inline-block;
+
+}
+
+
+.cart:hover
+{
+	transform: scale(1.05,1.05);
+}
+
+/*------------------------------------------------------------------------------------------------*/
+
+/*Product Manager */
+
+
+.product-manager-list
+{
+    overflow-y: auto;
+}
+
+.product-manager-list .product
+{
+    width: 200px;
+    display: inline-block;
+    margin:10px 10px;
+    box-shadow: 3px 3px 5px black;
+    border-radius: 10px 0 0 0 ;
+    padding:5px 0;
+    background:white;
+    text-align: center;
+}
+
+.product-manager-list .product:hover
+{
+    transform: scale(1.05,1.05);
+}
+
+.product-search-box, .product-control-box
+{
+    margin:15px 0;
+    background: #E4EAEC;
+    padding:20px 15px;
+    /*border-top: 4px groove #ADB2B3;*/
+    border-left: 10px groove #65696A;
+    border-bottom-right-radius: 50%;
+    /*box-shadow:2px 2px 5px 0px rgba(0,0,0,0.75)*/
+
+}
+
+
+.product-right-pane
+{
+    background: #E0E0E0;
+}
+
+.product-search-box button
+{
+    width:100%;
+    display:block;
+
+}
+
+.product-search-box label
+{
+    font-weight:800;
+    font-family:Helvetica;
+}
+
+
+
+.product-control-box
+{
+    margin-top:30px;
+}
+
+.add-btn
+{
+    padding:10px 0px;    
+    font-size: 30px;
+    font-weight: 600;
+
+    width:100%;
+
+}
+
+.add-btn:hover i
+{
+    transform:scale(1.2,1.2);
+}
+
+.add-btn:hover
+{
+    transform:scale(0.95,0.95);
+}
+
+.config-btn
+{
+    font-weight:700;
+    width:100%;
+    padding:3px 0px;    
+}
+
+.config-btn:hover i
+{
+    animation:fa-spin 0.5s linear;
+    animation-iteration-count:1;
+}
+
+
+
+
+
+/*------------------------------------------------------------------------------------------------*/
+

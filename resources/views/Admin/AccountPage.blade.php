@@ -256,7 +256,7 @@ var accountDetail = new Vue(
 
 		Edit()
 		{
-
+			
 		},
 
 		Hide()
