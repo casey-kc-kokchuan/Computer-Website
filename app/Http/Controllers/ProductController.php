@@ -86,18 +86,37 @@ class ProductController extends Controller
         return redirect()->route('Admin.index')->with('success', 'Data Deleted');
     }
 
-    public function deleteType($id)
+    public function DeleteBrand(Request $request)
     {
-      DB::table('types')->where('id', '=', $id)->delete();
-      return redirect()->route('Admin.index')->with('success', 'Data Deleted');
+      try {
+          $id = $request->id;
+          $brands = Brands::find($id);
+
+          if ($brands != null) {
+            $brands->delete();
+            return response()->json(['Status' => "Success", "Data" => Brands::all()]);
+  }
+
+      } catch (Exception $e) {
+          return response()->json(['Status' => "Database Error"]);
+      }
+
+
+
     }
 
-    public function deleteType($id)
+    public function RemoveProduct(Request $request)
     {
-      DB::table('types')->where('id', '=', $id)->delete();
-      return redirect()->route('Admin.index')->with('success', 'Data Deleted');
-    }
+        try {
+            $id = $request->id;
+            $product = Products::find($id);
+            $product->delete();
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Database Error"]);
+        }
+        return response()->json(['Status' => "Success", "Data" => Products::all()]);
 
+    }
 
     public function search(Request $request)
     {
