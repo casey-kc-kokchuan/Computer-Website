@@ -204,17 +204,17 @@ class ProductController extends Controller
         try
         {
 
-            $type = new Types();
-            $type->type = $request->type;
-            $type->save();
-            $id = $type->id;
+            $types = new Types();
+            $types->type = $request->type;
+            $types->save();
+            $id = $types->id;
 
 
 
         } catch (QueryException $e) {
 
 
-            return response()->json(['Status' => "Database Error", "Message" => $type->errors()]);
+            return response()->json(['Status' => "Database Error", "Message" => $types->errors()]);
         }
 
         return response()->json(['Status' => "Success","Data" => Types::all()]);
@@ -235,16 +235,16 @@ class ProductController extends Controller
         try
         {
 
-            $brand = new Brands();
-            $brand->name = $request->name;
-            $brand->save();
-            $id = $brand->id;
+            $brands = new Brands();
+            $brands->name = $request->name;
+            $brands->save();
+            $id = $brands->id;
 
 
         } catch (QueryException $e) {
 
 
-            return response()->json(['Status' => "Database Error", "Message" => $brand->errors()]);
+            return response()->json(['Status' => "Database Error", "Message" => $brands->errors()]);
         }
 
 
