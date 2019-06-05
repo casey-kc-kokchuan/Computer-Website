@@ -92,6 +92,12 @@ class ProductController extends Controller
       return redirect()->route('Admin.index')->with('success', 'Data Deleted');
     }
 
+    public function deleteType($id)
+    {
+      DB::table('types')->where('id', '=', $id)->delete();
+      return redirect()->route('Admin.index')->with('success', 'Data Deleted');
+    }
+
 
     public function search(Request $request)
     {
@@ -210,12 +216,12 @@ class ProductController extends Controller
             $id = $types->id;
 
 
-
         } catch (QueryException $e) {
 
 
             return response()->json(['Status' => "Database Error", "Message" => $types->errors()]);
         }
+
 
         return response()->json(['Status' => "Success","Data" => Types::all()]);
     }
@@ -224,7 +230,7 @@ class ProductController extends Controller
     {
         try {
             $validator = Brands::make($request->all(), [
-            'name' => 'required',
+            'brand' => 'required',
 
         ]);
 
@@ -236,7 +242,7 @@ class ProductController extends Controller
         {
 
             $brands = new Brands();
-            $brands->name = $request->name;
+            $brands->brand = $request->brand;
             $brands->save();
             $id = $brands->id;
 

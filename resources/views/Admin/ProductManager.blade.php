@@ -243,7 +243,7 @@
 		<br><br>
 		<h2>Brands</h2>
 
-		<input type="text" name="name" v-model="newBrand">
+		<input type="text" name="brand" v-model="newBrand">
 		<button type="button" @click="addBrand()">Add</button>
 		<button type="button" @click="newBrand=''">Clear</button>
 		<br>
