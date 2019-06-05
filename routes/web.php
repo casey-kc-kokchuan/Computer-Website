@@ -11,11 +11,59 @@
 |
 */
 
-Route::get('/', function () {
-    return view('Customer/CustomerPage');
-});
 
 
-Route::get('/Admin', function () {
-    return view('Admin/AdminPage');
-});
+/*
+--------------------------------------------------------------------------
+Page Controller
+--------------------------------------------------------------------------
+*/
+
+// Customer
+Route::get('/', 'PageController@showShoppingCart');
+
+
+// Admin
+Route::get('/Admin', 'PageController@showLogin');
+Route::get('/Admin/ProductManager', 'PageController@showProductManager');
+Route:: get('/Admin/Account', 'PageController@showAccount');
+
+
+Route::get('/Test', 'PageController@testGet');
+Route::post('/Test', 'PageController@testPost');
+
+/*
+--------------------------------------------------------------------------
+Product Controller
+--------------------------------------------------------------------------
+*/
+Route::get('/Product/search', 'ProductController@search');
+Route::post('/Product/AddProduct', 'ProductController@AddProduct');
+Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
+
+Route::get('/check', 'ProductController@check');
+
+/*
+--------------------------------------------------------------------------
+Order Controller
+--------------------------------------------------------------------------
+*/
+
+
+/*
+--------------------------------------------------------------------------
+Account Controller
+--------------------------------------------------------------------------
+*/
+
+Route::get('Account/ShowAllData', 'AccountController@ShowAllData');
+Route::get('Account/Logout', 'AccountController@Logout');
+
+Route::post('Account/Login', 'AccountController@Login');
+Route::post('Account/AddAccount', 'AccountController@AddAccount');
+Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');
+
+
+
+
+
