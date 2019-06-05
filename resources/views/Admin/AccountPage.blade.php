@@ -200,11 +200,6 @@ var table = new Tabulator("#account-table",{
 
 										SwalSuccess('Account is succesfully removed.','');
 										table.setData();
-										Swal.fire(
-										{
-											type: 'success',
-											title: 'Account Successfully Deleted',
-										})
 										return 0;
 									}
 

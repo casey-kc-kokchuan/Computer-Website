@@ -4,19 +4,20 @@ namespace App\Http\Controllers;
 
 
 use Validator;
+use App\User;
+use App\Role;
 use Illuminate\Http\Request;
-use App\Accounts;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use \Illuminate\Database\QueryException;
-
+use Laratrust\Models\LaratrustRoleTrait;
 
 class AccountController extends Controller
 {
     
     public function ShowAllData()
     {
-    	return response()->json(Accounts::all());
+    	return response()->json(User::all());
     }
 
     public function AddAccount(Request $request)
@@ -36,7 +37,7 @@ class AccountController extends Controller
 
     	try
     	{
-    		$account = new Accounts();
+    		$account = new User();
     		$account->username = $request->username;
     		$account->password = Hash::make($request->password);
             $account->full_name = $request->full_name;
@@ -45,6 +46,7 @@ class AccountController extends Controller
             $account->email = $request->email;
             $account->role = $request->role;
     		$account->save();
+            $account->attachRole($request->role);
     	}
     	catch(QueryException $e)
     	{
@@ -52,6 +54,7 @@ class AccountController extends Controller
     	}
 
     	return response()->json(['Status' => "Success"]);
+
     }
 
     public function RemoveAccount(Request $request)
@@ -64,7 +67,7 @@ class AccountController extends Controller
             return response()->json(['Status' => "Database Error"]);
         }
         return response()->json(['Status' => "Success"]);
-
+        
     }
 
     public function Login(Request $request)

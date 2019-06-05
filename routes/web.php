@@ -37,21 +37,12 @@ Route::post('/Test', 'PageController@testPost');
 Product Controller
 --------------------------------------------------------------------------
 */
-//Route::resource('Admin','ProductController');	
-
-// Route::get('/Admin', function () {
-//     return view('Admin.AdminInventory');
-// });
+Route::get('/Product/search', 'ProductController@search');
+Route::post('/Product/AddProduct', 'ProductController@AddProduct');
+Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
 
 Route::get('/check', 'ProductController@check');
 
-Route::get('/Product/search', 'ProductController@search');
-Route::post('/Product/AddProduct', 'ProductController@AddProduct');
-
-Route::get('/inventory', 'ProductController@index');
-Route::get('/create', 'ProductController@create')->name('create');
-Route::get('/edit', 'ProductController@edit')->name('edit');
-Route::get('/destroy', 'ProductController@destroy')->name('destroy');
 /*
 --------------------------------------------------------------------------
 Order Controller
