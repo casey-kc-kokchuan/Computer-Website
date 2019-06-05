@@ -86,6 +86,12 @@ class ProductController extends Controller
         return redirect()->route('Admin.index')->with('success', 'Data Deleted');
     }
 
+    public function deleteType($id)
+    {
+      DB::table('types')->where('id', '=', $id)->delete();
+      return redirect()->route('Admin.index')->with('success', 'Data Deleted');
+    }
+
 
     public function search(Request $request)
     {
@@ -195,25 +201,20 @@ class ProductController extends Controller
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
 
-        // if($validator->fails())
-        // {
-
-        // }
-
         try
         {
 
-            $types = new Types();
-            $types->type = $request->type;
-            $types->save();
-            $id = $types->id;
+            $type = new Types();
+            $type->type = $request->type;
+            $type->save();
+            $id = $type->id;
 
 
 
         } catch (QueryException $e) {
 
 
-            return response()->json(['Status' => "Database Error", "Message" => $types->errors()]);
+            return response()->json(['Status' => "Database Error", "Message" => $type->errors()]);
         }
 
         return response()->json(['Status' => "Success","Data" => Types::all()]);
@@ -231,11 +232,6 @@ class ProductController extends Controller
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
 
-        // if($validator->fails())
-        // {
-
-        // }
-
         try
         {
 
@@ -251,16 +247,6 @@ class ProductController extends Controller
             return response()->json(['Status' => "Database Error", "Message" => $brand->errors()]);
         }
 
-
-        // $image = $request->img;
-        // $imgDetail = $request->imgDetail;
-        // $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
-        // $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
-        // $image->move(public_path('img'), $new_name_1);
-        // $imgDetail->move(public_path('img'), $new_name_2);
-
-        // $db_name_1 = '/img/'.$new_name_1;
-        // $db_name_2 = '/img/'.$new_name_2;
 
         return response()->json(['Status' => "Success","Data" => Brands::all()]);
     }
