@@ -58,6 +58,7 @@ Order Controller
 Account Controller
 --------------------------------------------------------------------------
 */
+<<<<<<< HEAD
 
 
 Route::get('Account/ShowAllData', 'AccountController@ShowAllData');
@@ -65,3 +66,20 @@ Route::get('Account/Logout', 'AccountController@Logout');
 Route::post('Account/Login', 'AccountController@Login');
 Route::post('Account/AddAccount', 'AccountController@AddAccount');
 Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');
+=======
+<<<<<<< HEAD
+=======
+
+Route::get('Account/ShowAllData', 'AccountController@ShowAllData');
+Route::get('Account/Logout', 'AccountController@Logout');
+
+Route::post('Account/Login', 'AccountController@Login');
+Route::post('Account/AddAccount', 'AccountController@AddAccount');
+Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');
+
+
+
+
+
+>>>>>>> test
+>>>>>>> 1ae8c77aaeebf36eb793fd0f06c960bfd48d8ce9

@@ -68,8 +68,12 @@
 	right:0;
 	top:2%;
 	overflow-y: auto;
+<<<<<<< HEAD
 	overflow-x: hidden;
 
+=======
+	overflow-x: hidden;   
+>>>>>>> test
 }
 
 .nav a.active
@@ -124,7 +128,12 @@
 
 
 					<button @click="edit(index)">Edit</button>
+<<<<<<< HEAD
 
+=======
+					<button @click="remove(index)"><i class="fas fa-times text-danger"></i></button>
+					
+>>>>>>> test
 				</div>
 			</div>
 		</div>
