@@ -1,25 +1,8 @@
 @media screen and (min-width: 992px)
 {
 
-	.productList, .cartList, 
-	{	
+	
 
-		height:90%;
-		overflow-y: auto;
-	}
-
-	.product-manager-list
-	{
-		overflow-y: auto;
-	}
-
-
-	.cart, .product-manager-list .product
-	{
-		width: 25%;
-		display: inline-block;
-
-	}
 
 
 }

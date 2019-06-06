@@ -50,7 +50,7 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ url('Account/Login') }}">
+                    <form method="POST" action="{{ url('/Account/Login') }}">
                         @csrf
 
                         <div class="form-group row">

@@ -24,9 +24,12 @@ Route::get('/', 'PageController@showShoppingCart');
 
 
 // Admin
-Route::get('/Admin', 'PageController@showLogin');
-Route::get('/Admin/ProductManager', 'PageController@showProductManager');
-Route:: get('/Admin/Account', 'PageController@showAccount');
+Route::group(['prefix' => 'Admin'], function()
+	{
+		Route::get('/', 'PageController@showLogin');
+		Route::get('/ProductManager', 'PageController@showProductManager');
+		Route::get('/Account', 'PageController@showAccount');
+	});
 
 
 Route::get('/Test', 'PageController@testGet');
@@ -37,6 +40,16 @@ Route::post('/Test', 'PageController@testPost');
 Product Controller
 --------------------------------------------------------------------------
 */
+
+//Route::resource('Admin','ProductController');
+
+// Route::get('/Admin', function () {
+//     return view('Admin.AdminInventory');
+// });
+
+Route::get('/check', 'ProductController@check');
+
+
 Route::get('/Product/search', 'ProductController@search');
 Route::post('/Product/AddProduct', 'ProductController@AddProduct');
 Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
@@ -45,6 +58,7 @@ Route::post('/Product/AddBrand', 'ProductController@AddBrand');
 Route::post('/Product/DeleteBrand','ProductController@deleteBrand');
 
 Route::get('/check', 'ProductController@check');
+
 
 /*
 --------------------------------------------------------------------------
