@@ -40,7 +40,7 @@ Route::get('/Product/search', 'ProductController@search');
 Route::post('/Product/AddProduct', 'ProductController@AddProduct');
 Route::post('/Product/AddType', 'ProductController@AddType');
 Route::post('/Product/AddBrand', 'ProductController@AddBrand');
-Route::post('/Product/DeleteBrand','ProductController@DeleteBrand');
+Route::post('/Product/DeleteBrand','ProductController@deleteBrand');
 
 /*
 --------------------------------------------------------------------------

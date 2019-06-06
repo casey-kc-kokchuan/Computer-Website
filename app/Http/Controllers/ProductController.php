@@ -86,7 +86,7 @@ class ProductController extends Controller
         return redirect()->route('Admin.index')->with('success', 'Data Deleted');
     }
 
-    public function DeleteBrand($id)
+    public function deleteBrand(Request $request)
     {
       try {
           $id = $request->id;

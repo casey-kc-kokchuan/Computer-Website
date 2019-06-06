@@ -254,7 +254,7 @@
 		<table style="border:1px solid black">
 			<tr v-for="brand in brands">
 				<td>@{{brand.brand}}</td>
-				<td><button type="button" @click="DeleteBrand(brand.brand)">Remove</button></td>
+				<td><button type="button" @click="deleteBrand(brand.brand)">Remove</button></td>
 			</tr>
 		</table>
 
@@ -516,7 +516,7 @@ var productSetting = new Vue(
 		  jsonAjax("/Product/AddBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
 		},
 
-	DeleteBrand()
+	deleteBrand()
 		{
 			var obj = {brand: this.newBrand};
 			jsonAjax("/Product/DeleteBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
