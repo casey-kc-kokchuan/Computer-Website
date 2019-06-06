@@ -49,13 +49,13 @@ Product Controller
 
 Route::get('/check', 'ProductController@check');
 
-Route::get('Product/search', 'ProductController@search');
-Route::post('Product/AddProduct', 'ProductController@AddProduct');
-Route::post('Product/RemoveProduct', 'ProductController@RemoveProduct');
 
 Route::get('/Product/search', 'ProductController@search');
 Route::post('/Product/AddProduct', 'ProductController@AddProduct');
 Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
+Route::post('/Product/AddType', 'ProductController@AddType');
+Route::post('/Product/AddBrand', 'ProductController@AddBrand');
+Route::post('/Product/DeleteBrand','ProductController@deleteBrand');
 
 Route::get('/check', 'ProductController@check');
 
@@ -72,6 +72,7 @@ Order Controller
 Account Controller
 --------------------------------------------------------------------------
 */
+
 
 // Route::group([ 'prefix' => 'Account', 'middleware' => ['auth', 'role:Admin|Store Manager']], function()
 // 	{
@@ -92,6 +93,7 @@ Route::get('Account/Logout', 'AccountController@Logout');
 Route::post('Account/Login', 'AccountController@Login');
 Route::post('Account/AddAccount', 'AccountController@AddAccount');
 Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');
+
 
 
 

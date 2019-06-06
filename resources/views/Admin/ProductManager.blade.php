@@ -229,7 +229,7 @@
 				<h2>Types</h2>
 				<input type="text" name="type" class="form-control d-inline" v-model="newType">
 				<button type="button" class="btn-green btn-size-form" @click="addType()">Add</button>
-				<button type="button" class="btn-red btn-size-form" @click="newType=''">Clear</button>
+				<button type="button" class="btn-red btn-size-form" @click="clearType">Clear</button>
 				<br>
 				<p class="text-danger" v-if="typeError.type">@{{ typeError.type[0]}}</p>
 				<div id="typesTable" class="mt-2"></div>
@@ -238,7 +238,7 @@
 				<h2>Brands</h2>
 				<input type="text" name="type" class="form-control d-inline" v-model="newBrand">
 				<button type="button" class="btn-green btn-size-form" @click="addBrand()">Add</button>
-				<button type="button" class="btn-red btn-size-form" @click="newBrand=''">Clear</button>
+				<button type="button" class="btn-red btn-size-form" @click="clearBrand">Clear</button>
 				<br>
 				<p class="text-danger" v-if="brandError.brand">@{{ brandError.brand[0]}}</p>
 				<div id="brandsTable" class="mt-2"></div>
@@ -654,8 +654,24 @@ var productSetting = new Vue(
 		{
 			this.newType ='';
 			this.newBrand ='';
+			this.typeError = [];
+			this.brandError =[];
 			toggleOverlay('#product-setting-overlay')
+		},
+
+		clearType()
+		{
+			this.typeError = [];
+			this.newType = '';
+		},
+
+		clearBrand()
+		{
+			this.brandError =[];
+			this.newBrand ='';
 		}
+
+
 
 	},
 })
@@ -673,8 +689,8 @@ var typesTable = new Tabulator('#typesTable',
 	data: productManager.types,
 	columns:
 	[
-		{title: "Type", field: "type", headerFilter:true},
-		{title:"Remove", formatter:deleteIcon, width: 100, align:"center", tooltip:"Remove",
+		{title: "Type", field: "type", headerFilter:true, widthGrow: 3},
+		{title:"Remove", formatter:deleteIcon, widthGrow: 2, align:"center", tooltip:"Remove",
 			cellClick(e, cell)
 			{
 				Swal.fire(
@@ -732,8 +748,8 @@ var brandsTable = new Tabulator('#brandsTable',
 	data: productManager.brands,
 	columns:
 	[
-		{title: "Brand", field: "brand", headerFilter:true},
-		{title:"Remove", formatter:deleteIcon, width:100, align:"center", tooltip:"Remove",
+		{title: "Brand", field: "brand", headerFilter:true, widthGrow: 3},
+		{title:"Remove", formatter:deleteIcon, widthGrow: 2, align:"center", tooltip:"Remove",
 			cellClick(e, cell)
 			{
 				Swal.fire(
