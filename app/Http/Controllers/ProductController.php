@@ -7,13 +7,104 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Products;
 use \Illuminate\Database\QueryException;
-
-
+use App\Types;
+use App\Brands;
 
 class ProductController extends Controller
 {
+    public function index()
+    {
+        // $product = Products::all()->toArray();
+        // return view('Admin.AdminInventory', compact('product'));
+        //return view('Customer.ShoppingCart', compact('product'));
+    }
+
+    public function create()
+    {
+        return view('Admin.AdminCreate');
+    }
+
+    public function store(Request $request)
+    {
+        // $this->validate($request, [
+        //     'name'  => 'required',
+        //     'type'  => 'required',
+        //     'price' => 'required'
+        // ]);
+        // $product = new products([
+        //     'name'  => $request->get('name'),
+        //     'type'  => $request->get('type'),
+        //     'price'  => $request->get('price')
+        // ]);
+        // $product->save();
+        // return redirect()->route('Admin.index')->with('success', 'Data Added');
+
+
+
+        //To store image
+        // $file =  $request->img;
+        // $file->move(public_path('/img'),'test.jpg');
+
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required',
+        // ]);
+
+        // if($validator->fails())
+        // {
+        //     return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+
+        // }
+
+        return response()->json(['Status' => "Success", "Data" => [['type' => 'A'],['type' => 'B']]]);
+    }
+
+    public function edit($id)
+    {
+        $product = Products::find($id);
+        return view('Admin.AdminEdit', compact('product','id'));
+    }
+
+    // public function update(Request $request, $id)
+    // {
+    //     $this->validate($request, [
+    //         'name'  => 'required',
+    //         'type'  => 'required',
+    //         'price' => 'required'
+    //     ]);
+    //     $product = Products::find($id);
+    //     $product->name = $request->get('name');
+    //     $product->type = $request->get('type');
+    //     $product->price = $request->get('price');
+    //     $product->save();
+    //     return redirect()->route('Admin.index')->with('success', 'Data Updated');
+    // }
+
+    public function destroy($id)
+    {
+        $product = Products::find($id);
+        $product->delete();
+        return redirect()->route('Admin.index')->with('success', 'Data Deleted');
+    }
+
+    public function deleteBrand(Request $request)
+    {
+      try {
+          $id = $request->id;
+          $brands = Brands::find($id);
+          $brands->delete();
+
+      } catch (Exception $e) {
+          return response()->json(['Status' => "Database Error"]);
+      }
+
+
+
+    }
+
+    
     public function search(Request $request)
     {
+
         //default value to empty string if no value is passed in
 
         $type = empty($request->type)? "": $request->type;
@@ -41,13 +132,18 @@ class ProductController extends Controller
             'imgDetail' => 'required|image',
 
         ]);
-       
-        if($validator->fails()) 
+
+        if($validator->fails())
         {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
 
-        try 
+        // if($validator->fails())
+        // {
+
+        // }
+
+        try
         {
 
             $product = new Products();
@@ -83,20 +179,69 @@ class ProductController extends Controller
             ->where('id', $id)
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
-        return response()->json(['Status' => "Success","Data" => Products::all()]);
+        return response()->json(['Status' => "Success","Data" => Types::all()]);
     }
 
-    public function RemoveProduct(Request $request)
+
+    public function AddType(Request $request)
     {
         try {
-            $id = $request->id;
-            $product = Products::find($id);
-            $product->delete();
+            $validator = Types::make($request->all(), [
+            'type' => 'required',
+
+        ]);
+
         } catch (Exception $e) {
-            return response()->json(['Status' => "Database Error"]);
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
-        return response()->json(['Status' => "Success", "Data" => Products::all()]);
-        
+
+        try
+        {
+
+            $types = new Types();
+            $types->type = $request->type;
+            $types->save();
+            $id = $types->id;
+
+
+        } catch (QueryException $e) {
+
+            return response()->json(['Status' => "Database Error", "Message" => $types->errors()]);
+        }
+
+
+        return response()->json(['Status' => "Success","Data" => Types::all()]);
+    }
+
+    public function AddBrand(Request $request)
+    {
+        try {
+            $validator = Brands::make($request->all(), [
+            'brand' => 'required',
+
+        ]);
+
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        }
+
+        try
+        {
+
+            $brands = new Brands();
+            $brands->brand = $request->brand;
+            $brands->save();
+            $id = $brands->id;
+
+
+        } catch (QueryException $e) {
+
+
+            return response()->json(['Status' => "Database Error", "Message" => $brands->errors()]);
+        }
+
+
+        return response()->json(['Status' => "Success","Data" => Brands::all()]);
     }
 
     public function check(Request $request)

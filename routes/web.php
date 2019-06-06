@@ -40,6 +40,9 @@ Product Controller
 Route::get('/Product/search', 'ProductController@search');
 Route::post('/Product/AddProduct', 'ProductController@AddProduct');
 Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
+Route::post('/Product/AddType', 'ProductController@AddType');
+Route::post('/Product/AddBrand', 'ProductController@AddBrand');
+Route::post('/Product/DeleteBrand','ProductController@deleteBrand');
 
 Route::get('/check', 'ProductController@check');
 
@@ -55,6 +58,8 @@ Order Controller
 Account Controller
 --------------------------------------------------------------------------
 */
+<<<<<<< HEAD
+=======
 
 Route::get('Account/ShowAllData', 'AccountController@ShowAllData');
 Route::get('Account/Logout', 'AccountController@Logout');
@@ -67,3 +72,4 @@ Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');
 
 
 
+>>>>>>> test

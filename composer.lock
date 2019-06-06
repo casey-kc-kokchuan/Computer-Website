@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
+    "content-hash": "32730eadaff9d1a3cf28ba6e06e649e7",
+=======
     "content-hash": "81649169f334b63d02585b513d9424b0",
+>>>>>>> test
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -506,6 +510,18 @@
         },
         {
             "name": "laravel/framework",
+<<<<<<< HEAD
+            "version": "v5.8.21",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "c78796cc1159c8dc63c45a2011ddc4af17059cb4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c78796cc1159c8dc63c45a2011ddc4af17059cb4",
+                "reference": "c78796cc1159c8dc63c45a2011ddc4af17059cb4",
+=======
             "version": "v5.8.19",
             "source": {
                 "type": "git",
@@ -516,6 +532,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/47bb1471b727a0c1497143dccf46aacf73c0ce6b",
                 "reference": "47bb1471b727a0c1497143dccf46aacf73c0ce6b",
+>>>>>>> test
                 "shasum": ""
             },
             "require": {
@@ -649,7 +666,11 @@
                 "framework",
                 "laravel"
             ],
+<<<<<<< HEAD
+            "time": "2019-06-05T00:13:05+00:00"
+=======
             "time": "2019-05-28T13:19:37+00:00"
+>>>>>>> test
         },
         {
             "name": "laravel/tinker",
@@ -878,6 +899,18 @@
         },
         {
             "name": "nesbot/carbon",
+<<<<<<< HEAD
+            "version": "2.19.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/briannesbitt/Carbon.git",
+                "reference": "5cf102d1476fdf92f1f991bd1a1a0d93c65755ca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/5cf102d1476fdf92f1f991bd1a1a0d93c65755ca",
+                "reference": "5cf102d1476fdf92f1f991bd1a1a0d93c65755ca",
+=======
             "version": "2.19.0",
             "source": {
                 "type": "git",
@@ -888,6 +921,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/c3545b39197d314205226ac3c33cb4db99aa54ab",
                 "reference": "c3545b39197d314205226ac3c33cb4db99aa54ab",
+>>>>>>> test
                 "shasum": ""
             },
             "require": {
@@ -934,7 +968,11 @@
                 "datetime",
                 "time"
             ],
+<<<<<<< HEAD
+            "time": "2019-06-04T20:07:46+00:00"
+=======
             "time": "2019-05-30T10:15:05+00:00"
+>>>>>>> test
         },
         {
             "name": "nikic/php-parser",

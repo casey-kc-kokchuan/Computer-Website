@@ -9,14 +9,14 @@
 @section('head')
 
 <style type="text/css">
-	
+
 #product-setting-overlay
 {
 	height: 100%;
 	width: 100%;
 	position: fixed;
 	top:0;
-	right: -100vw; 
+	right: -100vw;
 	z-index: 1;
 	transition: right 0.3s linear;
 }
@@ -24,7 +24,7 @@
 #product-setting
 {
 	width:calc(100% - 250px - 5%);
-	height: 100%;	
+	height: 100%;
 
 	position: absolute;
 
@@ -35,7 +35,7 @@
 
 	padding:10px;
 	overflow-y: auto;
-	overflow-x: hidden;   
+	overflow-x: hidden;
 }
 
 #product-detail-overlay
@@ -44,7 +44,7 @@
 	width: 100%;
 	position: fixed;
 	top:0;
-	right: -100vw; 	
+	right: -100vw;
 	z-index: 1;
 	transition: right 0.3s linear;
 
@@ -68,7 +68,12 @@
 	right:0;
 	top:2%;
 	overflow-y: auto;
+<<<<<<< HEAD
+	overflow-x: hidden;
+
+=======
 	overflow-x: hidden;   
+>>>>>>> test
 }
 
 .nav a.active
@@ -95,35 +100,40 @@
 
 
 
-	
+
 <div id="product-manager" class="max-height">
 	<div class="row max-height">
 		<div class="col-12 col-md-4 product-left-pane">
-		
+
 			<input type="text" v-model="name"  class="form-control d-inline" style="width:50%;"placeholder="Search"><button @click="search()" class="btn-blue btn-size-form">Search</button>
 			<br><br>
 			<button  @click="addItem" >Add item</button>
 			<button onclick="toggleOverlay('#product-setting-overlay')"><i class="fas fa-cog"></i></button>
 			<br><br>
+			<br><br>
 			<div class="nav nav-pills flex-column" id="v-pills-tab" role="tablist">
-				
+
 				<a class="nav-link" v-bind:class="[ activetab === -1 ? 'active' : '' ]" id="pills-all-tab" data-toggle="pill"  aria-controls="pills-all" aria-selected="true" href="#" @click="activetab=-1;typeSearch('')">All</a>
 				<a v-for="(type, index) in types" class="nav-link" v-bind:class="[ activetab === index ? 'active' : '' ]" :id="'pills-all-' + type.type" data-toggle="pill" role="tab" :aria-controls="'pills-'+ type.type" aria-selected="false" href="#" @click="activetab=index;typeSearch(type.type)">@{{type.type}}</a>
 			</div>
 		</div>
 		<div class="col-12 col-md-8" style="background: #E0E0E0;">
-			
+
 			<div class="product-manager-list product-right-pane">
 				<div v-for="(product, index) in productList" class="product" id="product">
-					
+
 					<p>@{{product.name}}</p>
 					<img :src="product.img" style="width:150px;height:100px">
 					<p>@{{product.price}}</p>
 
 
 					<button @click="edit(index)">Edit</button>
+<<<<<<< HEAD
+
+=======
 					<button @click="remove(index)"><i class="fas fa-times text-danger"></i></button>
 					
+>>>>>>> test
 				</div>
 			</div>
 		</div>
@@ -135,34 +145,34 @@
 
 <div id="product-detail-overlay">
 	<div id="product-detail">
-		
+
 		<form id="myForm" @submit.prevent="handleSubmit">
 		@csrf
 		<div class="row">
-			
+
 			<div class="offset-2 col-8">
 				<input type="hidden" name="id" v-model="productDetail.id">
 
 				<div class="form-group">
-					<img :src=productDetail.img id="img" style="height:200px;width:200px;">	
+					<img :src=productDetail.img id="img" style="height:200px;width:200px;">
 					<input type="file" name="img" @change="previewImg" ref="img">
 					<p class="text-danger" v-if="error.img">@{{ error.img[0]}}</p>
 				</div>
 
 				<div class="form-group">
-					<label for="name">Name</label>	
+					<label for="name">Name</label>
 					<input type="text" v-model="productDetail.name" name="name" class="form-control">
 					<p class="text-danger" v-if="error.name">@{{ error.name[0]}}</p>
 				</div>
 
 
 				<div class="form-group">
-					<label for="type">Type</label>	
+					<label for="type">Type</label>
 					<select name="type" class="form-control" v-model="productDetail.type">
 						<option value="">Select Type</option>
 						<option v-for="type in types" :value="type.type">@{{type.type}}</option>
 					</select>
-						<p class="text-danger" v-if="error.type">@{{ error.type[0]}}</p>					
+						<p class="text-danger" v-if="error.type">@{{ error.type[0]}}</p>
 				</div>
 
 				<div class="form-group">
@@ -170,24 +180,24 @@
 					<select name="brand" class="form-control" v-model="productDetail.brand">
 						<option value="">Select Brand</option>
 						<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
-					</select>	
+					</select>
 						<p class="text-danger" v-if="error.brand">@{{ error.brand[0]}}</p>
 				</div>
 
 				<div class="form-group">
-					<label for="price">Price</label>	
+					<label for="price">Price</label>
 					<input type="text" name="price" class="form-control" v-model="productDetail.price">
 					<p class="text-danger" v-if="error.price">@{{ error.price[0]}}</p>
 				</div>
 
 				<div class="form-group">
-					<label for="qty">Qty in Stock</label>	
+					<label for="qty">Qty in Stock</label>
 					<input type="text" name="qty" class="form-control" v-model="productDetail.qty">
 					<p class="text-danger" v-if="error.qty">@{{ error.qty[0]}}</p>
 				</div>
 
 				<div class="form-group">
-					<label for="imgDetail">Product Detail Image</label>	
+					<label for="imgDetail">Product Detail Image</label>
 					<br>
 					<input type="file" name="imgDetail" @change="previewImgDetail">
 					<p class="text-danger" v-if="error.imgDetail">@{{ error.imgDetail[0]}}</p>
@@ -204,7 +214,7 @@
 
 		</form>
 	</div>
-	
+
 </div>
 
 
@@ -214,15 +224,18 @@
 
 <div id="product-setting-overlay">
 	<div id="product-setting">
+
+
 		<button type="button" onclick="toggleOverlay('#product-setting-overlay')">Close</button>
 		<br>
 		<h2>Types</h2>
+
 
 		<input type="text" name="type" v-model="newType">
 		<button type="button" @click="addType()">Add</button>
 		<button type="button" @click="newType=''">Clear</button>
 		<br>
-		<p class="text-danger" v-if="typeError.type">@{{ typeError.type[0]}}</p>					
+		<p class="text-danger" v-if="typeError.type">@{{ typeError.type[0]}}</p>
 
 
 		<h4>Exisiting Types</h4>
@@ -236,23 +249,23 @@
 		<br><br>
 		<h2>Brands</h2>
 
-		<input type="text" name="type" v-model="newBrand">
+		<input type="text" name="brand" v-model="newBrand">
 		<button type="button" @click="addBrand()">Add</button>
 		<button type="button" @click="newBrand=''">Clear</button>
 		<br>
-		<p class="text-danger" v-if="brandError.brand">@{{ brandError.brand[0]}}</p>					
+		<p class="text-danger" v-if="brandError.brand">@{{ brandError.brand[0]}}</p>
 
 
 		<h4>Exisiting Brands</h4>
 		<table style="border:1px solid black">
 			<tr v-for="brand in brands">
 				<td>@{{brand.brand}}</td>
-				<td><button type="button" @click="removeType(brand.brand)">Remove</button></td>
+				<td><button type="button" @click="deleteBrand(brand.brand)">Remove</button></td>
 			</tr>
 		</table>
 
 
-	</div>	
+	</div>
 </div>
 
 
@@ -266,7 +279,7 @@
 @section('script')
 
 <script type="text/javascript">
-	
+
 var productManager = new Vue(
 {
 	el: "#product-manager",
@@ -353,12 +366,12 @@ var productManager = new Vue(
 		{
 			productDetail.productDetail =
 			{
-				id: "", 
-				name: "", 
+				id: "",
+				name: "",
 				type: "",
 				brand: "",
 				price: "",
-				img: "#", 
+				img: "#",
 				imgDetail: "#",
 				qty: ""
 			};
@@ -368,7 +381,7 @@ var productManager = new Vue(
 
 	},
 
-	watch: 
+	watch:
 	{
 		types: function()
 		{
@@ -392,24 +405,24 @@ var productDetail = new Vue(
 	el: "#product-detail",
 	data:
 	{
-		productDetail: 
+		productDetail:
 		{
-			id: "", 
-			name: "", 
+			id: "",
+			name: "",
 			type: "",
 			brand: "",
 			price: "",
-			img: "#", 
+			img: "#",
 			imgDetail: "#",
 			qty: ""
 		},
 		error:
 		{
-			name: [], 
+			name: [],
 			type: [],
 			brand: [],
 			price: [],
-			img: [], 
+			img: [],
 			imgDetail: [],
 			qty: []
 		},
@@ -421,16 +434,18 @@ var productDetail = new Vue(
 	{
 		handleSubmit(event)
 		{
-		
+
 			var form = new FormData(event.target);
 			formAjax("/Product/AddProduct", "POST", form , this.manageProductList, alertError);
+
+
 		},
 
 		previewImg(event)
 		{
 			var reader = new FileReader();
 
-			reader.onload = function(e) 
+			reader.onload = function(e)
 			{
 			  $('#img').attr('src', e.target.result);
 			}
@@ -442,7 +457,7 @@ var productDetail = new Vue(
 		{
 			var reader = new FileReader();
 
-			reader.onload = function(e) 
+			reader.onload = function(e)
 			{
 			  $('#imgDetail').attr('src', e.target.result);
 			}
@@ -453,7 +468,7 @@ var productDetail = new Vue(
 
 		hide()
 		{
-			this.$refs.img.value = '';	
+			this.$refs.img.value = '';
 			$("#img").attr('src', '#');
 			$("#imgDetail").attr('src', '#');
 			toggleOverlay('#product-detail-overlay');
@@ -496,13 +511,13 @@ var productDetail = new Vue(
 
 		emptyError()
 		{
-			this.error = 		
+			this.error =
 			{
-				name: [], 
+				name: [],
 				type: [],
 				brand: [],
 				price: [],
-				img: [], 
+				img: [],
 				imgDetail: [],
 				qty: []
 			};
@@ -537,7 +552,7 @@ var productSetting = new Vue(
 		addType()
 		{
 			var obj = {type: this.newType};
-			jsonAjax("/Admin", "POST", JSON.stringify(obj), this.manageType, alertError);
+			jsonAjax("/Product/AddType", "POST", JSON.stringify(obj), this.manageType, alertError);
 		},
 
 		removeType(val)
@@ -549,13 +564,13 @@ var productSetting = new Vue(
 		addBrand()
 		{
 			var obj = {brand: this.newBrand};
-			jsonAjax("/Product/AddBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
+		  jsonAjax("/Product/AddBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
 		},
 
-		removeBrand()
+	deleteBrand()
 		{
 			var obj = {brand: this.newBrand};
-			jsonAjax("/Product/RemoveBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
+			jsonAjax("/Product/DeleteBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
 		},
 
 		manageType(response)
@@ -604,7 +619,7 @@ var productSetting = new Vue(
 				SwalError('Database Error. Please contact administrator.','');
 			}
 		},
-		
+
 
 	},
 })
