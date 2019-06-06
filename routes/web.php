@@ -42,11 +42,6 @@ Route::post('/Product/AddType', 'ProductController@AddType');
 Route::post('/Product/AddBrand', 'ProductController@AddBrand');
 Route::post('/Product/DeleteBrand','ProductController@DeleteBrand');
 
-
-Route::get('/inventory', 'ProductController@index');
-Route::get('/create', 'ProductController@create')->name('create');
-Route::get('/edit', 'ProductController@edit')->name('edit');
-Route::get('/destroy', 'ProductController@destroy')->name('destroy');
 /*
 --------------------------------------------------------------------------
 Order Controller

@@ -86,16 +86,12 @@ class ProductController extends Controller
         return redirect()->route('Admin.index')->with('success', 'Data Deleted');
     }
 
-    public function DeleteBrand(Request $request)
+    public function DeleteBrand($id)
     {
       try {
           $id = $request->id;
           $brands = Brands::find($id);
-
-          if ($brands != null) {
-            $brands->delete();
-            return response()->json(['Status' => "Success", "Data" => Brands::all()]);
-  }
+          $brands->delete();
 
       } catch (Exception $e) {
           return response()->json(['Status' => "Database Error"]);
@@ -236,7 +232,6 @@ class ProductController extends Controller
 
 
         } catch (QueryException $e) {
-
 
             return response()->json(['Status' => "Database Error", "Message" => $types->errors()]);
         }
