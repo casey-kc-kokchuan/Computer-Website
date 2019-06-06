@@ -689,6 +689,8 @@ var typesTable = new Tabulator('#typesTable',
 	data: productManager.types,
 	columns:
 	[
+
+		{title: "ID", field: "id", visible: false},
 		{title: "Type", field: "type", headerFilter:true, widthGrow: 3},
 		{title:"Remove", formatter:deleteIcon, widthGrow: 2, align:"center", tooltip:"Remove",
 			cellClick(e, cell)
@@ -708,7 +710,7 @@ var typesTable = new Tabulator('#typesTable',
 						if(result.value)
 						{
 
-							jsonAjax("/Product/RemoveType", "POST", JSON.stringify({type: cell.getData().type}), function(response)
+							jsonAjax("/Product/RemoveType", "POST", JSON.stringify({id: cell.getData().id}), function(response)
 								{
 									if(response.Status == "Success")
 									{
@@ -748,6 +750,7 @@ var brandsTable = new Tabulator('#brandsTable',
 	data: productManager.brands,
 	columns:
 	[
+		{title: "ID", field: "id", visible: false},
 		{title: "Brand", field: "brand", headerFilter:true, widthGrow: 3},
 		{title:"Remove", formatter:deleteIcon, widthGrow: 2, align:"center", tooltip:"Remove",
 			cellClick(e, cell)
@@ -766,8 +769,7 @@ var brandsTable = new Tabulator('#brandsTable',
 					{
 						if(result.value)
 						{
-
-							jsonAjax("/Product/RemoveBrand", "POST", JSON.stringify({brand: cell.getData().brand}), function(response)
+							jsonAjax("/Product/RemoveBrand", "POST", JSON.stringify({id: cell.getData().id}), function(response)
 								{
 									if(response.Status == "Success")
 									{
