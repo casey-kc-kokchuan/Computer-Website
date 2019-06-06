@@ -21,6 +21,14 @@
 	    margin-left: -80px;
 	}
 
+	#sidebar button
+	{
+	    border-radius:50%;
+	    position: absolute;
+	    right:-24px;
+	    transform:scale(0.85);
+	}
+
 	#main.active 
 	{
 	    width: 100%;
@@ -34,7 +42,7 @@
 	    min-height:100vh;
 	    top: 0;
 	    right: 0;
-	    padding: 5px 5px 5px 10px;
+	    padding: 0;
 	}
 
 	#sidebar ul li a {
@@ -49,19 +57,6 @@
 	    margin-bottom: 5px;
 	}
 
-	/* Adjust the dropdown links padding*/
-	#sidebar ul ul a {
-	    padding: 10px !important;
-	}
-
-	.dropdown-toggle::after {
-	    top: auto;
-	    bottom: 10px;
-	    right: 50%;
-	    -webkit-transform: translateX(50%);
-	    -ms-transform: translateX(50%);
-	    transform: translateX(50%);
-	}
 
 	.productList, .cartList
 	{	
@@ -81,5 +76,204 @@
 		display: inline-block;
 	}
 
+
+	.overlay-close-btn
+	{
+	 
+		padding:0 auto;
+	    width:100%;
+
+	}
+
+	.overlay-close-btn .fa-angle-right
+	{
+	    font-size:30px;
+	    transform:rotate(-90deg);
+	}
+	/*------------------------------------------------------------------------------------------------*/
+
+	/*Product Manager */
+
+	.product-manager-list
+	{
+	    overflow-y: hidden;
+	    overflow-x: scroll;
+	    white-space: nowrap;
+	    height:auto;
+	}
+
+	.product-right-pane
+	{
+		padding:10px 20px;
+		height:auto;
+	}
+
+	.product-search-box button
+	{
+	    width:49%; 
+	    display:inline-block;
+	}
+
+	.product-control-box, .product-search-box
+	{
+		box-shadow: none;
+		margin: 0;
+		border-top:none;
+		border-left:none;
+		border-bottom-right-radius: 0;
+
+
+	}
+
+	.product-search-box
+	{
+		border-bottom:1px solid black;
+		padding:35px 25px 15px 25px;
+
+	}
+
+	.product-control-box
+	{
+		padding:15px 25px;
+		border-bottom:1px solid black;
+
+	}
+
+	.add-btn
+	{
+	    width:79%;
+	    padding:3px 0;   
+	    font-size:16px;
+	    display:inline-block;
+	}
+
+	.config-btn
+	{
+		width:19%;
+		display:inline-block;
+
+	}
+
+	.config-txt
+	{
+		display:none;
+	}
+
+	.product-left-pane hr
+	{
+		display:none;
+	}
+
+	.max-height
+	{
+		height:0;
+	}
+
+	.product-left-pane
+	{
+		margin-bottom:20px;
+		padding:0;
+	}
+
+
+	#product-detail-overlay, #product-setting-overlay
+	{
+
+	    top:-100%;
+	    right: 0;
+	    transition: top 0.3s linear;
+	}
+
+	#product-detail-overlay.active, #product-setting-overlay.active
+	{
+	    top: 0;
+	}
+
+	#main.active #product-detail, #main.active #product-setting
+	{
+		width:100%;
+	}
+
+	#product-detail, #product-setting
+	{
+	    width:calc(100% - 80px);
+	    transition:width 0.3s linear;
+	}
+
+	#product-detail *, #product-setting *
+	{
+	    position:relative;
+	}
+
+	#typesTable, #brandsTable
+	{
+		height:280px;
+	}
+
+	#product-setting input 
+	{
+		width:100%;
+	}
+
+	.product-setting-table button
+	{
+		width:49%;
+		margin-top:5px;
+	}
+
+	.product-setting-table h2
+	{
+		font-size:18px;
+		font-weight:800;
+	}
+
+
+	/*------------------------------------------------------------------------------------------------*/
+	/*Account Page*/
+
+	#account-detail-overlay
+	{
+		top:-100%;
+		right: 0;
+		transition: top 0.3s linear;
+	}
+
+	#account-detail-overlay.active
+	{
+		top: 0;
+	}
+
+	#main.active #account-detail
+	{
+		width:100%;
+	}
+
+	#account-detail
+	{
+		width:calc(100% - 80px);
+		transition:width 0.3s linear;
+	}
+
+	#account-detail *
+	{
+	    position:relative;
+	}
+
+	.account-btn-box
+	{
+		height:100%;
+		padding-left:5px;
+		padding-right:5px;
+	}
+	.account-btn-box button
+	{
+	    padding:3px 0;   
+	    font-size:16px;
+
+	    width:100%;
+	}
+
+
+	/*------------------------------------------------------------------------------------------------*/
 
 }
