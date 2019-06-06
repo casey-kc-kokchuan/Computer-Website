@@ -70,14 +70,15 @@
 			</div>
 			
 		</div>
-		<div class="col-12 col-lg-9 product-right-pane" style="">
+		<div class="col-12 col-lg-9 product-right-pane">
 			
 			<div class="product-manager-list">
 				<div v-for="(product, index) in productList" class="product" id="product">
 					
-					<p>@{{product.name}}</p>
+					<p><strong>@{{product.name}}</strong></p>
 					<img :src="product.img" style="width:150px;height:100px">
-					<p>@{{product.price}}</p>
+					<p>RM&nbsp;@{{product.price}}</p>
+					<p style="font-size:0.8em">@{{product.qty}} <i>in stock</i></p>
 
 
 					<button @click="edit(index)" class="btn-blue btn-size-form">Edit</button>
@@ -310,13 +311,14 @@ var productManager = new Vue(
 					if(result.value)
 					{
 
-						jsonAjax("/Product/RemoveProduct", "POST", JSON.stringify({id: this.productList[index].id}), function(response)
+						var obj = {id: this.productList[index].id, searchName: productManager.name, searchType: productManager.type, searchBrand: productManager.brand};
+						jsonAjax("/Product/RemoveProduct", "POST", JSON.stringify(obj), function(response)
 							{
 								if(response.Status == "Success")
 								{
 
 									SwalSuccess('Product is succesfully removed.','');
-									this.productList = response.Data;
+									productManager.productList = response.Data;
 									return 0;
 								}
 
@@ -412,7 +414,18 @@ var productDetail = new Vue(
 		{
 		
 			var form = new FormData(event.target);
-			formAjax("/Product/AddProduct", "POST", form , this.manageProductList, alertError);
+			form.append("searchName", productManager.name)
+			form.append("searchType", productManager.type)
+			form.append("searchBrand", productManager.brand)
+
+			if(this.isEdit)
+			{
+				formAjax("/Product/EditProduct", "POST", form , this.editProductList, alertError);
+			}
+			else
+			{
+				formAjax("/Product/AddProduct", "POST", form , this.addProductList, alertError);
+			}
 		},
 
 		previewImg(event)
@@ -465,22 +478,12 @@ var productDetail = new Vue(
 			this.emptyError();
 		},
 
-		manageProductList(response)
+		addProductList(response)
 		{
 			if(response.Status == "Success")
 			{
-				// productManager.typeSearch(productManager.type);
-
-				// if(isEdit)
-				// {
-				// 	SwalSuccess('Product is successfully editted.','')
-				// }
-				// else
-				// {
-				// 	SwalSuccess('New product is successfully added.','')
-				// }
-					SwalSuccess('New product is successfully added.','')
-
+				SwalSuccess('New product is successfully added.','')
+				productManager.productList = response.Data;
 				this.emptyError();
 				this.hide();
 				return 0;
@@ -498,6 +501,31 @@ var productDetail = new Vue(
 				SwalError('Database Error. Please contact administrator.','')
 			}
 		},
+
+		editProductList(response)
+		{
+			if(response.Status == "Success")
+			{
+				SwalSuccess('Edit is successful.','')
+				productManager.productList = response.Data;
+				this.emptyError();
+				this.hide();
+				return 0;
+			}
+
+			if(response.Status == "Validation Error")
+			{
+				this.error = response.Message;
+				SwalError('Invalid detail. Please check error messages.','')
+				return 0;
+			}
+
+			if(response.Status == "Database Error")
+			{
+				SwalError('Database Error. Please contact administrator.','')
+			}
+		},
+
 
 		emptyError()
 		{

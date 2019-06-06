@@ -99,11 +99,13 @@
 	    overflow-y: hidden;
 	    overflow-x: scroll;
 	    white-space: nowrap;
+	    height:auto;
 	}
 
 	.product-right-pane
 	{
 		padding:10px 20px;
+		height:auto;
 	}
 
 	.product-search-box button
@@ -224,6 +226,8 @@
 		font-size:18px;
 		font-weight:800;
 	}
+
+
 	/*------------------------------------------------------------------------------------------------*/
 	/*Account Page*/
 

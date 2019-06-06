@@ -12,84 +12,8 @@ use \Illuminate\Database\QueryException;
 
 class ProductController extends Controller
 {
-    public function index()
-    {
-        // $product = Products::all()->toArray(); 
-        // return view('Admin.AdminInventory', compact('product'));
-        //return view('Customer.ShoppingCart', compact('product'));
-    }
-
-    public function create()
-    {
-        return view('Admin.AdminCreate');
-    }
-
-    public function store(Request $request)
-    {
-        // $this->validate($request, [
-        //     'name'  => 'required',
-        //     'type'  => 'required',
-        //     'price' => 'required'
-        // ]);  
-        // $product = new products([
-        //     'name'  => $request->get('name'),
-        //     'type'  => $request->get('type'),
-        //     'price'  => $request->get('price')
-        // ]);  
-        // $product->save(); 
-        // return redirect()->route('Admin.index')->with('success', 'Data Added');
-
-
-
-        //To store image
-        // $file =  $request->img;
-        // $file->move(public_path('/img'),'test.jpg');
-
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required',
-        // ]);
-
-        // if($validator->fails())
-        // {
-        //     return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
-
-        // }
-
-        return response()->json(['Status' => "Success", "Data" => [['type' => 'A'],['type' => 'B']]]);
-    }
-
-    public function edit($id)
-    {
-        $product = Products::find($id);
-        return view('Admin.AdminEdit', compact('product','id'));
-    }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $this->validate($request, [
-    //         'name'  => 'required',
-    //         'type'  => 'required',
-    //         'price' => 'required'
-    //     ]);
-    //     $product = Products::find($id);
-    //     $product->name = $request->get('name');
-    //     $product->type = $request->get('type');
-    //     $product->price = $request->get('price');
-    //     $product->save();
-    //     return redirect()->route('Admin.index')->with('success', 'Data Updated');
-    // }
-
-    public function destroy($id)
-    {
-        $product = Products::find($id);
-        $product->delete();
-        return redirect()->route('Admin.index')->with('success', 'Data Deleted');
-    }
-
-
     public function search(Request $request)
     {
-        
         //default value to empty string if no value is passed in
 
         $type = empty($request->type)? "": $request->type;
@@ -107,8 +31,13 @@ class ProductController extends Controller
 
     public function AddProduct(Request $request)
     {
+
+        $searchType = empty($request->searchType)? "": $request->searchType;
+        $searchName = empty($request->searchName)? "": $request->searchName;
+        $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
+
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique',
+            'name' => 'required|unique:products',
             'type' => 'required',
             'brand' => 'required',
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
@@ -159,7 +88,36 @@ class ProductController extends Controller
             ->where('id', $id)
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
-        return response()->json(['Status' => "Success","Data" => Products::all()]);
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
+
+
+        return response()->json(['Status' => "Success","Data" => $searchProduct]);
+    }
+
+    public function RemoveProduct(Request $request)
+    {
+
+        $searchType = empty($request->searchType)? "": $request->searchType;
+        $searchName = empty($request->searchName)? "": $request->searchName;
+        $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
+
+        try {
+            $id = $request->id;
+            $product = Products::find($id);
+            $product->forceDelete();
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Database Error"]);
+        }
+
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
+        return response()->json(['Status' => "Success", "Data" => $searchProduct]);
+        
     }
 
     public function check(Request $request)

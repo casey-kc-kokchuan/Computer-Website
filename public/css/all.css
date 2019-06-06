@@ -220,6 +220,7 @@ label
 .product-manager-list
 {
     overflow-y: auto;
+    height:100%;
 }
 
 .product-manager-list .product
@@ -229,9 +230,15 @@ label
     margin:10px 10px;
     box-shadow: 3px 3px 5px black;
     border-radius: 10px 0 0 0 ;
-    padding:5px 0;
+    padding:5px;
     background:white;
     text-align: center;
+}
+
+.product-manager-list p, .product-manager-list img, .product-manager-list button
+{
+    
+    margin-bottom:5px ;
 }
 
 .product-manager-list .product:hover
@@ -252,9 +259,13 @@ label
 }
 
 
+
+
+
 .product-right-pane
 {
     background: #E0E0E0;
+    height:100vh;
 }
 
 .product-search-box button
@@ -382,7 +393,6 @@ label
 {
     width:auto;
 }
-
 
 
 /*------------------------------------------------------------------------------------------------*/

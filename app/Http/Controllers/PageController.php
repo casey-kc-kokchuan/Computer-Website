@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Products;
+use App\User;
 use App\Types;
 use App\Brands;
 
@@ -42,7 +43,7 @@ class PageController extends Controller
 
 	public function showAccount()
 	{
-		return view('Admin/AccountPage');
+		return view('Admin/AccountPage', [ 'Data' => User::all()]);
 	}
 
 	public function showLogin()

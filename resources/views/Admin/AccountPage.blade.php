@@ -26,7 +26,7 @@
 <div class="row">
 	<div class="col-12">
 		<div class="card">
-			<button class="btn-blue btn-size-form" onclick="toggleOverlay('#account-detail-overlay')"><i class="fas fa-user-plus"></i>Add Account</button>
+			<button class="btn-blue btn-size-form" onclick="accountDetail.isEdit=false;toggleOverlay('#account-detail-overlay')"><i class="fas fa-user-plus"></i>Add Account</button>
 			<div id="account-table"></div>
 		</div>
 	</div>
@@ -52,16 +52,18 @@
 						<p class="text-danger" v-if="error.username">@{{ error.username[0] }}</p>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group" v-if="!isEdit">
 						<label for="">Password</label>
 						<input type="password" name="password" class="form-control" v-model="accountDetail.password">
 						<p class="text-danger" v-if="error.password">@{{ error.password[0] }}</p>
 					</div>
 
-{{-- 					<div class="form-group">
+					<div class="form-group" v-if="!isEdit">
 						<label for="">Confirm Password</label>
-						<input type="text" v-model="confirmPassword">
-					</div> --}}
+						<input type="password" v-model="accountDetail.confirmPassword" class="form-control">
+						<p class="text-danger" v-if="error.password">@{{ error.password[0] }}</p>
+
+					</div>
 
 					<div class="form-group">
 						<label for="">Full Name</label>
@@ -104,7 +106,8 @@
 					</div>
 
 
-					<button type="submit" class="btn-green btn-size-form" style="width:100%">Add</button>
+					<button type="submit" class="btn-blue btn-size-form" style="width:100%" v-if="isEdit">Save</button>
+					<button type="submit" class="btn-green btn-size-form" style="width:100%" v-else>Add</button>
 				</form>
 			</div>
 		</div>
@@ -132,6 +135,7 @@ var editIcon = function(cell, formatterParams, onRendered)
 var table = new Tabulator("#account-table",{
 	layout: "fitDataFill",
 	height: "70vh",
+	data: {!! json_encode($Data) !!},
 	headerFilterPlaceholder: "Search",
 	columns:
 	[
@@ -143,11 +147,12 @@ var table = new Tabulator("#account-table",{
 		{title:"Contact No", field:"contact", headerFilter:true},
 		{title:"Email", field:"email", headerFilter:true},
 		{title:"Edit", formatter:editIcon, align:"center", tooltip:"Edit", 
-			// cellClick(e, cell)
-			// {
-			// 	accountDetail.accountDetail = cell.getData();
-			// 	toggleOverlay('#account-detail-overlay');
-			// }
+			cellClick(e, cell)
+			{
+				accountDetail.accountDetail = cell.getData();
+				accountDetail.isEdit = true;
+				toggleOverlay('#account-detail-overlay');
+			}
 		},
 		{title:"Remove", formatter:deleteIcon, align:"center", tooltip:"Remove",
 			cellClick(e, cell)
@@ -210,6 +215,7 @@ var accountDetail = new Vue(
 			id:"",
 			username:"",
 			password: "",
+			confirmPassword: "",
 			full_name:"",
 			gender: "",
 			contact: "",
@@ -224,7 +230,25 @@ var accountDetail = new Vue(
 		handleSubmit(event)
 		{
 			var formData = new FormData(event.target);
-			formAjax("/Account/AddAccount", "POST", formData, this.manageAccount, alertError);
+
+			if(this.isEdit)
+			{
+				formAjax("/Account/EditAccount", "POST", formData, this.editAccount, alertError);
+			}
+			else
+			{
+
+				if(this.checkPassword())
+				{
+
+					formAjax("/Account/AddAccount", "POST", formData, this.addAccount, alertError);
+				}
+				else
+				{
+					SwalError('Invalid detail. Please check error messages.', '');
+					this.error = { password: ["Password does not match."]};
+				}
+			}
 		},
 
 		Edit()
@@ -239,16 +263,18 @@ var accountDetail = new Vue(
 				id:"",
 				username:"",
 				password: "",
+				confirmPassword: "",
 				full_name:"",
 				gender: "",
 				contact: "",
 				email:"",
 				role:""
 			}
+			this.error = {};
 			toggleOverlay('#account-detail-overlay')
 		},
 
-		manageAccount(response)
+		addAccount(response)
 		{
 			if(response.Status == "Success")
 			{
@@ -269,6 +295,44 @@ var accountDetail = new Vue(
 			if(response.Status == "Database Error")
 			{
 				SwalError('Database Error. Please contact administrator.','');
+			}
+		},
+
+		editAccount(response)
+		{
+			if(response.Status == "Success")
+			{
+
+				SwalSuccess('Account is successfully edited.','');
+				table.setData(response.Data);
+				this.Hide();
+				return 0;
+			}
+
+			if(response.Status == "Validation Error")
+			{
+				SwalError('Invalid detail. Please check error messages.','');
+				this.error = response.Message;
+				return 0;
+			}
+
+			if(response.Status == "Database Error")
+			{
+				SwalError('Database Error. Please contact administrator.','');
+			}
+		},
+
+		checkPassword()
+		{
+
+			if(this.accountDetail.password == this.accountDetail.confirmPassword)
+			{
+
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}
