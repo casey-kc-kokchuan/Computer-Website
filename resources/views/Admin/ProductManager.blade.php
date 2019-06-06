@@ -51,9 +51,7 @@
 }
 
 #product-detail-overlay.active, #product-setting-overlay.active/*, #product-detail-overlay.active #product-detail*/
-
 {
-
 	right: 0;
 
 }
@@ -74,19 +72,18 @@
 
 }
 
-
-
-
-
 .nav a.active
 {
   background:  #5D8AA8 !important;
 }
 
+
+/*Override default styling*/
 #main
 {
 	padding-top:0;
 	padding-bottom:0;
+	background: white;
 }
 
 </style>
@@ -137,7 +134,7 @@
 
 
 
-<div id="product-detail-overlay" {{-- on-click="toggleOverlay('#product-detail-overlay')" --}}>
+<div id="product-detail-overlay">
 	<div id="product-detail">
 
 		<form id="myForm" @submit.prevent="handleSubmit">
@@ -254,7 +251,7 @@
 		<table style="border:1px solid black">
 			<tr v-for="brand in brands">
 				<td>@{{brand.brand}}</td>
-				<td><button type="button" @click="DeleteBrand(brand.brand)">Remove</button></td>
+				<td><button type="button" @click="deleteBrand(brand.brand)">Remove</button></td>
 			</tr>
 		</table>
 
@@ -312,6 +309,50 @@ var productManager = new Vue(
 			productDetail.isEdit = true;
 		},
 
+		remove(index)
+		{
+			Swal.fire(
+			{
+				type: 'warning',
+				title: 'Are you sure on removing this product?',
+				showCancelButton:true,
+				cancelButtonColor:'#d9534f',
+				cancelButtonText: "No",
+				confirmButtonColor:'#5cb85c',
+				confirmButtonText: 'Yes'
+			}).then((result) =>
+				{
+					if(result.value)
+					{
+
+						jsonAjax("/Product/RemoveProduct", "POST", JSON.stringify({id: this.productList[index].id}), function(response)
+							{
+								if(response.Status == "Success")
+								{
+
+									SwalSuccess('Product is succesfully removed.','');
+									this.productList = response.Data;
+									return 0;
+								}
+
+								// if(response.Status == "Validation Error")
+								// {
+								// 	SwalError('Invalid detail. Please check error messages.','');
+								// 	this.error = response.Message;
+								// 	return 0;
+								// }
+
+								if(response.Status == "Database Error")
+								{
+									SwalError('Database Error. Please contact administrator.','');
+								}
+
+							}, alertError );
+
+					}
+				});
+		},
+
 		addItem()
 		{
 			productDetail.productDetail =
@@ -326,7 +367,7 @@ var productManager = new Vue(
 				qty: ""
 			};
 			productDetail.isEdit = false;
-			toggleOverlay('#product-detail-overlay',);
+			toggleOverlay('#product-detail-overlay');
 		}
 
 	},
@@ -421,24 +462,25 @@ var productDetail = new Vue(
 			this.$refs.img.value = '';
 			$("#img").attr('src', '#');
 			$("#imgDetail").attr('src', '#');
-			this.emptyError();
 			toggleOverlay('#product-detail-overlay');
+			this.emptyError();
 		},
 
 		manageProductList(response)
 		{
 			if(response.Status == "Success")
 			{
-				productManager.typeSearch(productManager.type);
+				// productManager.typeSearch(productManager.type);
 
-				if(isEdit)
-				{
-					SwalSuccess('Product is successfully editted.','')
-				}
-				else
-				{
+				// if(isEdit)
+				// {
+				// 	SwalSuccess('Product is successfully editted.','')
+				// }
+				// else
+				// {
+				// 	SwalSuccess('New product is successfully added.','')
+				// }
 					SwalSuccess('New product is successfully added.','')
-				}
 
 				this.emptyError();
 				this.hide();
@@ -516,7 +558,7 @@ var productSetting = new Vue(
 		  jsonAjax("/Product/AddBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
 		},
 
-	DeleteBrand()
+	deleteBrand()
 		{
 			var obj = {brand: this.newBrand};
 			jsonAjax("/Product/DeleteBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);

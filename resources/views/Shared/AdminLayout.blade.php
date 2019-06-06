@@ -20,11 +20,16 @@
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_max991.css')}}">
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_min992.css')}}">
 
+
         <script src="{{ URL::asset('js/app.js')}}"></script>
         <script src="{{ URL::asset('js/utility.js')}}"></script>
+        
 
+        <link href="https://unpkg.com/tabulator-tables@4.2.7/dist/css/tabulator.min.css" rel="stylesheet">
+        <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.7/dist/js/tabulator.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 {{--         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
@@ -45,19 +50,21 @@
                     <i class="fas fa-angle-left" id="arrow"></i>
                  </button>
                 <div class="sidebar-header">
-                </div>
+                </div>  
 
                 <ul class="list-unstyled components">
                     <li><a href="#"><i class="fas fa-home"></i>&nbsp;&nbsp;Home</a></li>
                     <li>
                         <a href="#productSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-boxes"></i>&nbsp;&nbsp;Product</a>
                         <ul class="collapse list-unstyled" id="productSubmenu">
-                            <li><a href="#">Manage</a></li>
+                            <li><a href="/Admin/ProductManager">Manage</a></li>
                             <li><a href="#">Configuration</a></li>
                         </ul>
                     </li>
-                    <li><a href="#"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>                
+                    <li><a href="/Admin/Account"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>    
                     <li><a href="#"><i class="fas fa-receipt"></i>&nbsp;&nbsp;Order</a></li>
+                    {{-- <li><a href="#"></i>&nbsp;&nbsp;{{ Auth::user()->username}}</a></li> --}}
+                    {{-- <li><a href="{{ url('Account/Logout')}}">&nbsp;&nbsp;Logout</a></li> --}}
                 </ul>
 
             </nav>
