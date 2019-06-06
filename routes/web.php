@@ -54,8 +54,9 @@ Route::get('/Product/search', 'ProductController@search');
 Route::post('/Product/AddProduct', 'ProductController@AddProduct');
 Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
 Route::post('/Product/AddType', 'ProductController@AddType');
+Route::post('/Product/DeleteType', 'ProductController@DeleteType');
 Route::post('/Product/AddBrand', 'ProductController@AddBrand');
-Route::post('/Product/DeleteBrand','ProductController@deleteBrand');
+Route::post('/Product/DeleteBrand','ProductController@DeleteBrand');
 
 Route::get('/check', 'ProductController@check');
 
