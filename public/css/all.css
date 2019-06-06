@@ -171,6 +171,17 @@ label
     font-weight: 600;
 }
 
+.tabulator-cell, .tabulator-col
+{
+    border-right:1px solid rgba(34,36,38,.1) !important;
+}
+
+.tabulator-row-even
+{
+    background:#EFEFEF;
+}
+
+
 /*------------------------------------------------------------------------------------------------*/
 /*Shopping cart*/
 #shoppingCart
@@ -445,6 +456,41 @@ label
     padding:30px 15px;
 }
 
+.account-box
+{
+    height:100%;
+}
 
+.account-table-box
+{
+
+    /*padding: 20px 30px;*/
+    height:100%;
+
+}
+
+.account-btn-box
+{
+    background: white;
+    padding: 20px 30px;
+    border-radius:5px;
+    height:90%;
+    margin:0 15px;
+    box-sizing: border-box;
+}
+
+.account-btn-box .addBtn
+{
+    padding:10px 0px;    
+    font-size: 25px;
+    font-weight: 600;
+
+    width:100%;
+}
+
+#account-table
+{
+    height:90%;
+}
 /*------------------------------------------------------------------------------------------------*/
 

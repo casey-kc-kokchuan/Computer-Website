@@ -148,6 +148,7 @@
 						<select name="type" class="form-control" v-model="productDetail.type">
 							<option value="">Select Type</option>
 							<option v-for="type in types" :value="type.type">@{{type.type}}</option>
+							<option v-if="tempoType" :value="tempoType">@{{ tempoType }}</option>
 						</select>
 							<p class="text-danger" v-if="error.type">@{{ error.type[0]}}</p>					
 					</div>
@@ -157,6 +158,7 @@
 						<select name="brand" class="form-control" v-model="productDetail.brand">
 							<option value="">Select Brand</option>
 							<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
+							<option v-if="tempoBrand" :value="tempoBrand">@{{ tempoBrand }}</option>
 						</select>	
 							<p class="text-danger" v-if="error.brand">@{{ error.brand[0]}}</p>
 					</div>
@@ -268,7 +270,8 @@ var productManager = new Vue(
 		name:"",
 		type:"",
 		brand: "",
-		img: "#",
+		img: "/img/placeholder.png",
+
 	},
 	methods:
 	{
@@ -291,6 +294,20 @@ var productManager = new Vue(
 		edit(index)
 		{
 			toggleOverlay("#product-detail-overlay");
+
+			var matchingType = this.types.findIndex(x => x.type == this.productList[index].type);
+			if(matchingType == -1)
+			{
+				productDetail.tempoType = this.productList[index].type;
+			}
+
+			var matchingBrand = this.brands.findIndex(x => x.brand == this.productList[index].brand );
+
+			if(matchingBrand == -1)
+			{
+				productDetail.tempoBrand = this.productList[index].brand;
+			}
+
 			productDetail.productDetail = this.productList[index];
 			productDetail.isEdit = true;
 		},
@@ -390,7 +407,8 @@ var productDetail = new Vue(
 			price: "",
 			img: "/img/placeholder.png", 
 			imgDetail: "/img/placeholder.png",
-			qty: ""
+			qty: "",
+
 		},
 		error:
 		{
@@ -406,6 +424,8 @@ var productDetail = new Vue(
 		brands: productManager.brands,
 		imgStatus: "No file is selected",
 		imgDetailStatus: "No file is selected",
+		tempoType: "",
+		tempoBrand: "",
 		isEdit: true,
 	},
 	methods:
@@ -459,6 +479,8 @@ var productDetail = new Vue(
 		{
 			this.$refs.img.value = '';	
 			this.$refs.imgDetail.value = '';	
+			this.tempoBrand = '';
+			this.tempoType = '';
 			this.imgDetailStatus = "No file is selected";
 			this.imgStatus = "No file is selected";
 			this.productDetail =

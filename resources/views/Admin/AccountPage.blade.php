@@ -21,12 +21,12 @@
 @section('body')
 
 
-<h2>Account</h2>
 
-<div class="row">
-	<div class="col-12">
-		<div class="card">
-			<button class="btn-blue btn-size-form" onclick="accountDetail.isEdit=false;toggleOverlay('#account-detail-overlay')"><i class="fas fa-user-plus"></i>Add Account</button>
+
+<div class="row account-box">
+	<div class="col-12 col-lg-11 account-btn-box">
+		<button class="btn-green btn-size-form addBtn" onclick="accountDetail.isEdit=false;toggleOverlay('#account-detail-overlay')"><i class="fas fa-user-plus mr-2"></i>Add Account</button>
+		<div class="account-table-box">
 			<div id="account-table"></div>
 		</div>
 	</div>
@@ -37,7 +37,7 @@
 	<div id="account-detail">
 		<div class="row">
 			<div class="col-12 col-lg-1">
-				<button type="button" @click="Hide" class="overlay-close-btn"><i class="fas fa-angle-right"></i></button>
+				<button type="button" @click="hide" class="overlay-close-btn"><i class="fas fa-angle-right"></i></button>
 			</div>
 
 			<div class="col-12 col-lg-8">
@@ -124,17 +124,18 @@
 
 var deleteIcon = function(cell, formatterParams, onRendered)
 {
-	return '<i class="fas fa-times" style="color:red;"></i>';
+	// return '<i class="fas fa-times" style="color:red;"></i>';
+	return '<button class="btn-red"><i class="fas fa-times"></i></button>'
 }
 
 var editIcon = function(cell, formatterParams, onRendered)
 {
 	return '<i class="far fa-edit"></i>';
+
 }
 
 var table = new Tabulator("#account-table",{
 	layout: "fitDataFill",
-	height: "70vh",
 	data: {!! json_encode($Data) !!},
 	headerFilterPlaceholder: "Search",
 	columns:
@@ -251,12 +252,7 @@ var accountDetail = new Vue(
 			}
 		},
 
-		Edit()
-		{
-			
-		},
-
-		Hide()
+		hide()
 		{
 			this.accountDetail = 
 			{
@@ -281,7 +277,7 @@ var accountDetail = new Vue(
 
 				SwalSuccess('New account is successfully added.','');
 				table.setData(response.Data);
-				this.Hide();
+				this.hide();
 				return 0;
 			}
 
@@ -305,7 +301,7 @@ var accountDetail = new Vue(
 
 				SwalSuccess('Account is successfully edited.','');
 				table.setData(response.Data);
-				this.Hide();
+				this.hide();
 				return 0;
 			}
 
@@ -324,10 +320,8 @@ var accountDetail = new Vue(
 
 		checkPassword()
 		{
-
 			if(this.accountDetail.password == this.accountDetail.confirmPassword)
 			{
-
 				return true;
 			}
 			else

@@ -27,7 +27,7 @@
         <script src="{{ URL::asset('js/utility.js')}}"></script>
         
 
-        <link href="https://unpkg.com/tabulator-tables@4.2.7/dist/css/tabulator.min.css" rel="stylesheet">
+        <link href="https://unpkg.com/tabulator-tables@4.2.7/dist/css/semantic-ui/tabulator_semantic-ui.min.css" rel="stylesheet">
         <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.7/dist/js/tabulator.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
