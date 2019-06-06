@@ -65,4 +65,3 @@ Route::get('Account/Logout', 'AccountController@Logout');
 Route::post('Account/Login', 'AccountController@Login');
 Route::post('Account/AddAccount', 'AccountController@AddAccount');
 Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');
->>>>>>> 1ae8c77aaeebf36eb793fd0f06c960bfd48d8ce9
