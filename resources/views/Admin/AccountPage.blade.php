@@ -10,37 +10,7 @@
 
 <style type="text/css">
 	
-#account-detail-overlay
-{
-	height: 100%;
-	width: 100%;
-	position: fixed;
-	top:0;
-	right: -100vw; 
-	z-index: 1;
-	transition: right 0.3s linear;
 
-}
-
-#account-detail-overlay.active
-{
-	right:0;
-}
-
-#account-detail
-{
-	border-top:5px solid black;
-	border-left:5px solid black;
-	width:calc(100% - 250px - 5%);
-
-	height:95%;
-	position: absolute;
-	background: white;
-	right:0;
-	top:2%;
-	overflow-y: auto;
-	overflow-x: hidden;   
-}
 
 </style>
 
@@ -65,10 +35,14 @@
 
 <div id="account-detail-overlay">
 	<div id="account-detail">
-		<form  @submit.prevent="handleSubmit">
+		<div class="row">
+			<div class="col-12 col-lg-1">
+				<button type="button" @click="Hide" class="overlay-close-btn"><i class="fas fa-angle-right"></i></button>
+			</div>
+
+			<div class="col-12 col-lg-8">
+				<form  @submit.prevent="handleSubmit">
 			@csrf
-			<div class="row">
-				<div class="offset-2 col-8">
 					
 					<input type="hidden" name="id" v-model="accountDetail.id">
 
@@ -95,10 +69,21 @@
 						<p class="text-danger" v-if="error.full_name">@{{ error.full_name[0] }}</p>
 					</div>
 
+					<div class="form-group">
+						<label for="">Role</label>
+						<select name="role" v-model="accountDetail.role" class="form-control">
+							<option value="">Select Role</option>
+							<option value="Admin">Admin</option>
+							<option value="Store Manager">Store Manager</option>
+							<option value="Product Manager">Product Manager</option>
+							<option value="Sales Assistant">Sales Assistant</option>
+						</select>
+						<p class="text-danger" v-if="error.role">@{{ error.role[0] }}</p>
+					</div>
 
 					<div class="form-group">
 						<label for="">Gender</label>
-						<select name="gender" v-model="accountDetail.gender">
+						<select name="gender" v-model="accountDetail.gender" class="form-control">
 							<option value="">Select Gender</option>
 							<option value="Male">Male</option>
 							<option value="Female">Female</option>
@@ -118,23 +103,11 @@
 						<p class="text-danger" v-if="error.email">@{{ error.email[0] }}</p>
 					</div>
 
-					<div class="form-group">
-						<label for="">Role</label>
-						<select name="role" v-model="accountDetail.role">
-							<option value="">Select Role</option>
-							<option value="Admin">Admin</option>
-							<option value="Store Manager">Store Manager</option>
-							<option value="Product Manager">Product Manager</option>
-							<option value="Sales Assistant">Sales Assistant</option>
-						</select>
-						<p class="text-danger" v-if="error.role">@{{ error.role[0] }}</p>
-					</div>
 
-					<button type="submit">Add Account</button>
-					<button type="button"  @click="Hide">Close</button>
-				</div>
+					<button type="submit" class="btn-green btn-size-form" style="width:100%">Add</button>
+				</form>
 			</div>
-		</form>
+		</div>
 	</div>
 
 </div>
@@ -176,7 +149,7 @@ var table = new Tabulator("#account-table",{
 			// 	toggleOverlay('#account-detail-overlay');
 			// }
 		},
-		{title:"Remove", formatter:deleteIcon, align:"center", toottip:"Remove",
+		{title:"Remove", formatter:deleteIcon, align:"center", tooltip:"Remove",
 			cellClick(e, cell)
 			{
 				Swal.fire(
@@ -243,8 +216,8 @@ var accountDetail = new Vue(
 			email:"",
 			role:""
 		},
-
 		error: {},
+		isEdit: false
 	},
 	methods:
 	{
@@ -281,7 +254,7 @@ var accountDetail = new Vue(
 			{
 
 				SwalSuccess('New account is successfully added.','');
-				table.setData();
+				table.setData(response.Data);
 				this.Hide();
 				return 0;
 			}

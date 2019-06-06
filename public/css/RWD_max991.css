@@ -76,6 +76,20 @@
 		display: inline-block;
 	}
 
+
+	.overlay-close-btn
+	{
+	 
+		padding:0 auto;
+	    width:100%;
+
+	}
+
+	.overlay-close-btn .fa-angle-right
+	{
+	    font-size:30px;
+	    transform:rotate(-90deg);
+	}
 	/*------------------------------------------------------------------------------------------------*/
 
 	/*Product Manager */
@@ -138,8 +152,6 @@
 
 	}
 
-
-
 	.config-txt
 	{
 		display:none;
@@ -160,5 +172,92 @@
 		margin-bottom:20px;
 		padding:0;
 	}
+
+
+	#product-detail-overlay, #product-setting-overlay
+	{
+
+	    top:-100%;
+	    right: 0;
+	    transition: top 0.3s linear;
+	}
+
+	#product-detail-overlay.active, #product-setting-overlay.active
+	{
+	    top: 0;
+	}
+
+	#main.active #product-detail, #main.active #product-setting
+	{
+		width:100%;
+	}
+
+	#product-detail, #product-setting
+	{
+	    width:calc(100% - 80px);
+	    transition:width 0.3s linear;
+	}
+
+	#product-detail *, #product-setting *
+	{
+	    position:relative;
+	}
+
+	#typesTable, #brandsTable
+	{
+		height:280px;
+	}
+
+	#product-setting input 
+	{
+		width:100%;
+	}
+
+	.product-setting-table button
+	{
+		width:49%;
+		margin-top:5px;
+	}
+
+	.product-setting-table h2
+	{
+		font-size:18px;
+		font-weight:800;
+	}
+	/*------------------------------------------------------------------------------------------------*/
+	/*Account Page*/
+
+	#account-detail-overlay
+	{
+		top:-100%;
+		right: 0;
+		transition: top 0.3s linear;
+	}
+
+	#account-detail-overlay.active
+	{
+		top: 0;
+	}
+
+	#main.active #account-detail
+	{
+		width:100%;
+	}
+
+	#account-detail
+	{
+		width:calc(100% - 80px);
+		transition:width 0.3s linear;
+	}
+
+	#account-detail *
+	{
+	    position:relative;
+	}
+
+
+
+
+	/*------------------------------------------------------------------------------------------------*/
 
 }
