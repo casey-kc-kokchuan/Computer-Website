@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Validator;
 use App\User;
 use App\Role;
+use App\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -53,7 +54,7 @@ class AccountController extends Controller
     		return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
     	}
 
-    	return response()->json(['Status' => "Success"]);
+    	return response()->json(['Status' => "Success", 'Data' => User::all()]);
 
     }
 
@@ -61,13 +62,12 @@ class AccountController extends Controller
     {
         try {
             $id = $request->id;
-            $account = Accounts::find($id);
+            $account = User::find($id);
             $account->delete();
         } catch (Exception $e) {
             return response()->json(['Status' => "Database Error"]);
         }
-        return response()->json(['Status' => "Success"]);
-        
+        return response()->json(['Status' => "Success", 'Data' => User::all()]);
     }
 
     public function Login(Request $request)

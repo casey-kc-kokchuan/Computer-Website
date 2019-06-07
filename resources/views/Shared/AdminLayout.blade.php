@@ -12,6 +12,8 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 
 
 
@@ -25,10 +27,13 @@
         <script src="{{ URL::asset('js/utility.js')}}"></script>
         
 
-        <link href="https://unpkg.com/tabulator-tables@4.2.7/dist/css/tabulator.min.css" rel="stylesheet">
+        <link href="https://unpkg.com/tabulator-tables@4.2.7/dist/css/semantic-ui/tabulator_semantic-ui.min.css" rel="stylesheet">
         <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.7/dist/js/tabulator.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
 
 {{--         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
@@ -54,17 +59,11 @@
 
                 <ul class="list-unstyled components">
                     <li><a href="#"><i class="fas fa-home"></i>&nbsp;&nbsp;Home</a></li>
-                    <li>
-                        <a href="#productSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-boxes"></i>&nbsp;&nbsp;Product</a>
-                        <ul class="collapse list-unstyled" id="productSubmenu">
-                            <li><a href="/Admin/ProductManager">Manage</a></li>
-                            <li><a href="#">Configuration</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="/Admin/Account"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>    
+                    <li><a href="{{ url('Admin/ProductManager') }}"><i class="fas fa-boxes"></i>&nbsp;&nbsp;Product</a></li>
+                    <li><a href="{{ url('Admin/Account') }}"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>    
                     <li><a href="#"><i class="fas fa-receipt"></i>&nbsp;&nbsp;Order</a></li>
-                    {{-- <li><a href="#"></i>&nbsp;&nbsp;{{ Auth::user()->username}}</a></li> --}}
-                    {{-- <li><a href="{{ url('Account/Logout')}}">&nbsp;&nbsp;Logout</a></li> --}}
+{{--                     <li><a href="#"></i>&nbsp;&nbsp;{{ Auth::user()->username}}</a></li> 
+                    <li><a href="{{ url('Account/Logout')}}">&nbsp;&nbsp;Logout</a></li> --}}
                 </ul>
 
             </nav>

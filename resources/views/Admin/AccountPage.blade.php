@@ -10,37 +10,7 @@
 
 <style type="text/css">
 	
-#account-detail-overlay
-{
-	height: 100%;
-	width: 100%;
-	position: fixed;
-	top:0;
-	right: -100vw; 
-	z-index: 1;
-	transition: right 0.3s linear;
 
-}
-
-#account-detail-overlay.active
-{
-	right:0;
-}
-
-#account-detail
-{
-	border-top:5px solid black;
-	border-left:5px solid black;
-	width:calc(100% - 250px - 5%);
-
-	height:95%;
-	position: absolute;
-	background: white;
-	right:0;
-	top:2%;
-	overflow-y: auto;
-	overflow-x: hidden;   
-}
 
 </style>
 
@@ -51,12 +21,12 @@
 @section('body')
 
 
-<h2>Account</h2>
 
-<div class="row">
-	<div class="col-12">
-		<div class="card">
-			<button class="btn-blue btn-size-form" onclick="toggleOverlay('#account-detail-overlay')"><i class="fas fa-user-plus"></i>Add Account</button>
+
+<div class="row account-box">
+	<div class="col-12 col-lg-11 account-btn-box">
+		<button class="btn-green btn-size-form addBtn" onclick="accountDetail.isEdit=false;toggleOverlay('#account-detail-overlay')"><i class="fas fa-user-plus mr-2"></i>Add Account</button>
+		<div class="account-table-box">
 			<div id="account-table"></div>
 		</div>
 	</div>
@@ -65,10 +35,14 @@
 
 <div id="account-detail-overlay">
 	<div id="account-detail">
-		<form  @submit.prevent="handleSubmit">
+		<div class="row">
+			<div class="col-12 col-lg-1">
+				<button type="button" @click="hide" class="overlay-close-btn"><i class="fas fa-angle-right"></i></button>
+			</div>
+
+			<div class="col-12 col-lg-8">
+				<form  @submit.prevent="handleSubmit">
 			@csrf
-			<div class="row">
-				<div class="offset-2 col-8">
 					
 					<input type="hidden" name="id" v-model="accountDetail.id">
 
@@ -78,16 +52,18 @@
 						<p class="text-danger" v-if="error.username">@{{ error.username[0] }}</p>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group" v-if="!isEdit">
 						<label for="">Password</label>
 						<input type="password" name="password" class="form-control" v-model="accountDetail.password">
 						<p class="text-danger" v-if="error.password">@{{ error.password[0] }}</p>
 					</div>
 
-{{-- 					<div class="form-group">
+					<div class="form-group" v-if="!isEdit">
 						<label for="">Confirm Password</label>
-						<input type="text" v-model="confirmPassword">
-					</div> --}}
+						<input type="password" v-model="accountDetail.confirmPassword" class="form-control">
+						<p class="text-danger" v-if="error.password">@{{ error.password[0] }}</p>
+
+					</div>
 
 					<div class="form-group">
 						<label for="">Full Name</label>
@@ -95,10 +71,21 @@
 						<p class="text-danger" v-if="error.full_name">@{{ error.full_name[0] }}</p>
 					</div>
 
+					<div class="form-group">
+						<label for="">Role</label>
+						<select name="role" v-model="accountDetail.role" class="form-control">
+							<option value="">Select Role</option>
+							<option value="Admin">Admin</option>
+							<option value="Store Manager">Store Manager</option>
+							<option value="Product Manager">Product Manager</option>
+							<option value="Sales Assistant">Sales Assistant</option>
+						</select>
+						<p class="text-danger" v-if="error.role">@{{ error.role[0] }}</p>
+					</div>
 
 					<div class="form-group">
 						<label for="">Gender</label>
-						<select name="gender" v-model="accountDetail.gender">
+						<select name="gender" v-model="accountDetail.gender" class="form-control">
 							<option value="">Select Gender</option>
 							<option value="Male">Male</option>
 							<option value="Female">Female</option>
@@ -118,23 +105,12 @@
 						<p class="text-danger" v-if="error.email">@{{ error.email[0] }}</p>
 					</div>
 
-					<div class="form-group">
-						<label for="">Role</label>
-						<select name="role" v-model="accountDetail.role">
-							<option value="">Select Role</option>
-							<option value="Admin">Admin</option>
-							<option value="Store Manager">Store Manager</option>
-							<option value="Product Manager">Product Manager</option>
-							<option value="Sales Assistant">Sales Assistant</option>
-						</select>
-						<p class="text-danger" v-if="error.role">@{{ error.role[0] }}</p>
-					</div>
 
-					<button type="submit">Add Account</button>
-					<button type="button"  @click="Hide">Close</button>
-				</div>
+					<button type="submit" class="btn-blue btn-size-form" style="width:100%" v-if="isEdit">Save</button>
+					<button type="submit" class="btn-green btn-size-form" style="width:100%" v-else>Add</button>
+				</form>
 			</div>
-		</form>
+		</div>
 	</div>
 
 </div>
@@ -148,17 +124,19 @@
 
 var deleteIcon = function(cell, formatterParams, onRendered)
 {
-	return '<i class="fas fa-times" style="color:red;"></i>';
+	// return '<i class="fas fa-times" style="color:red;"></i>';
+	return '<button class="btn-red"><i class="fas fa-times"></i></button>'
 }
 
 var editIcon = function(cell, formatterParams, onRendered)
 {
 	return '<i class="far fa-edit"></i>';
+
 }
 
 var table = new Tabulator("#account-table",{
 	layout: "fitDataFill",
-	height: "70vh",
+	data: {!! json_encode($Data) !!},
 	headerFilterPlaceholder: "Search",
 	columns:
 	[
@@ -170,13 +148,14 @@ var table = new Tabulator("#account-table",{
 		{title:"Contact No", field:"contact", headerFilter:true},
 		{title:"Email", field:"email", headerFilter:true},
 		{title:"Edit", formatter:editIcon, align:"center", tooltip:"Edit", 
-			// cellClick(e, cell)
-			// {
-			// 	accountDetail.accountDetail = cell.getData();
-			// 	toggleOverlay('#account-detail-overlay');
-			// }
+			cellClick(e, cell)
+			{
+				accountDetail.accountDetail = cell.getData();
+				accountDetail.isEdit = true;
+				toggleOverlay('#account-detail-overlay');
+			}
 		},
-		{title:"Remove", formatter:deleteIcon, align:"center", toottip:"Remove",
+		{title:"Remove", formatter:deleteIcon, align:"center", tooltip:"Remove",
 			cellClick(e, cell)
 			{
 				Swal.fire(
@@ -237,52 +216,68 @@ var accountDetail = new Vue(
 			id:"",
 			username:"",
 			password: "",
+			confirmPassword: "",
 			full_name:"",
 			gender: "",
 			contact: "",
 			email:"",
 			role:""
 		},
-
 		error: {},
+		isEdit: false
 	},
 	methods:
 	{
 		handleSubmit(event)
 		{
 			var formData = new FormData(event.target);
-			formAjax("/Account/AddAccount", "POST", formData, this.manageAccount, alertError);
+
+			if(this.isEdit)
+			{
+				formAjax("/Account/EditAccount", "POST", formData, this.editAccount, alertError);
+			}
+			else
+			{
+
+				if(this.checkPassword())
+				{
+
+					formAjax("/Account/AddAccount", "POST", formData, this.addAccount, alertError);
+				}
+				else
+				{
+					SwalError('Invalid detail. Please check error messages.', '');
+					this.error = { password: ["Password does not match."]};
+				}
+			}
 		},
 
-		Edit()
-		{
-
-		},
-
-		Hide()
+		hide()
 		{
 			this.accountDetail = 
 			{
 				id:"",
 				username:"",
 				password: "",
+				confirmPassword: "",
 				full_name:"",
 				gender: "",
 				contact: "",
 				email:"",
 				role:""
 			}
+			this.error = {};
 			toggleOverlay('#account-detail-overlay')
 		},
 
-		manageAccount(response)
+		addAccount(response)
 		{
 			if(response.Status == "Success")
 			{
 
 				SwalSuccess('New account is successfully added.','');
-				table.setData();
-				this.Hide();
+				table.setData(response.Data);
+				this.hide();
 				return 0;
 			}
 
@@ -296,6 +291,42 @@ var accountDetail = new Vue(
 			if(response.Status == "Database Error")
 			{
 				SwalError('Database Error. Please contact administrator.','');
+			}
+		},
+
+		editAccount(response)
+		{
+			if(response.Status == "Success")
+			{
+
+				SwalSuccess('Account is successfully edited.','');
+				table.setData(response.Data);
+				this.hide();
+				return 0;
+			}
+
+			if(response.Status == "Validation Error")
+			{
+				SwalError('Invalid detail. Please check error messages.','');
+				this.error = response.Message;
+				return 0;
+			}
+
+			if(response.Status == "Database Error")
+			{
+				SwalError('Database Error. Please contact administrator.','');
+			}
+		},
+
+		checkPassword()
+		{
+			if(this.accountDetail.password == this.accountDetail.confirmPassword)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}

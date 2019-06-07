@@ -86,22 +86,38 @@ class ProductController extends Controller
         return redirect()->route('Admin.index')->with('success', 'Data Deleted');
     }
 
-    public function deleteBrand(Request $request)
+    public function DeleteType(Request $request)
     {
       try {
           $id = $request->id;
-          $brands = Brands::find($id);
-          $brands->delete();
+          $types = Types::find($id);
+          $types->delete();
 
-      } catch (Exception $e) {
+     } catch (QueryException $e) {
           return response()->json(['Status' => "Database Error"]);
-      }
+     }
 
-
+     return response()->json(['Status' => "Success","Data" => Types::all()]);
 
     }
 
-    
+
+     public function DeleteBrand(Request $request)
+     {
+       try {
+           $id = $request->id;
+           $brands = Brands::find($id);
+           $brands->delete();
+
+      } catch (QueryException $e) {
+           return response()->json(['Status' => "Database Error"]);
+      }
+
+      return response()->json(['Status' => "Success","Data" => Brands::all()]);
+
+     }
+
+
     public function search(Request $request)
     {
 
@@ -122,8 +138,13 @@ class ProductController extends Controller
 
     public function AddProduct(Request $request)
     {
+
+        $searchType = empty($request->searchType)? "": $request->searchType;
+        $searchName = empty($request->searchName)? "": $request->searchName;
+        $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
+
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique',
+            'name' => 'required|unique:products',
             'type' => 'required',
             'brand' => 'required',
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
@@ -137,11 +158,6 @@ class ProductController extends Controller
         {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
-
-        // if($validator->fails())
-        // {
-
-        // }
 
         try
         {
@@ -179,21 +195,35 @@ class ProductController extends Controller
             ->where('id', $id)
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
+
+        // $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+        //                     ->where('type', 'LIKE', '%'.$searchType.'%')
+        //                     ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+        //                     ->get();
+
+
+        // return response()->json(['Status' => "Success","Data" => $searchProduct]);
+
         return response()->json(['Status' => "Success","Data" => Types::all()]);
     }
 
 
     public function AddType(Request $request)
     {
-        try {
-            $validator = Types::make($request->all(), [
-            'type' => 'required',
+
+
+        $validator = Validator::make($request->all(), [
+        'type' => 'required|unique:types',
 
         ]);
 
-        } catch (Exception $e) {
+
+        if($validator->fails())
+        {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
+
+
 
         try
         {
@@ -201,27 +231,28 @@ class ProductController extends Controller
             $types = new Types();
             $types->type = $request->type;
             $types->save();
-            $id = $types->id;
 
 
         } catch (QueryException $e) {
 
-            return response()->json(['Status' => "Database Error", "Message" => $types->errors()]);
+            return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
         }
-
 
         return response()->json(['Status' => "Success","Data" => Types::all()]);
     }
 
     public function AddBrand(Request $request)
     {
-        try {
-            $validator = Brands::make($request->all(), [
-            'brand' => 'required',
+
+
+
+        $validator = Validator::make($request->all(), [
+        'brand' => 'required|unique:brands',
 
         ]);
 
-        } catch (Exception $e) {
+        if($validator->fails())
+        {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
 
@@ -231,18 +262,20 @@ class ProductController extends Controller
             $brands = new Brands();
             $brands->brand = $request->brand;
             $brands->save();
-            $id = $brands->id;
 
 
         } catch (QueryException $e) {
 
 
-            return response()->json(['Status' => "Database Error", "Message" => $brands->errors()]);
+            return response()->json(['Status' => "Database Error", "Message" =>  $e->getMessage()]);
         }
 
 
         return response()->json(['Status' => "Success","Data" => Brands::all()]);
+
     }
+
+
 
     public function check(Request $request)
     {
