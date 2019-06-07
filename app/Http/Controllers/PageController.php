@@ -14,7 +14,7 @@ class PageController extends Controller
 
 	public function testGet()
 	{
-		return view("Shared/Test");
+		return response()->json(Products::all());
 	}
 
 	public function testPost(Request $request)

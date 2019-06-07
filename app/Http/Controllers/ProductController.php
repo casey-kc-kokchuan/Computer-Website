@@ -179,15 +179,14 @@ class ProductController extends Controller
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
 
-        // $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
-        //                     ->where('type', 'LIKE', '%'.$searchType.'%')
-        //                     ->where('brand', 'LIKE', '%'.$searchBrand.'%')
-        //                     ->get();
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
 
 
-        // return response()->json(['Status' => "Success","Data" => $searchProduct]);
+        return response()->json(['Status' => "Success","Data" => $searchProduct]);
 
-        return response()->json(['Status' => "Success","Data" => Types::all()]);
     }
 
 
