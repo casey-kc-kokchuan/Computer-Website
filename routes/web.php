@@ -22,7 +22,7 @@ Page Controller
 // Customer
 Route::get('/', 'PageController@showShoppingCart');
 
-
+ 
 // Admin
 Route::group(['prefix' => 'Admin'], function()
 	{
@@ -48,8 +48,9 @@ Route::post('/Product/AddProduct', 'ProductController@AddProduct');
 Route::post('/Product/EditProduct', 'ProductController@EditProduct');
 Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
 Route::post('/Product/AddType', 'ProductController@AddType');
+Route::post('/Product/DeleteType', 'ProductController@DeleteType');
 Route::post('/Product/AddBrand', 'ProductController@AddBrand');
-Route::post('/Product/DeleteBrand','ProductController@deleteBrand');
+Route::post('/Product/DeleteBrand','ProductController@DeleteBrand');
 
 Route::get('/check', 'ProductController@check');
 
@@ -68,29 +69,9 @@ Account Controller
 */
 
 
-// Route::group([ 'prefix' => 'Account', 'middleware' => ['auth', 'role:Admin|Store Manager']], function()
-// 	{
-// 		Route::get('/ShowAllData', 'AccountController@ShowAllData');
-
-
-
-// 		Route::post('/AddAccount', 'AccountController@AddAccount');
-// 		Route::post('/RemoveAccount', 'AccountController@RemoveAccount');
-// 	});
-
-// Route::post('Account/Login', 'AccountController@Login');
-// Route::get('Account/Logout', 'AccountController@Logout');
-
 Route::get('Account/ShowAllData', 'AccountController@ShowAllData');
 Route::get('Account/Logout', 'AccountController@Logout');
-
 Route::post('Account/Login', 'AccountController@Login');
 Route::post('Account/AddAccount', 'AccountController@AddAccount');
 Route::post('Account/EditAccount', 'AccountController@EditAccount');
 Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');
-
-
-
-
-
-

@@ -12,7 +12,6 @@ use App\Brands;
 
 class ProductController extends Controller
 {
-    
     // public function deleteBrand(Request $request)
     // {
     //   try {
@@ -20,13 +19,27 @@ class ProductController extends Controller
     //       $brands = Brands::find($id);
     //       $brands->delete();
 
-    //   } catch (Exception $e) {
-    //       return response()->json(['Status' => "Database Error"]);
-    //   }
+     return response()->json(['Status' => "Success","Data" => Types::all()]);
 
-    // }
+    }
 
-    
+
+     public function DeleteBrand(Request $request)
+     {
+       try {
+           $id = $request->id;
+           $brands = Brands::find($id);
+           $brands->delete();
+
+      } catch (QueryException $e) {
+           return response()->json(['Status' => "Database Error"]);
+      }
+
+      return response()->json(['Status' => "Success","Data" => Brands::all()]);
+
+     }
+
+
     public function search(Request $request)
     {
 
@@ -218,8 +231,8 @@ class ProductController extends Controller
     public function AddBrand(Request $request)
     {
 
-     
-      
+
+
         $validator = Validator::make($request->all(), [
         'brand' => 'required|unique:brands',
 
@@ -236,7 +249,6 @@ class ProductController extends Controller
             $brands = new Brands();
             $brands->brand = $request->brand;
             $brands->save();
-            $id = $brands->id;
 
 
         } catch (QueryException $e) {
@@ -249,8 +261,6 @@ class ProductController extends Controller
         return response()->json(['Status' => "Success","Data" => Brands::all()]);
 
     }
-
-
 
     public function check(Request $request)
     {
