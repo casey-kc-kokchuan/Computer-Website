@@ -54,7 +54,7 @@ Route::post('/Product/DeleteBrand','ProductController@DeleteBrand');
 
 Route::get('/check', 'ProductController@check');
 
-
+ 
 /*
 --------------------------------------------------------------------------
 Order Controller

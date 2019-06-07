@@ -9,7 +9,7 @@ use App\Role;
 use App\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Hash; 
 use \Illuminate\Database\QueryException;
 use Laratrust\Models\LaratrustRoleTrait;
 
