@@ -94,7 +94,7 @@ class ProductController extends Controller
           $types->delete();
 
      } catch (QueryException $e) {
-          return response()->json(['Status' => "Database Error"]);
+          return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
      }
 
      return response()->json(['Status' => "Success","Data" => Types::all()]);
@@ -110,7 +110,7 @@ class ProductController extends Controller
            $brands->delete();
 
       } catch (QueryException $e) {
-           return response()->json(['Status' => "Database Error"]);
+           return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
       }
 
       return response()->json(['Status' => "Success","Data" => Brands::all()]);
@@ -221,8 +221,6 @@ class ProductController extends Controller
         {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
-
-
 
         try
         {
