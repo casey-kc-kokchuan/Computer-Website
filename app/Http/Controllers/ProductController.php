@@ -12,81 +12,7 @@ use App\Brands;
 
 class ProductController extends Controller
 {
-    public function index()
-    {
-        // $product = Products::all()->toArray();
-        // return view('Admin.AdminInventory', compact('product'));
-        //return view('Customer.ShoppingCart', compact('product'));
-    }
-
-    public function create()
-    {
-        return view('Admin.AdminCreate');
-    }
-
-    public function store(Request $request)
-    {
-        // $this->validate($request, [
-        //     'name'  => 'required',
-        //     'type'  => 'required',
-        //     'price' => 'required'
-        // ]);
-        // $product = new products([
-        //     'name'  => $request->get('name'),
-        //     'type'  => $request->get('type'),
-        //     'price'  => $request->get('price')
-        // ]);
-        // $product->save();
-        // return redirect()->route('Admin.index')->with('success', 'Data Added');
-
-
-
-        //To store image
-        // $file =  $request->img;
-        // $file->move(public_path('/img'),'test.jpg');
-
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required',
-        // ]);
-
-        // if($validator->fails())
-        // {
-        //     return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
-
-        // }
-
-        return response()->json(['Status' => "Success", "Data" => [['type' => 'A'],['type' => 'B']]]);
-    }
-
-    public function edit($id)
-    {
-        $product = Products::find($id);
-        return view('Admin.AdminEdit', compact('product','id'));
-    }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $this->validate($request, [
-    //         'name'  => 'required',
-    //         'type'  => 'required',
-    //         'price' => 'required'
-    //     ]);
-    //     $product = Products::find($id);
-    //     $product->name = $request->get('name');
-    //     $product->type = $request->get('type');
-    //     $product->price = $request->get('price');
-    //     $product->save();
-    //     return redirect()->route('Admin.index')->with('success', 'Data Updated');
-    // }
-
-    public function destroy($id)
-    {
-        $product = Products::find($id);
-        $product->delete();
-        return redirect()->route('Admin.index')->with('success', 'Data Deleted');
-    }
-
-
+    
     // public function deleteBrand(Request $request)
     // {
     //   try {
@@ -144,7 +70,6 @@ class ProductController extends Controller
 
         try
         {
-
             $product = new Products();
             $product->name = $request->name;
             $product->type = $request->type;
@@ -154,20 +79,23 @@ class ProductController extends Controller
             $product->save();
             $id = $product->id;
 
-        } catch (QueryException $e) {
-
+        }catch (QueryException $e) 
+        {
             return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
         }
 
         $db_name_1 = '/img/default.jpg';
         $db_name_2 = '/img/default.jpg';
 
-        if($request->hasFile('img')){
+        if($request->hasFile('img'))
+        {
             $image = $request->img;
             $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
             $image->move(public_path('img'), $new_name_1);
             $db_name_1 = '/img/'.$new_name_1;
-        }if($request->hasFile('imgDetail')){
+        }
+        if($request->hasFile('imgDetail'))
+        {
             $imgDetail = $request->imgDetail;
             $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
             $imgDetail->move(public_path('img'), $new_name_2);
@@ -188,6 +116,69 @@ class ProductController extends Controller
         // return response()->json(['Status' => "Success","Data" => $searchProduct]);
 
         return response()->json(['Status' => "Success","Data" => Types::all()]);
+    }
+
+    public function EditProduct(Request $request)
+    {
+        $searchType = empty($request->searchType)? "": $request->searchType;
+        $searchName = empty($request->searchName)? "": $request->searchName;
+        $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
+        $id = $request->id;
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|',
+            'type' => 'required',
+            'brand' => 'required',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'qty' => 'required|integer|min:0',
+
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        }
+
+        try
+        {
+            $product = Products::find($id);
+            $product->name = $request->name;
+            $product->type = $request->type;
+            $product->brand = $request->brand;
+            $product->price = $request->price;
+            $product->qty = $request->qty;
+            $product->save();
+
+        } catch (QueryException $e) {
+
+            return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+        }
+
+        if($request->hasFile('img'))
+        {
+            $image = $request->img;
+            $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
+            $image->move(public_path('img'), $new_name_1);
+            $db_name_1 = '/img/'.$new_name_1;
+
+            DB::table('products')
+                ->where('id', $id)
+                ->update(['img' => $db_name_1]);
+        }
+        if($request->hasFile('imgDetail'))
+        {
+            $imgDetail = $request->imgDetail;
+            $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
+            $imgDetail->move(public_path('img'), $new_name_2);
+            $db_name_2 = '/img/'.$new_name_2;
+
+            DB::table('products')
+                ->where('id', $id)
+                ->update(['img' => $db_name_2]);
+        }
+
+        return response()->json(['Status' => "Success","Data" => Types::all()]);
+
     }
 
 

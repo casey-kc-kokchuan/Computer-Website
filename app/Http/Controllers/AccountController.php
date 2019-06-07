@@ -58,6 +58,42 @@ class AccountController extends Controller
 
     }
 
+    public function EditAccount(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required',
+            'email' => 'required|max:255|email',
+            'role' => 'required',
+            
+        ]);
+
+        if($validator->fails()) 
+        {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        } 
+
+        try
+        {
+            $account = User::find($request->id);
+            // $account->username = $request->username;
+            // $account->password = Hash::make($request->password);
+            $account->full_name = $request->full_name;
+            $account->gender = $request->gender;
+            $account->contact = $request->contact;
+            $account->email = $request->email;
+            $account->role = $request->role;
+            $account->save();
+            // $account->attachRole($request->role);
+        }
+        catch(QueryException $e)
+        {
+            return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+        }
+
+        return response()->json(['Status' => "Success", 'Data' => User::all()]);
+
+    }
+
     public function RemoveAccount(Request $request)
     {
         try {
