@@ -34,7 +34,10 @@ Route::group(['prefix' => 'Admin'], function()
 
 Route::get('/Test', 'PageController@testGet');
 Route::post('/Test', 'PageController@testPost');
-
+Route::get('/Test2', function()
+{
+	dd('Order Verified');
+});
 /*
 --------------------------------------------------------------------------
 Product Controller

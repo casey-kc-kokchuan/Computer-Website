@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Products;
 use App\User;
 use App\Types;
 use App\Brands;
+use App\Mail\OrderPlaced;
 
 class PageController extends Controller
 {
 
 	public function testGet()
 	{
-		return response()->json(Products::all());
+		Mail::to("chuanfrost98@gmail.com")->send(new OrderPlaced);
+		return response()->json("sent");
 	}
 
 	public function testPost(Request $request)
