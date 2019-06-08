@@ -24,11 +24,12 @@ class AccountController extends Controller
     public function AddAccount(Request $request)
     {
     	 $validator = Validator::make($request->all(), [
-    	    'username' => 'required|unique:accounts|max:255',
-    	    'password' => 'required',
-            'full_name' => 'required',
+    	    'username' => 'required|unique:accounts|between:8,255',
+    	    'password' => 'required|between:8,255',
+            'full_name' => 'required|max:255',
             'email' => 'required|unique:accounts|max:255|email',
             'role' => 'required',
+            'contact' => 'max:25'
     	]);
 
     	if($validator->fails()) 
@@ -61,10 +62,10 @@ class AccountController extends Controller
     public function EditAccount(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required',
+            'full_name' => 'required|max:255',
             'email' => 'required|max:255|email',
             'role' => 'required',
-            
+            'contact' => 'max:25'
         ]);
 
         if($validator->fails()) 
@@ -75,15 +76,13 @@ class AccountController extends Controller
         try
         {
             $account = User::find($request->id);
-            // $account->username = $request->username;
-            // $account->password = Hash::make($request->password);
             $account->full_name = $request->full_name;
             $account->gender = $request->gender;
             $account->contact = $request->contact;
             $account->email = $request->email;
             $account->role = $request->role;
             $account->save();
-            // $account->attachRole($request->role);
+            $account->syncRoles([$request->role]);
         }
         catch(QueryException $e)
         {
@@ -92,6 +91,31 @@ class AccountController extends Controller
 
         return response()->json(['Status' => "Success", 'Data' => User::all()]);
 
+    }
+
+    public function ChangePassword(Request $request)
+    {
+         $validator = Validator::make($request->all(), [
+            'password' => 'required|between:8,255',
+        ]);
+
+         if($validator->fails()) 
+         {
+             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+         } 
+
+         try
+         {
+            $id = $request->id;
+            $account = User::find($id);
+            $account->password = Hash::make($request->password);
+            $account->save();
+            
+         }catch (Exception $e) {
+            return response()->json(['Status' => "Database Error"]);
+        }
+
+        return response()->json(['Status' => "Success"]);
     }
 
     public function RemoveAccount(Request $request)
@@ -106,6 +130,7 @@ class AccountController extends Controller
         return response()->json(['Status' => "Success", 'Data' => User::all()]);
     }
 
+
     public function Login(Request $request)
     {
     	$request->validate([
@@ -117,12 +142,10 @@ class AccountController extends Controller
 
     	if(Auth::attempt($credentials))
     	{
-    		return redirect()->intended('Admin/Account');
+    		return redirect('Admin/Home');
     	}
 
-
         return back()->with(['err' => 'Invalid username or password. Please try again.'])->withInput();
-
     	
     }
 

@@ -12,34 +12,6 @@ use App\Brands;
 
 class ProductController extends Controller
 {
-    // public function deleteBrand(Request $request)
-    // {
-    //   try {
-    //       $id = $request->id;
-    //       $brands = Brands::find($id);
-    //       $brands->delete();
-
-     return response()->json(['Status' => "Success","Data" => Types::all()]);
-
-    }
-
-
-     public function DeleteBrand(Request $request)
-     {
-       try {
-           $id = $request->id;
-           $brands = Brands::find($id);
-           $brands->delete();
-
-      } catch (QueryException $e) {
-           return response()->json(['Status' => "Database Error"]);
-      }
-
-      return response()->json(['Status' => "Success","Data" => Brands::all()]);
-
-     }
-
-
     public function search(Request $request)
     {
 
@@ -66,11 +38,11 @@ class ProductController extends Controller
         $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:products',
+            'name' => 'required|unique:products|max:255',
             'type' => 'required',
             'brand' => 'required',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
-            'qty' => 'required|integer|min:0',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|min:0',
+            'qty' => 'required|integer|between:0,25',
             'img' => 'required|image',
             'imgDetail' => 'required|image',
 
@@ -97,8 +69,8 @@ class ProductController extends Controller
             return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
         }
 
-        $db_name_1 = '/img/default.jpg';
-        $db_name_2 = '/img/default.jpg';
+        $db_name_1 = '/img/placeholder.png';
+        $db_name_2 = '/img/placeholder.png';
 
         if($request->hasFile('img'))
         {
@@ -120,15 +92,14 @@ class ProductController extends Controller
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
 
-        // $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
-        //                     ->where('type', 'LIKE', '%'.$searchType.'%')
-        //                     ->where('brand', 'LIKE', '%'.$searchBrand.'%')
-        //                     ->get();
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
 
 
-        // return response()->json(['Status' => "Success","Data" => $searchProduct]);
+        return response()->json(['Status' => "Success","Data" => $searchProduct]);
 
-        return response()->json(['Status' => "Success","Data" => Types::all()]);
     }
 
     public function EditProduct(Request $request)
@@ -187,20 +158,51 @@ class ProductController extends Controller
 
             DB::table('products')
                 ->where('id', $id)
-                ->update(['img' => $db_name_2]);
+                ->update(['imgDetail' => $db_name_2]);
         }
 
-        return response()->json(['Status' => "Success","Data" => Types::all()]);
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
 
+
+        return response()->json(['Status' => "Success","Data" => $searchProduct]);
+
+    }
+
+
+    public function RemoveProduct(Request $request)
+    {
+
+        $searchType = empty($request->searchType)? "": $request->searchType;
+        $searchName = empty($request->searchName)? "": $request->searchName;
+        $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
+
+        try {
+            $id = $request->id;
+            $product = Products::find($id);
+            $product->delete();
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Database Error"]);
+        }
+
+
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
+
+        return response()->json(['Status' => "Success", "Data" => $searchProduct]);
+        
     }
 
 
     public function AddType(Request $request)
     {
 
-
         $validator = Validator::make($request->all(), [
-        'type' => 'required|unique:types',
+        'type' => 'required|unique:types|max:255',
 
         ]);
 
@@ -209,8 +211,6 @@ class ProductController extends Controller
         {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
-
-
 
         try
         {
@@ -231,10 +231,8 @@ class ProductController extends Controller
     public function AddBrand(Request $request)
     {
 
-
-
         $validator = Validator::make($request->all(), [
-        'brand' => 'required|unique:brands',
+        'brand' => 'required|unique:brands|max:255',
 
         ]);
 
@@ -261,6 +259,38 @@ class ProductController extends Controller
         return response()->json(['Status' => "Success","Data" => Brands::all()]);
 
     }
+
+    public function DeleteType(Request $request)
+    {
+          try {
+              $id = $request->id;
+              $types = Types::find($id);
+              $types->delete();
+
+         } catch (QueryException $e) {
+              return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+         }
+
+
+         return response()->json(['Status' => "Success","Data" => Types::all()]);
+
+    }
+
+
+     public function DeleteBrand(Request $request)
+     {
+           try {
+               $id = $request->id;
+               $brands = Brands::find($id);
+               $brands->delete();
+
+          } catch (QueryException $e) {
+               return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+          }
+
+          return response()->json(['Status' => "Success","Data" => Brands::all()]);
+
+     }
 
     public function check(Request $request)
     {

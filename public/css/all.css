@@ -10,6 +10,10 @@ label
     font-family:Helvetica;
 }
 
+input[disabled] {
+  cursor: not-allowed;
+}
+
 .max-height
 {
     height: 100%;

@@ -308,7 +308,9 @@ var productManager = new Vue(
 				productDetail.tempoBrand = this.productList[index].brand;
 			}
 
-			productDetail.productDetail = this.productList[index];
+			var obj = {};
+			Object.assign(obj, this.productList[index]);
+			productDetail.productDetail = obj;
 			productDetail.isEdit = true;
 		},
 
