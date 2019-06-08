@@ -22,14 +22,17 @@ Page Controller
 // Customer
 Route::get('/', 'PageController@showShoppingCart');
 
-
+ 
 // Admin
-Route::group(['prefix' => 'Admin'], function()
+Route::group(['prefix' => 'Admin', 'middleware' => ['auth']], function()
 	{
-		Route::get('/', 'PageController@showLogin');
-		Route::get('/ProductManager', 'PageController@showProductManager');
-		Route::get('/Account', 'PageController@showAccount');
+		Route::get('/ProductManager', 'PageController@showProductManager')->middleware('role:Admin|Store Manager|Product Manager');
+		Route::get('/Account', 'PageController@showAccount')->middleware('role:Admin|Store Manager');
+		Route::get('/OrderManager', 'PageController@showOrderManager');
+		Route::get('/Home', 'PageController@showHome');
 	});
+
+Route::get('Admin', 'PageController@showLogin');
 
 
 Route::get('/Test', 'PageController@testGet');
@@ -44,32 +47,36 @@ Product Controller
 --------------------------------------------------------------------------
 */
 
-//Route::resource('Admin','ProductController');
-
-// Route::get('/Admin', function () {
-//     return view('Admin.AdminInventory');
-// });
-
-Route::get('/check', 'ProductController@check');
-
 
 Route::get('/Product/search', 'ProductController@search');
-Route::post('/Product/AddProduct', 'ProductController@AddProduct');
-Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
-Route::post('/Product/AddType', 'ProductController@AddType');
-Route::post('/Product/DeleteType', 'ProductController@DeleteType');
-Route::post('/Product/AddBrand', 'ProductController@AddBrand');
-Route::post('/Product/DeleteBrand','ProductController@DeleteBrand');
+
+Route::group(['prefix' => 'Product', 'middleware' => ['auth','role:Admin|Store Manager|Product Manager']], function()
+{
+	Route::post('/AddProduct', 'ProductController@AddProduct');
+	Route::post('/EditProduct', 'ProductController@EditProduct');
+	Route::post('/RemoveProduct', 'ProductController@RemoveProduct');
+	Route::post('/AddType', 'ProductController@AddType');
+	Route::post('/DeleteType', 'ProductController@DeleteType');
+	Route::post('/AddBrand', 'ProductController@AddBrand');
+	Route::post('/DeleteBrand','ProductController@DeleteBrand');
+
+});
+
+
 
 Route::get('/check', 'ProductController@check');
 
-
+ 
 /*
 --------------------------------------------------------------------------
 Order Controller
 --------------------------------------------------------------------------
 */
 
+// Route::group(['prefix' => 'Order'], function()
+// {
+
+// });
 
 /*
 --------------------------------------------------------------------------
@@ -77,9 +84,15 @@ Account Controller
 --------------------------------------------------------------------------
 */
 
+Route::group(['prefix' => 'Account', 'middleware' => ['auth','role:Admin|Store Manager']], function()
+{
+	Route::get('/ShowAllData', 'AccountController@ShowAllData');
+	Route::post('/AddAccount', 'AccountController@AddAccount');
+	Route::post('/EditAccount', 'AccountController@EditAccount');
+	Route::post('/RemoveAccount', 'AccountController@RemoveAccount');
+	Route::post('/ChangePassword', 'AccountController@ChangePassword');
+});
 
-Route::get('Account/ShowAllData', 'AccountController@ShowAllData');
-Route::get('Account/Logout', 'AccountController@Logout');
+
+Route::get('Account/Logout', 'AccountController@Logout')->middleware('auth');
 Route::post('Account/Login', 'AccountController@Login');
-Route::post('Account/AddAccount', 'AccountController@AddAccount');
-Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');

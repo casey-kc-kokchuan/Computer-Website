@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use App\Products;
 use App\User;
 use App\Types;
@@ -51,6 +52,24 @@ class PageController extends Controller
 
 	public function showLogin()
 	{
-		return view('Admin/LoginPage');
+
+		if(Auth::check())
+		{
+			return view('Admin/HomePage');
+		}
+		else
+		{
+			return view('Admin/LoginPage');
+		}
+	}
+
+	public function showOrderManager()
+	{
+		return view('Admin/OrderManager');
+	}
+
+	public function showHome()
+	{
+		return view ('Admin/HomePage');
 	}
 }

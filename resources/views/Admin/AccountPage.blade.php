@@ -48,7 +48,7 @@
 
 					<div class="form-group">
 						<label for="">Username</label>
-						<input type="text" name="username" class="form-control" v-model="accountDetail.username">
+						<input type="text" name="username" class="form-control" v-model="accountDetail.username" :disabled="isEdit">
 						<p class="text-danger" v-if="error.username">@{{ error.username[0] }}</p>
 					</div>
 
@@ -134,6 +134,11 @@ var editIcon = function(cell, formatterParams, onRendered)
 
 }
 
+var passwordIcon = function(cell, formatterParams, onRendered)
+{
+	return '<i class="fas fa-user-lock"></i>';
+}
+
 var table = new Tabulator("#account-table",{
 	layout: "fitDataFill",
 	data: {!! json_encode($Data) !!},
@@ -150,7 +155,9 @@ var table = new Tabulator("#account-table",{
 		{title:"Edit", formatter:editIcon, align:"center", tooltip:"Edit", 
 			cellClick(e, cell)
 			{
-				accountDetail.accountDetail = cell.getData();
+				var obj = {};
+				Object.assign(obj, cell.getData())
+				accountDetail.accountDetail = obj;
 				accountDetail.isEdit = true;
 				toggleOverlay('#account-detail-overlay');
 			}
@@ -200,7 +207,93 @@ var table = new Tabulator("#account-table",{
 					});
 				
 			}
-		}
+		},
+		{title:"Change Password", formatter:passwordIcon, align:"center", tooltip:"Change Password",cellClick(e, cell)
+			{
+				(
+				async function getFormValues () 
+				{
+					const {value: formValues} = await Swal.fire(
+					{
+					  title: 'Change Password',
+					  html:
+					    '<input type="password" id="password" class="swal2-input" placeholder="Password">' + 
+					    '<input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirm Password">' +
+					    '<p id="err" class="text-danger"></p>' ,
+					  focusConfirm: false,
+					  showCancelButton:true,
+					  cancelButtonColor:'#d9534f',
+					  cancelButtonText: "No",
+					  confirmButtonColor:'#5cb85c',
+					  confirmButtonText: 'Save',
+					  preConfirm: ()=>
+					  {
+					  	let password = document.getElementById('password').value;
+					  	let confirmPassword = document.getElementById('confirmPassword').value;
+
+					  	if( password && confirmPassword)
+					  	{
+
+					  		if(password.length < 8 || password.length > 255)
+					  		{
+					  			document.getElementById('err').innerHTML = "The password must be between 8 and 255 characters.";
+					  		}
+					  		else
+					  		{
+					  			if(password == confirmPassword)
+					  			{
+					  				
+					  				return {
+					  					id: cell.getData().id,
+					  					password: password
+					  				}
+					  			}
+					  			else
+					  			{
+					  				document.getElementById('err').innerHTML = "Password does not match.";
+					  				document.getElementById('password').value  = "";
+					  				document.getElementById('confirmPassword').value  = "";
+					  			}
+					  		}
+
+					  	}	
+					  	else
+					  	{
+					  		document.getElementById('err').innerHTML = "Both field is required.";
+					  	}
+					    return false;
+					  }
+					})
+
+					if (formValues) 
+					{
+
+						jsonAjax("/Account/ChangePassword", "POST", JSON.stringify(formValues) ,function(response)
+							{
+								if(response.Status == "Success")
+								{
+
+									SwalSuccess('Password is successfully changed.','');
+									return 0;
+								}
+
+								if(response.Status == "Validation Error")
+								{
+									SwalError('Validation Error' ,response.Message.password[0]);
+									return 0;
+								}
+
+								if(response.Status == "Database Error")
+								{
+									SwalError('Database Error. Please contact administrator.','');
+								}
+							}
+							,alertError);
+
+					}
+				})()
+			}
+		},
 		
 	],
 	ajaxURL: "/Account/ShowAllData", 
