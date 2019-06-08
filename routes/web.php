@@ -22,7 +22,7 @@ Page Controller
 // Customer
 Route::get('/', 'PageController@showShoppingCart');
 
-
+ 
 // Admin
 Route::group(['prefix' => 'Admin'], function()
 	{
@@ -41,17 +41,11 @@ Product Controller
 --------------------------------------------------------------------------
 */
 
-//Route::resource('Admin','ProductController');
-
-// Route::get('/Admin', function () {
-//     return view('Admin.AdminInventory');
-// });
-
 Route::get('/check', 'ProductController@check');
-
 
 Route::get('/Product/search', 'ProductController@search');
 Route::post('/Product/AddProduct', 'ProductController@AddProduct');
+Route::post('/Product/EditProduct', 'ProductController@EditProduct');
 Route::post('/Product/RemoveProduct', 'ProductController@RemoveProduct');
 Route::post('/Product/AddType', 'ProductController@AddType');
 Route::post('/Product/DeleteType', 'ProductController@DeleteType');
@@ -60,7 +54,7 @@ Route::post('/Product/DeleteBrand','ProductController@DeleteBrand');
 
 Route::get('/check', 'ProductController@check');
 
-
+ 
 /*
 --------------------------------------------------------------------------
 Order Controller
@@ -79,4 +73,5 @@ Route::get('Account/ShowAllData', 'AccountController@ShowAllData');
 Route::get('Account/Logout', 'AccountController@Logout');
 Route::post('Account/Login', 'AccountController@Login');
 Route::post('Account/AddAccount', 'AccountController@AddAccount');
+Route::post('Account/EditAccount', 'AccountController@EditAccount');
 Route::post('Account/RemoveAccount', 'AccountController@RemoveAccount');
