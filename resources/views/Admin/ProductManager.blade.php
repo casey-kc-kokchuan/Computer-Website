@@ -201,7 +201,7 @@
 						<img :src="productDetail.imgDetail" id="imgDetail">
 					</div>
 
-					<button type="submit" class="btn-blue btn-size-form"v-if="isEdit">Save</button>
+					<button type="submit" class="btn-blue btn-size-form" v-if="isEdit">Update</button>
 					<button type="submit" class="btn-green btn-size-form" v-else>Add</button>
 				</form>
 			</div>
@@ -434,7 +434,6 @@ var productDetail = new Vue(
 	{
 		handleSubmit(event)
 		{
-
 			var form = new FormData(event.target);
 			form.append("searchName", productManager.name)
 			form.append("searchType", productManager.type)

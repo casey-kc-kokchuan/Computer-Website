@@ -15,14 +15,14 @@
 
 @section('body')
 
-<div class="container" >
+<div class="container-fluid" >
 	<div class="row" id="shoppingCart">
 
 
-		<div class="col-12" style="height:5%;">
-			
+		<div class="col-2">
+
 			<label for="sortby">Sort By: </label>
-			<select class="form-control" v-model="type" style="width:30%;display: inline-block;">
+			<select class="form-control" v-model="type">
 				<option value="">All</option>
 				@foreach ($types as $type)
 					<option value="{{$type->type}}">{{$type->type}}</option>

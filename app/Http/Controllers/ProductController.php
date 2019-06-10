@@ -42,7 +42,7 @@ class ProductController extends Controller
             'type' => 'required',
             'brand' => 'required',
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|min:0',
-            'qty' => 'required|integer|between:0,25',
+            'qty' => 'required|integer|min:0',
             'img' => 'required|image',
             'imgDetail' => 'required|image',
 
