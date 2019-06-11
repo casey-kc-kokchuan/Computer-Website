@@ -127,22 +127,22 @@
 
 $(document).ready(function()
 {
-	 // $(".product-list").mCustomScrollbar({
-	 //     theme: "dark",
-	 //     scrollButtons:{ enable: true },
-	 //     axis : "yx",
-	 //     advanced:{autoExpandHorizontalScroll:true}, 
-  //     callbacks:{
-  //       onOverflowY:function(){
-  //         var opt=$(this).data("mCS").opt;
-  //         if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
-  //       },
-  //       onOverflowX:function(){
-  //         var opt=$(this).data("mCS").opt;
-  //         if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
-  //       },
-  //   }
-	 // });
+	 $(".product-list").mCustomScrollbar({
+	     theme: "dark",
+	     scrollButtons:{ enable: true },
+	     axis : "yx",
+	     advanced:{autoExpandHorizontalScroll:true}, 
+      callbacks:{
+        onOverflowY:function(){
+          var opt=$(this).data("mCS").opt;
+          if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
+        },
+        onOverflowX:function(){
+          var opt=$(this).data("mCS").opt;
+          if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
+        },
+    }
+	 });
 
 	 // 	 $(".cart-list").mCustomScrollbar({
 	 // 	     theme: "dark",
@@ -247,26 +247,24 @@ var orderDetail = new Vue(
 			obj.cart = shoppingCart.cartList;
 			obj.total_price = shoppingCart.formatPrice(shoppingCart.total_price);
 
-			alert(JSON.stringify(obj))
+			jsonAjax("/Order/PlaceOrder", "POST", JSON.stringify(obj) ,function(response)
+				{
+					if(response.Status == "Success")
+					{
+						SwalSuccess("Data successfully trasmitted", "");
+					}
 
-			// jsonAjax("/Order/PlaceOrder", "POST", "",function(response)
-			// 	{
-			// 		if(response.Status == "Success")
-			// 		{
+					if(response.Status == "Database Error")
+					{
+						SwalError("Database Error", "")
+					}
 
-			// 		}
+					if(response.Status == "Quantity Error")
+					{
+						SwalError("Quantity Error", alert(response.Message))
+					}	
 
-			// 		if(response.Status == "Database Error")
-			// 		{
-
-			// 		}
-
-			// 		if(response.Status == "Quantity Error")
-			// 		{
-
-			// 		}
-
-			// 	}, alertError);
+				}, alertError);
 		}
 	}
 
