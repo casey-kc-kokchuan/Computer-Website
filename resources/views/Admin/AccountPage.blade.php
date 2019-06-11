@@ -124,7 +124,6 @@
 
 var deleteIcon = function(cell, formatterParams, onRendered)
 {
-	// return '<i class="fas fa-times" style="color:red;"></i>';
 	return '<button class="btn-red"><i class="fas fa-times"></i></button>'
 }
 

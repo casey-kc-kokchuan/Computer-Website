@@ -292,17 +292,6 @@ class ProductController extends Controller
 
      }
 
-    public function check(Request $request)
-    {
-        // $product = new Products();
-        // $product->name = $request->name;
-        // $product->save();
-        // $id = $product->id;
-        // DB::table('products')
-        //     ->where('id', $id)
-        //     ->update(['img' => 'something', 'imgDetail' => 'somethingelse']);
-
-    }
 
 
 }

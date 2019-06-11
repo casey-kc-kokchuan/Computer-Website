@@ -8,18 +8,27 @@
 
 @section('head')
 
+<style type="text/css">
 
+
+/*override container fluid	*/
+.container-fluid
+{
+	padding: 0px !important;
+}
+
+</style>
 @endsection
 
 
 
 @section('body')
 
-<div class="container-fluid">
+<div class="container-fluid ">
 	<div class="row no-gutters" id="shoppingCart">
 
 
-		<div class="col-12 col-lg-2 max-height">
+		<div class="col-12 col-lg-2 max-height cart-search-box">
 
 			<label>Name</label>
 			<input type="text" v-model="searchName" placeholder="Search" class="form-control">
@@ -39,7 +48,7 @@
 			</select>
 
 			
-			<button @click="search" type="button" class="btn-yellow btn-size-form">Search</button>
+			<button @click="search" type="button" class="btn-yellow btn-size-form mt-lg-3">Search</button>
 		</div>
 
 		<div class="col-12 col-lg-5 product-list max-height">
@@ -53,27 +62,20 @@
 					<p style="font-size:0.8em">@{{product.qty}} <i>in stock</i></p>
 
 
-					<button @click="addToCart(index)">+</button>
-					<button >About</button>
+					<button @click="addToCart(index)"><i class="fas fa-plus"></i></button>
+					<button class="btn-yellow btn-size-1">About</button>
 					
 				</div>
-
-
-
-
-
-			
 		</div>
 
 		<div class="col-12 col-lg-5 max-height">
-
 			<div class="cart-list">
 				<div v-for="(cart, index) in cartList" class="cart" id="cart" >
 					<p><strong>@{{cart.name}}</strong></p>
 					<img :src="cart.img" style="width:150px;height:100px">
 					<p>RM&nbsp;@{{ formatPrice(cart.price)}}</p>
 					<p>Qty: @{{cart.qty}}</p>
-					<button @click="removeFromCart(index)">-</button>
+					<button @click="removeFromCart(index)"><i class="fas fa-minus"></i></button>
 
 				</div>
 			</div>
@@ -127,22 +129,22 @@
 
 $(document).ready(function()
 {
-	 $(".product-list").mCustomScrollbar({
-	     theme: "dark",
-	     scrollButtons:{ enable: true },
-	     axis : "yx",
-	     advanced:{autoExpandHorizontalScroll:true}, 
-      callbacks:{
-        onOverflowY:function(){
-          var opt=$(this).data("mCS").opt;
-          if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
-        },
-        onOverflowX:function(){
-          var opt=$(this).data("mCS").opt;
-          if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
-        },
-    }
-	 });
+	 // $(".product-list").mCustomScrollbar({
+	 //     theme: "dark",
+	 //     scrollButtons:{ enable: true },
+	 //     axis : "yx",
+	 //     advanced:{autoExpandHorizontalScroll:true}, 
+  //     callbacks:{
+  //       onOverflowY:function(){
+  //         var opt=$(this).data("mCS").opt;
+  //         if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
+  //       },
+  //       onOverflowX:function(){
+  //         var opt=$(this).data("mCS").opt;
+  //         if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
+  //       },
+  //   }
+	 // });
 
 	 // 	 $(".cart-list").mCustomScrollbar({
 	 // 	     theme: "dark",
