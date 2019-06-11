@@ -17,7 +17,7 @@ class PageController extends Controller
 
 	public function testGet()
 	{
-		Mail::to("chuanfrost98@gmail.com")->send(new OrderPlaced);
+		// Mail::to("chuanfrost98@gmail.com")->send(new OrderPlaced);
 		return response()->json("sent");
 	}
 

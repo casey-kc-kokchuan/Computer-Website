@@ -172,7 +172,7 @@ input[disabled] {
 {
     padding:3px 10px;    
     font-size: 17px;
-    /*font-weight: 600;*/
+    font-weight: 600;
 }
 
 .tabulator-cell, .tabulator-col
@@ -237,6 +237,7 @@ input[disabled] {
 .cart-list
 {
     height:90%;
+    overflow-y:auto;
 }
 
 .product-list .product, .cart

@@ -106,7 +106,7 @@
 					</div>
 
 
-					<button type="submit" class="btn-blue btn-size-form" style="width:100%" v-if="isEdit">Save</button>
+					<button type="submit" class="btn-blue btn-size-form" style="width:100%" v-if="isEdit">Update</button>
 					<button type="submit" class="btn-green btn-size-form" style="width:100%" v-else>Add</button>
 				</form>
 			</div>
