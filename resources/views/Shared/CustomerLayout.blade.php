@@ -16,7 +16,7 @@
         <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/app.css') }}">
         <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/all.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_max991.css')}}">
-        <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_min992.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_992to1210.css')}}">
         <script src="{{ URL::asset('js/app.js')}}"></script>
         <script src="{{ URL::asset('js/utility.js')}}"></script>
 
