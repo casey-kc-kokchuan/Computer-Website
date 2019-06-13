@@ -73,10 +73,12 @@ Order Controller
 --------------------------------------------------------------------------
 */
 
-// Route::group(['prefix' => 'Order'], function()
-// {
+Route::post('/Order/PlaceOrder', 'ProductController@PlaceOrder');
 
-// });
+Route::group(['prefix' => 'Order'], function()
+{
+	Route::get('/ShowOrder', 'ProductController@ShowOrder');
+});
 
 /*
 --------------------------------------------------------------------------
