@@ -289,7 +289,34 @@ var orderDetail = new Vue(
 
 					if(response.Status == "Quantity Error")
 					{
-						SwalError("Quantity Error", alert(response.Message));
+						toggleOverlay("#place-order-overlay");
+						var data = response.Message;
+						var txt ="";
+						
+						for(var i = 0; i < data.length; i++)
+						{
+							var	matchingIndex = shoppingCart.cartList.findIndex(x => x.id == data[i].id);
+
+							var counter = i +1;
+							if(data[i].qty <= 0)
+							{
+								txt += "<p>" + i+ ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> 0(Removed)</p>"; 
+								delete shoppingCart.cartList[matchingIndex];
+							}
+							else
+							{
+								shoppingCart.cartList[matchingIndex].qty = data[i].qty;
+								txt += "<p>" + i + ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> " + data[i].qty + "</p>"; 
+							}
+						}
+
+						// SwalError("Apologies, we are running out of stock for item(s) ordered.", '<p>Cart is automatically refreshed, changes are as follow:<p>' + txt);
+						Swal.fire(
+						{
+							title: "Apologies, we are running out of stock for item(s) ordered.",
+							html: '<p>Cart is automatically refreshed, changes are as follow:<p>' + txt,
+						});
+
 						return 0;
 					}	
 
