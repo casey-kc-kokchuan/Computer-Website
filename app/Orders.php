@@ -10,4 +10,9 @@ class Orders extends Model
 
 	protected $fillable = ['name','contact','email','address','total_price'];
 
+	public function orderlist()
+    {
+        return $this->hasMany('App\OrderList');
+    }
+
 }
