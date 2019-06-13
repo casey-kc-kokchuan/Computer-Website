@@ -114,18 +114,23 @@
 			<div class="form-group">
 				<label>Name</label>
 				<input type="text" class="form-control" v-model="orderDetail.name">
+				<p class="text-danger" v-if="error.name">@{{ error.name[0] }}</p>
 			</div>
 			<div class="form-group">
 				<label>Email</label>
 				<input type="text" class="form-control" v-model="orderDetail.email">
+				<p class="text-danger" v-if="error.email">@{{ error.email[0] }}</p>	
 			</div>
 			<div class="form-group">
 				<label>Contact</label>
 				<input type="text" class="form-control" v-model="orderDetail.contact">
+				<p class="text-danger" v-if="error.contact">@{{ error.contact[0] }}</p>
+
 			</div>
 			<div class="form-group">
 				<label>Address</label>
 				<input type="text" class="form-control" v-model="orderDetail.address">
+				<p class="text-danger" v-if="error.address">@{{ error.address[0] }}</p>
 			</div>
 
 			<button>Submit</button>
@@ -146,22 +151,22 @@
 
 $(document).ready(function()
 {
-	 $(".roduct-list").mCustomScrollbar({
-	     theme: "dark",
-	     scrollButtons:{ enable: true },
-	     axis : "y",
-	     advanced:{autoExpandHorizontalScroll:true}, 
-      callbacks:{
-        onOverflowY:function(){
-          var opt=$(this).data("mCS").opt;
-          if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
-        },
-        onOverflowX:function(){
-          var opt=$(this).data("mCS").opt;
-          if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
-        },
-    }
-	 });
+	 // $(".roduct-list").mCustomScrollbar({
+	 //     theme: "dark",
+	 //     scrollButtons:{ enable: true },
+	 //     axis : "y",
+	 //     advanced:{autoExpandHorizontalScroll:true}, 
+  //     callbacks:{
+  //       onOverflowY:function(){
+  //         var opt=$(this).data("mCS").opt;
+  //         if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
+  //       },
+  //       onOverflowX:function(){
+  //         var opt=$(this).data("mCS").opt;
+  //         if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
+  //       },
+  //   }
+	 // });
 
 	 // 	 $(".cart-list").mCustomScrollbar({
 	 // 	     theme: "dark",
@@ -262,7 +267,8 @@ var orderDetail = new Vue(
 			email: "",
 			contact: "",
 			address: ""
-		}
+		},
+		error: {},
 	},
 	methods:
 	{
@@ -278,17 +284,28 @@ var orderDetail = new Vue(
 					if(response.Status == "Success")
 					{
 						SwalSuccess("Data successfully trasmitted", "");
-					}
-
-					if(response.Status == "Database Error")
-					{
-						SwalError("Database Error", "")
+						return 0;
 					}
 
 					if(response.Status == "Quantity Error")
 					{
-						SwalError("Quantity Error", alert(response.Message))
+						SwalError("Quantity Error", alert(response.Message));
+						return 0;
 					}	
+
+					if(response.Status == "Validation Error")
+					{
+						SwalError("Validation Error", '');
+						orderDetail.error = response.Message;
+						return 0;
+					}
+
+					if(response.Status == "Database Error")
+					{
+						SwalError("Database Error", "");
+						return 0;
+					}
+
 
 				}, alertError);
 		}

@@ -142,16 +142,19 @@ var table = new Tabulator("#account-table",{
 	layout: "fitDataFill",
 	data: {!! json_encode($Data) !!},
 	headerFilterPlaceholder: "Search",
+	responsiveLayout:"collapse",
+	responsiveLayoutCollapseStartOpen:false,
 	columns:
 	[
-		{title:"ID", field:"id"},
-		{title:"Username", field:"username", headerFilter:true},
-		{title:"Full Name", field:"full_name", headerFilter:true},
-		{title:"Role", field:"role", headerFilter:true},
-		{title:"Gender", field:"gender", headerFilter:true},
-		{title:"Contact No", field:"contact", headerFilter:true},
-		{title:"Email", field:"email", headerFilter:true},
-		{title:"Edit", formatter:editIcon, align:"center", tooltip:"Edit", 
+		{formatter:"responsiveCollapse", width:50, minWidth:30, align:"center", headerSort:false,resizable:false, responsive:0},
+		{title:"ID", field:"id", responsive: 0},
+		{title:"Username", field:"username", headerFilter:true, responsive: 0},
+		{title:"Full Name", field:"full_name", headerFilter:true, responsive: 1},
+		{title:"Role", field:"role", headerFilter:true,responsive: 1},
+		{title:"Gender", field:"gender", headerFilter:true, responsive: 1},
+		{title:"Contact No", field:"contact", headerFilter:true, responsive: 1},
+		{title:"Email", field:"email", headerFilter:true,responsive: 1},
+		{title:"Edit", formatter:editIcon, align:"center", tooltip:"Edit", responsive: 0,
 			cellClick(e, cell)
 			{
 				var obj = {};
@@ -161,7 +164,7 @@ var table = new Tabulator("#account-table",{
 				toggleOverlay('#account-detail-overlay');
 			}
 		},
-		{title:"Remove", formatter:deleteIcon, align:"center", tooltip:"Remove",
+		{title:"Remove", formatter:deleteIcon, align:"center", tooltip:"Remove",responsive: 0,
 			cellClick(e, cell)
 			{
 				Swal.fire(
@@ -184,16 +187,10 @@ var table = new Tabulator("#account-table",{
 									{
 
 										SwalSuccess('Account is succesfully removed.','');
-										table.setData();
+										table.setData(response.Data);
 										return 0;
 									}
 
-									// if(response.Status == "Validation Error")
-									// {
-									// 	SwalError('Invalid detail. Please check error messages.','');
-									// 	this.error = response.Message;
-									// 	return 0;
-									// }
 
 									if(response.Status == "Database Error")
 									{
@@ -207,95 +204,94 @@ var table = new Tabulator("#account-table",{
 				
 			}
 		},
-		{title:"Change Password", formatter:passwordIcon, align:"center", tooltip:"Change Password",cellClick(e, cell)
-			{
-				(
-				async function getFormValues () 
-				{
-					const {value: formValues} = await Swal.fire(
-					{
-					  title: 'Change Password',
-					  html:
-					    '<input type="password" id="password" class="swal2-input" placeholder="Password">' + 
-					    '<input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirm Password">' +
-					    '<p id="err" class="text-danger"></p>' ,
-					  focusConfirm: false,
-					  showCancelButton:true,
-					  cancelButtonColor:'#d9534f',
-					  cancelButtonText: "No",
-					  confirmButtonColor:'#5cb85c',
-					  confirmButtonText: 'Save',
-					  preConfirm: ()=>
-					  {
-					  	let password = document.getElementById('password').value;
-					  	let confirmPassword = document.getElementById('confirmPassword').value;
+		// {title:"Change Password", formatter:passwordIcon, align:"center", tooltip:"Change Password",cellClick(e, cell)
+		// 	{
+		// 		(
+		// 		async function getFormValues () 
+		// 		{
+		// 			const {value: formValues} = await Swal.fire(
+		// 			{
+		// 			  title: 'Change Password',
+		// 			  html:
+		// 			    '<input type="password" id="password" class="swal2-input" placeholder="Password">' + 
+		// 			    '<input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirm Password">' +
+		// 			    '<p id="err" class="text-danger"></p>' ,
+		// 			  focusConfirm: false,
+		// 			  showCancelButton:true,
+		// 			  cancelButtonColor:'#d9534f',
+		// 			  cancelButtonText: "No",
+		// 			  confirmButtonColor:'#5cb85c',
+		// 			  confirmButtonText: 'Save',
+		// 			  preConfirm: ()=>
+		// 			  {
+		// 			  	let password = document.getElementById('password').value;
+		// 			  	let confirmPassword = document.getElementById('confirmPassword').value;
 
-					  	if( password && confirmPassword)
-					  	{
+		// 			  	if( password && confirmPassword)
+		// 			  	{
 
-					  		if(password.length < 8 || password.length > 255)
-					  		{
-					  			document.getElementById('err').innerHTML = "The password must be between 8 and 255 characters.";
-					  		}
-					  		else
-					  		{
-					  			if(password == confirmPassword)
-					  			{
+		// 			  		if(password.length < 8 || password.length > 255)
+		// 			  		{
+		// 			  			document.getElementById('err').innerHTML = "The password must be between 8 and 255 characters.";
+		// 			  		}
+		// 			  		else
+		// 			  		{
+		// 			  			if(password == confirmPassword)
+		// 			  			{
 					  				
-					  				return {
-					  					id: cell.getData().id,
-					  					password: password
-					  				}
-					  			}
-					  			else
-					  			{
-					  				document.getElementById('err').innerHTML = "Password does not match.";
-					  				document.getElementById('password').value  = "";
-					  				document.getElementById('confirmPassword').value  = "";
-					  			}
-					  		}
+		// 			  				return {
+		// 			  					id: cell.getData().id,
+		// 			  					password: password
+		// 			  				}
+		// 			  			}
+		// 			  			else
+		// 			  			{
+		// 			  				document.getElementById('err').innerHTML = "Password does not match.";
+		// 			  				document.getElementById('password').value  = "";
+		// 			  				document.getElementById('confirmPassword').value  = "";
+		// 			  			}
+		// 			  		}
 
-					  	}	
-					  	else
-					  	{
-					  		document.getElementById('err').innerHTML = "Both field is required.";
-					  	}
-					    return false;
-					  }
-					})
+		// 			  	}	
+		// 			  	else
+		// 			  	{
+		// 			  		document.getElementById('err').innerHTML = "Both field is required.";
+		// 			  	}
+		// 			    return false;
+		// 			  }
+		// 			})
 
-					if (formValues) 
-					{
+		// 			if (formValues) 
+		// 			{
 
-						jsonAjax("/Account/ChangePassword", "POST", JSON.stringify(formValues) ,function(response)
-							{
-								if(response.Status == "Success")
-								{
+		// 				jsonAjax("/Account/ChangePassword", "POST", JSON.stringify(formValues) ,function(response)
+		// 					{
+		// 						if(response.Status == "Success")
+		// 						{
 
-									SwalSuccess('Password is successfully changed.','');
-									return 0;
-								}
+		// 							SwalSuccess('Password is successfully changed.','');
+		// 							return 0;
+		// 						}
 
-								if(response.Status == "Validation Error")
-								{
-									SwalError('Validation Error' ,response.Message.password[0]);
-									return 0;
-								}
+		// 						if(response.Status == "Validation Error")
+		// 						{
+		// 							SwalError('Validation Error' ,response.Message.password[0]);
+		// 							return 0;
+		// 						}
 
-								if(response.Status == "Database Error")
-								{
-									SwalError('Database Error. Please contact administrator.','');
-								}
-							}
-							,alertError);
+		// 						if(response.Status == "Database Error")
+		// 						{
+		// 							SwalError('Database Error. Please contact administrator.','');
+		// 						}
+		// 					}
+		// 					,alertError);
 
-					}
-				})()
-			}
-		},
+		// 			}
+		// 		})()
+		// 	}
+		// },
 		
 	],
-	ajaxURL: "/Account/ShowAllData", 
 })
 
 var accountDetail = new Vue(

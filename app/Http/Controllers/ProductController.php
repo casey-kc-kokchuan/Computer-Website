@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Products;
 use \Illuminate\Database\QueryException;
 use App\Types;
@@ -63,6 +64,7 @@ class ProductController extends Controller
             $product->brand = $request->brand;
             $product->price = $request->price;
             $product->qty = $request->qty;
+            $product->user = Auth::user()->username;
             $product->save();
             $id = $product->id;
 
@@ -133,6 +135,7 @@ class ProductController extends Controller
             $product->brand = $request->brand;
             $product->price = $request->price;
             $product->qty = $request->qty;
+            $product->user = Auth::user()->username;
             $product->save();
 
         } catch (QueryException $e) {
@@ -297,18 +300,18 @@ class ProductController extends Controller
     public function PlaceOrder(Request $request)
     {   
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'email' => 'email',
-            'contact' => 'required|regex:/(01)[0-9]{8,9}/',
-            'address' => 'required',
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|max:255',
+        //     'email' => 'email',
+        //     'contact' => 'required|regex:/(01)[0-9]{8,9}/',
+        //     'address' => 'required',
 
-        ]);
+        // ]);
 
-        if($validator->fails())
-        {
-            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
-        }
+        // if($validator->fails())
+        // {
+        //     return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        // }
 
         $document = $request->cart;
         $all_exceed = [] ;
@@ -328,7 +331,7 @@ class ProductController extends Controller
 
             if ($qty <= $purchase_qty){
 
-                $exceed[] = [
+                $exceed = [
                     'id' => $purchase_id,
                     'qty' => $qty,
                 ];

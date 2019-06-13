@@ -1,10 +1,10 @@
 @component('mail::message')
-# Introduction
+# Order has been placed.
 
-The body of your message.
+Please verify your order.
 
 @component('mail::button', ['url' => 'http://localhost:8000/Test2'])
-Button Text
+Verify Order
 @endcomponent
 
 Thanks,<br>
