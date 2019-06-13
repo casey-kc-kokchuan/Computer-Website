@@ -329,7 +329,7 @@ class ProductController extends Controller
                 $qty = $stock_qty1->qty;
             }
 
-            if ($qty <= $purchase_qty){
+            if ($qty == 0 || $qty < $purchase_qty){
 
                 $exceed = [
                     'id' => $purchase_id,
@@ -356,6 +356,7 @@ class ProductController extends Controller
                 $order->contact = $request->contact;
                 $order->address = $request->address;
                 $order->total_price = $request->total_price;
+                $order->status = "Pending Confirmation";
                 $order->save();
                 $id = $order->id;
             }
