@@ -8,18 +8,27 @@
 
 @section('head')
 
+<style type="text/css">
 
+
+/*override container fluid	*/
+.container-fluid
+{
+	padding: 0px !important;
+}
+
+</style>
 @endsection
 
 
 
 @section('body')
 
-<div class="container-fluid">
+<div class="container-fluid ">
 	<div class="row no-gutters" id="shoppingCart">
 
 
-		<div class="col-12 col-lg-2 max-height">
+		<div class="col-12 col-lg-2 max-height cart-search-box">
 
 			<label>Name</label>
 			<input type="text" v-model="searchName" placeholder="Search" class="form-control">
@@ -39,48 +48,46 @@
 			</select>
 
 			
-			<button @click="search" type="button" class="btn-yellow btn-size-form">Search</button>
+			<button @click="search" type="button" class="btn-yellow btn-size-form mt-lg-3">Search</button>
 		</div>
 
-		<div class="col-12 col-lg-5 product-list max-height">
-			
-				
+		<div class="col-12 col-lg-5 product-list">
 				<div v-for="(product, index) in productList" class="product" id="product">
-					
-					<p><strong>@{{product.name}}</strong></p>
-					<img :src="product.img" style="width:150px;height:100px">
-					<p>RM&nbsp;@{{ formatPrice(product.price) 	}}</p>
-					<p style="font-size:0.8em">@{{product.qty}} <i>in stock</i></p>
+					<div class="row no-gutters max-height">
+						<div class="col-lg-4">
+							<img :src="product.img">
+						</div>
+						<div class="col-lg-8">
+							<p><strong>@{{product.name}}</strong></p>
+							<p>RM&nbsp;@{{ formatPrice(product.price) 	}}</p>
+							<p style="font-size:0.8em">@{{product.qty}} <i>in stock</i></p>
 
 
-					<button @click="addToCart(index)">+</button>
-					<button >About</button>
+							<div class="btn-position">
+								<button @click="addToCart(index)" class="btn-green btn-size-form"><i class="fas fa-cart-plus"></i>&nbsp;Add To Cart</button>
+								<button class="btn-blue btn-size-form" @click="about(index)">About</button>
+							</div>
+						</div>
+					</div>
 					
 				</div>
-
-
-
-
-
-			
 		</div>
 
 		<div class="col-12 col-lg-5 max-height">
-
 			<div class="cart-list">
 				<div v-for="(cart, index) in cartList" class="cart" id="cart" >
 					<p><strong>@{{cart.name}}</strong></p>
 					<img :src="cart.img" style="width:150px;height:100px">
 					<p>RM&nbsp;@{{ formatPrice(cart.price)}}</p>
 					<p>Qty: @{{cart.qty}}</p>
-					<button @click="removeFromCart(index)">-</button>
+					<button @click="removeFromCart(index)" class="btn-red"><i class="fas fa-minus"></i></button>
 
 				</div>
 			</div>
 
 			<div class="order-box">
-				<p class="float-left">Total: RM @{{ formatPrice(total_price) }}</p>
-				<button class="float-right" onclick="toggleOverlay('#place-order-overlay')">Place Order</button>
+				<p class="float-lg-left" style="color:#F9D342;font-size:18px;font-weight:600">Total: RM @{{ formatPrice(total_price) }}</p>
+				<button class="float-lg-right btn-yellow btn-size-form" onclick="toggleOverlay('#place-order-overlay')">Place Order</button>
 			</div>
 
 
@@ -88,6 +95,16 @@
 
 
 		
+		<div id="about-product-overlay">
+			<div id="about-product">
+				<button onclick="toggleOverlay('#about-product-overlay')">Close</button>
+				<h3>@{{ aboutProduct.name }}</h3>
+				<img :src="aboutProduct.img" style="width:150px;height:150px;">
+				<p>RM&nbsp;@{{ formatPrice(aboutProduct.price) }}</p>
+				<img :src="aboutProduct.imgDetail">
+			</div>
+		</div>
+
 	</div>
 </div>
 
@@ -97,18 +114,23 @@
 			<div class="form-group">
 				<label>Name</label>
 				<input type="text" class="form-control" v-model="orderDetail.name">
+				<p class="text-danger" v-if="error.name">@{{ error.name[0] }}</p>
 			</div>
 			<div class="form-group">
 				<label>Email</label>
 				<input type="text" class="form-control" v-model="orderDetail.email">
+				<p class="text-danger" v-if="error.email">@{{ error.email[0] }}</p>	
 			</div>
 			<div class="form-group">
 				<label>Contact</label>
 				<input type="text" class="form-control" v-model="orderDetail.contact">
+				<p class="text-danger" v-if="error.contact">@{{ error.contact[0] }}</p>
+
 			</div>
 			<div class="form-group">
 				<label>Address</label>
 				<input type="text" class="form-control" v-model="orderDetail.address">
+				<p class="text-danger" v-if="error.address">@{{ error.address[0] }}</p>
 			</div>
 
 			<button>Submit</button>
@@ -116,6 +138,8 @@
 		</form>
 	</div>
 </div>
+
+
 
 @endsection
 
@@ -127,22 +151,22 @@
 
 $(document).ready(function()
 {
-	 $(".product-list").mCustomScrollbar({
-	     theme: "dark",
-	     scrollButtons:{ enable: true },
-	     axis : "yx",
-	     advanced:{autoExpandHorizontalScroll:true}, 
-      callbacks:{
-        onOverflowY:function(){
-          var opt=$(this).data("mCS").opt;
-          if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
-        },
-        onOverflowX:function(){
-          var opt=$(this).data("mCS").opt;
-          if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
-        },
-    }
-	 });
+	 // $(".roduct-list").mCustomScrollbar({
+	 //     theme: "dark",
+	 //     scrollButtons:{ enable: true },
+	 //     axis : "y",
+	 //     advanced:{autoExpandHorizontalScroll:true}, 
+  //     callbacks:{
+  //       onOverflowY:function(){
+  //         var opt=$(this).data("mCS").opt;
+  //         if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
+  //       },
+  //       onOverflowX:function(){
+  //         var opt=$(this).data("mCS").opt;
+  //         if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
+  //       },
+  //   }
+	 // });
 
 	 // 	 $(".cart-list").mCustomScrollbar({
 	 // 	     theme: "dark",
@@ -173,6 +197,7 @@ var shoppingCart = new Vue(
 		searchName: "",
 		searchBrand: "",
 		total_price: 0.00,
+		aboutProduct: { name: "", img: "/img/placeholder.png", price: 0.00, imgDetail: "/img/placeholder.png"}
 	},
 	methods:
 	{
@@ -211,11 +236,17 @@ var shoppingCart = new Vue(
 
 		},
 
-		search()
+		search(index)
 		{
 
 			var url = "/Product/search?type=" + this.searchType + "&brand="+ this.searchBrand + "&name=" + this.searchName;
 			jsonAjax(url, "GET", "", function(response) {shoppingCart.productList = response;}, alertError);
+		},
+
+		about(index)
+		{
+			this.aboutProduct = this.productList[index];
+			toggleOverlay("#about-product-overlay");
 		},
 
 		formatPrice(value) 
@@ -236,7 +267,8 @@ var orderDetail = new Vue(
 			email: "",
 			contact: "",
 			address: ""
-		}
+		},
+		error: {},
 	},
 	methods:
 	{
@@ -252,17 +284,28 @@ var orderDetail = new Vue(
 					if(response.Status == "Success")
 					{
 						SwalSuccess("Data successfully trasmitted", "");
-					}
-
-					if(response.Status == "Database Error")
-					{
-						SwalError("Database Error", "")
+						return 0;
 					}
 
 					if(response.Status == "Quantity Error")
 					{
-						SwalError("Quantity Error", alert(response.Message))
+						SwalError("Quantity Error", alert(response.Message));
+						return 0;
 					}	
+
+					if(response.Status == "Validation Error")
+					{
+						SwalError("Validation Error", '');
+						orderDetail.error = response.Message;
+						return 0;
+					}
+
+					if(response.Status == "Database Error")
+					{
+						SwalError("Database Error", "");
+						return 0;
+					}
+
 
 				}, alertError);
 		}

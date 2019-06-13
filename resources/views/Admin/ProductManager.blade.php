@@ -51,14 +51,14 @@
 
 						<label for="">Type</label>
 						<select v-model="type" class="form-control">
-								<option value="">Select Type</option>
+								<option value="">All</option>
 								<option v-for="type in types" :value="type.type">@{{type.type}}</option>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="">Brand</label>
 						<select v-model="brand" class="form-control">
-							<option value="">Select Brand</option>
+							<option value="">All</option>
 							<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
 						</select>
 					</div>
