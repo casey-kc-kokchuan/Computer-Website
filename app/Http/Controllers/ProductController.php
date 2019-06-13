@@ -9,6 +9,8 @@ use App\Products;
 use \Illuminate\Database\QueryException;
 use App\Types;
 use App\Brands;
+use App\Orders;
+use App\OrderList;
 
 class ProductController extends Controller
 {
@@ -110,7 +112,7 @@ class ProductController extends Controller
         $id = $request->id;
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|',
+            'name' => 'required|max:255',
             'type' => 'required',
             'brand' => 'required',
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
@@ -277,8 +279,8 @@ class ProductController extends Controller
     }
 
 
-     public function DeleteBrand(Request $request)
-     {
+    public function DeleteBrand(Request $request)
+    {
            try {
                $id = $request->id;
                $brands = Brands::find($id);
@@ -290,7 +292,115 @@ class ProductController extends Controller
 
           return response()->json(['Status' => "Success","Data" => Brands::all()]);
 
-     }
+    }
+
+    public function PlaceOrder(Request $request)
+    {   
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'email',
+            'contact' => 'required|regex:/(01)[0-9]{8,9}/',
+            'address' => 'required',
+
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        }
+
+        $document = $request->cart;
+        $all_exceed = [] ;
+        foreach($document as $check){
+
+            $purchase_id = $check['id'];
+            $purchase_qty = $check['qty'];
+
+            $stock_qty = DB::table('products')
+                        ->select('qty')
+                        ->where('id', $purchase_id)
+                        ->get();
+
+            foreach($stock_qty as $stock_qty1){
+                $qty = $stock_qty1->qty;
+            }
+
+            if ($qty <= $purchase_qty){
+
+                $exceed[] = [
+                    'id' => $purchase_id,
+                    'qty' => $qty,
+                ];
+
+                array_push($all_exceed, $exceed); 
+            }         
+        }
+
+        if ($all_exceed != null)
+        {
+            return response()->json(['Status' => "Quantity Error", "Message" => $all_exceed]);
+        }
+        else
+        {
+
+            //insert into orders database
+            try
+            {
+                $order = new Orders();
+                $order->name = $request->name;
+                $order->email = $request->email;
+                $order->contact = $request->contact;
+                $order->address = $request->address;
+                $order->total_price = $request->total_price;
+                $order->save();
+                $id = $order->id;
+            }
+            catch (QueryException $e) 
+            {
+                return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+            }
+
+
+            //insert into order_list database
+            try 
+            {
+                foreach($document as $data){ 
+                    $orderlist = new OrderList();
+                    $orderlist->order_id = $id;
+                    $orderlist->name = $data['name'];
+                    $orderlist->type = $data['type'];
+                    $orderlist->brand = $data['brand'];
+                    $orderlist->price = $data['price'];
+                    $orderlist->qty = $data['qty'];
+                    $orderlist->save();
+                    $product_id = $data['id'];
+                    $order_qty = $data['qty'];
+                    $products = Products::find($product_id);
+                    $product_qty = $products->qty;
+                    $new_qty = $product_qty - $order_qty;
+                    $products->qty = $new_qty;
+                    $products->save();
+                }
+                
+            } catch (Exception $e) {
+                
+                return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]); 
+            }
+
+        }
+        
+
+        return response()->json(['Status' => "Success"]);
+
+    }
+
+    public function ShowOrder()
+    {
+        
+    }
+
+
 
 
 
