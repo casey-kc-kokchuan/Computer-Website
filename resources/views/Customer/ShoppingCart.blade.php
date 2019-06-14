@@ -301,7 +301,7 @@ var orderDetail = new Vue(
 							if(data[i].qty <= 0)
 							{
 								txt += "<p>" + i+ ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> 0(Removed)</p>"; 
-								delete shoppingCart.cartList[matchingIndex];
+								shoppingCart.cartList.splice(matchingIndex, 1);
 							}
 							else
 							{
