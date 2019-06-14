@@ -371,7 +371,7 @@ class ProductController extends Controller
             {
                 foreach($document as $data){ 
                     $orderlist = new OrderList();
-                    $orderlist->order_id = $id;
+                    $orderlist->orders_id = $id;
                     $orderlist->name = $data['name'];
                     $orderlist->type = $data['type'];
                     $orderlist->brand = $data['brand'];
@@ -401,11 +401,53 @@ class ProductController extends Controller
 
     public function ShowOrder()
     {
+
+        $order = Orders::all();
+        $array_list1 = [];
+        $array_list2 = [];
+
+        foreach ($order as $orders)
+        {
+
+            $orderlist = Orders::find($orders->id)->orderlist;
+
+            foreach ($orderlist as $orderlists)
+            {
+
+                $name = $orderlists->name;
+
+                 $list2 = [
+                    'orders_id' => $orderlists->orders_id,
+                    'name' => $orderlists->name,
+                    'type' => $orderlists->type,
+                    'brand' => $orderlists->brand,
+                    'price' => $orderlists->price,
+                    'qty' => $orderlists->qty,
+                    ];
+
+                array_push($array_list2, $list2);
+
+            }
+            
+            $list1 = [
+                    'id' => $orders->id,
+                    'name' => $orders->name,
+                    'email' => $orderlists->email,
+                    'contact' => $orderlists->contact,
+                    'address' => $orderlists->address,
+                    'total_price' => $orderlists->total_price,
+                    'user' => $orderlists->user,
+                    'status' => $orderlists->status,
+                    'orderlist' => $array_list2,
+                    ];
+
+            $array_list2 = [];
+
+            array_push($array_list1, $list1);
+        }
+
+        return $array_list1;
         
     }
-
-
-
-
 
 }
