@@ -264,10 +264,10 @@ var orderDetail = new Vue(
 	{
 		orderDetail: 
 		{
-			name: "Kok Chuan",
-			email: "chuanfrost98@gmail.com",
-			contact: "01820744556",
-			address: "Somewhere"
+			name: "",
+			email: "",
+			contact: "",
+			address: ""
 		},
 		error: {},
 	},
