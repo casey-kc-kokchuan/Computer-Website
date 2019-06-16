@@ -10,15 +10,58 @@ use App\Products;
 use App\User;
 use App\Types;
 use App\Brands;
-use App\Mail\OrderPlaced;
+use App\Orders;
+
 
 class PageController extends Controller
 {
 
 	public function testGet()
 	{
-		// Mail::to("chuanfrost98@gmail.com")->send(new OrderPlaced);
-		return response()->json("sent");
+		$order = Orders::all();
+		$array_list1 = [];
+		$array_list2 = [];
+
+		foreach ($order as $orders)
+		{
+
+		    $orderlist = Orders::find($orders->id)->orderlist;
+
+		    foreach ($orderlist as $orderlists)
+		    {
+
+		        $name = $orderlists->name;
+
+		         $list2 = [
+		            'orders_id' => $orderlists->orders_id,
+		            'name' => $orderlists->name,
+		            'type' => $orderlists->type,
+		            'brand' => $orderlists->brand,
+		            'price' => $orderlists->price,
+		            'qty' => $orderlists->qty,
+		            ];
+
+		        array_push($array_list2, $list2);
+
+		    }
+		    
+		    $list1 = [
+		            'id' => $orders->id,
+		            'name' => $orders->name,
+		            'email' => $orders->email,
+		            'contact' => $orders->contact,
+		            'address' => $orders->address,
+		            'total_price' => $orders->total_price,
+		            'user' => $orders->user,
+		            'status' => $orders->status,
+		            'orderlist' => $array_list2,
+		            ];
+
+		    $array_list2 = [];
+
+		    array_push($array_list1, $list1);
+		}
+		return response()->json($array_list1);
 	}
 
 	public function testPost(Request $request)
@@ -55,7 +98,7 @@ class PageController extends Controller
 
 		if(Auth::check())
 		{
-			return view('Admin/HomePage');
+			return view('Admin/OrderManager');
 		}
 		else
 		{
@@ -63,13 +106,76 @@ class PageController extends Controller
 		}
 	}
 
+    public function showChangePasswordRequest()
+    {
+        if(Auth::check())
+        {
+        	return view('Admin/OrderManager');
+        }
+        else
+        {
+        	return view('Admin/ChangePasswordRequest');
+        }
+    }
+
 	public function showOrderManager()
 	{
-		return view('Admin/OrderManager');
+		$order = Orders::all();
+		$array_list1 = [];
+		$array_list2 = [];
+
+		foreach ($order as $orders)
+		{
+
+		    $orderlist = Orders::find($orders->id)->orderlist;
+
+		    foreach ($orderlist as $orderlists)
+		    {
+
+		        $name = $orderlists->name;
+
+		         $list2 = [
+		            'orders_id' => $orderlists->orders_id,
+		            'product_id' => $orderlists->product_id,
+		            'name' => $orderlists->name,
+		            'type' => $orderlists->type,
+		            'brand' => $orderlists->brand,
+		            'price' => $orderlists->price,
+		            'qty' => $orderlists->qty
+		            ];
+
+		        array_push($array_list2, $list2);
+
+		    }
+		    
+		    $list1 = [
+		            'id' => $orders->id,
+		            'name' => $orders->name,
+		            'email' => $orders->email,
+		            'contact' => $orders->contact,
+		            'address' => $orders->address,
+		            'total_price' => $orders->total_price,
+		            'user' => $orders->user,
+		            'status' => $orders->status,
+		            'orderlist' => $array_list2,
+		            ];
+
+		    $array_list2 = [];
+
+		    array_push($array_list1, $list1);
+		}
+		return view('Admin/OrderManager', ['Data' => $array_list1]);
 	}
 
 	public function showHome()
 	{
 		return view ('Admin/HomePage');
 	}
+
+	public function showVerifyOrderEmail()
+	{
+		return view('Customer/VerifyOrderEmail');
+	}
+
+
 }

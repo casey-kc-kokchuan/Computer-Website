@@ -102,6 +102,14 @@
 		border-bottom:1px solid black;
 		height:auto;
 	}
+
+	.cart-search-box button
+	{
+		margin-top:5px;
+		width:49%;
+	}
+
+
 	.product-list, .cart-list
 	{
 		overflow-y: hidden;
@@ -125,6 +133,11 @@
 		width:100px;
 	}
 
+	.product-list .product .atc
+	{
+		display:none;
+	}
+
 	.btn-position
 	{
 		position:static;
@@ -132,7 +145,7 @@
 
 	.btn-position i
 	{
-		display:block;
+		font-size:0.8rem;
 	}
 
 	.btn-position button

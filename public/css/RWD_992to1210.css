@@ -1,4 +1,16 @@
 @media screen and (min-width: 992px) and (max-width:1210px)
 {
-	
+	.product-search-box, .product-control-box
+	{
+	    margin:5px 0;
+	    background: #E4EAEC;
+	    padding:10px 5px;
+	    border-left: 5px groove #65696A;
+	    border-bottom-right-radius: 0;
+	}
+
+	.product-left-pane
+	{
+		padding:0 10px 0 5px;
+	}
 }

@@ -6,24 +6,27 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Orders;
 
-class OrderPlaced extends Mailable
+class OrderConfirmed extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $token;
+
+
+    protected $order;
+    protected $orderlist;
     protected $id;
-    protected $name;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($token, $id, $name)
+    public function __construct($order, $orderlist)
     {
-        $this->token = $token;
-        $this->id = $id;
-        $this->name = $name;
+        $this->order = $order;
+        $this->orderlist = $orderlist;
+        $this->id = $order->id;
     }
 
     /**
@@ -33,6 +36,6 @@ class OrderPlaced extends Mailable
      */
     public function build()
     {
-        return $this->markdown('email.order-placed')->subject("Order ID: $this->id [Order Confirmation]")->with(['token' => $this->token, 'id' => $this->id, 'name' => $this->name]);
+        return $this->markdown('email.order-confirmed')->subject("Order ID: $this->id [Order Confirmed]")->with(['order' => $this->order, 'orderlist' => $this->orderlist]) ;
     }
 }

@@ -192,6 +192,21 @@ input[disabled] {
     background:#EFEFEF;
 }
 
+#nested *
+{
+    background:inherit !important;
+}
+
+#nested .tabulator-col:hover
+{
+    background:#e0e0e0 !important;
+}
+
+#nested *
+{
+    min-width: auto !important;
+}
+
 .btn-yellow
 {
     background-color:#292826;
