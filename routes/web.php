@@ -21,6 +21,8 @@ Page Controller
 
 // Customer
 Route::get('/', 'PageController@showShoppingCart');
+Route::get('/VerifyOrderEmail', 'PageController@showVerifyOrderEmail');
+
 
  
 // Admin
@@ -33,6 +35,7 @@ Route::group(['prefix' => 'Admin', 'middleware' => ['auth']], function()
 	});
 
 Route::get('Admin', 'PageController@showLogin');
+Route::get('Admin/ChangePasswordRequest', 'PageController@showChangePasswordRequest');
 
 
 Route::get('/Test', 'PageController@testGet');
@@ -73,11 +76,14 @@ Order Controller
 --------------------------------------------------------------------------
 */
 
-Route::post('/Order/PlaceOrder', 'OrderController@PlaceOrder');
+
 
 Route::group(['prefix' => 'Order'], function()
 {
+	Route::get('/ConfirmOrder', 'OrderController@ConfirmOrder');
 	Route::get('/ShowOrder', 'OrderController@ShowOrder');
+	Route::post('/PlaceOrder', 'OrderController@PlaceOrder');
+	Route::post('/UpdateOrderStatus', 'OrderController@UpdateOrderStatus');
 });
 
 /*
@@ -92,9 +98,11 @@ Route::group(['prefix' => 'Account', 'middleware' => ['auth','role:Admin|Store M
 	Route::post('/AddAccount', 'AccountController@AddAccount');
 	Route::post('/EditAccount', 'AccountController@EditAccount');
 	Route::post('/RemoveAccount', 'AccountController@RemoveAccount');
-	Route::post('/ChangePassword', 'AccountController@ChangePassword');
 });
 
 
 Route::get('Account/Logout', 'AccountController@Logout')->middleware('auth');
+Route::get('Account/VerifyChangePasswordRequest', 'AccountController@VerifyChangePasswordRequest');
+Route::post('Account/ChangePassword', 'AccountController@ChangePassword');
+Route::post('Account/ChangePasswordRequest', 'AccountController@ChangePasswordRequest');
 Route::post('Account/Login', 'AccountController@Login');

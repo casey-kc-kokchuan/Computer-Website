@@ -49,6 +49,7 @@
 
 			
 			<button @click="search" type="button" class="btn-yellow btn-size-form mt-lg-3">Search</button>
+			<button @click="clear" type="button" class="btn-red btn-size-form mt-lg-3">Clear</button>
 		</div>
 
 		<div class="col-12 col-lg-5 product-list">
@@ -64,7 +65,7 @@
 
 
 							<div class="btn-position">
-								<button @click="addToCart(index)" class="btn-green btn-size-form"><i class="fas fa-cart-plus"></i>&nbsp;Add To Cart</button>
+								<button @click="addToCart(index)" class="btn-green btn-size-form"><i class="fas fa-cart-plus"></i><span class="atc">&nbsp;Add To Cart</span></button>
 								<button class="btn-blue btn-size-form" @click="about(index)">About</button>
 							</div>
 						</div>
@@ -149,42 +150,6 @@
 
 <script type="text/javascript">
 
-$(document).ready(function()
-{
-	 // $(".roduct-list").mCustomScrollbar({
-	 //     theme: "dark",
-	 //     scrollButtons:{ enable: true },
-	 //     axis : "y",
-	 //     advanced:{autoExpandHorizontalScroll:true}, 
-  //     callbacks:{
-  //       onOverflowY:function(){
-  //         var opt=$(this).data("mCS").opt;
-  //         if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
-  //       },
-  //       onOverflowX:function(){
-  //         var opt=$(this).data("mCS").opt;
-  //         if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
-  //       },
-  //   }
-	 // });
-
-	 // 	 $(".cart-list").mCustomScrollbar({
-	 // 	     theme: "dark",
-	 // 	     scrollButtons:{ enable: true },
-	 // 	     axis : "y",
-	 // 	     advanced:{autoExpandHorizontalScroll:true}, 
-	 //       callbacks:{
-	 //         onOverflowY:function(){
-	 //           var opt=$(this).data("mCS").opt;
-	 //           if(opt.mouseWheel.axis!=="y") opt.mouseWheel.axis="y";
-	 //         },
-	 //         onOverflowX:function(){
-	 //           var opt=$(this).data("mCS").opt;
-	 //           if(opt.mouseWheel.axis!=="x") opt.mouseWheel.axis="x";
-	 //         },
-	 //     }
-	 // 	 });
-});
 
 var shoppingCart = new Vue(
 {
@@ -209,16 +174,32 @@ var shoppingCart = new Vue(
 			var	matchingIndex = this.cartList.findIndex(x => x.id == obj.id)
 
 			if( matchingIndex == -1)
-			{
-				obj.qty = 1;
-				this.cartList.push(obj)
+			{	
+				if(obj.qty <= 0)
+				{
+					alert("nope");
+				}
+				else
+				{
+					obj.qty = 1;
+					this.cartList.push(obj);
+					this.total_price += this.productList[index].price;
+				}
 			}
 			else
 			{
-				this.cartList[matchingIndex].qty += 1;
+				if(obj.qty <= this.cartList[matchingIndex].qty)
+				{
+					alert("nope");
+				}
+				else
+				{
+					this.cartList[matchingIndex].qty += 1;
+					this.total_price += this.productList[index].price;
+				}
 			}
 			
-			this.total_price += this.productList[index].price;
+			
 		},
 
 		removeFromCart(index)
@@ -236,7 +217,7 @@ var shoppingCart = new Vue(
 
 		},
 
-		search(index)
+		search()
 		{
 
 			var url = "/Product/search?type=" + this.searchType + "&brand="+ this.searchBrand + "&name=" + this.searchName;
@@ -252,6 +233,26 @@ var shoppingCart = new Vue(
 		formatPrice(value) 
 		{
 	       return val = (value).toFixed(2);	
+	    },
+
+	    clear()
+	    {
+	    	this.searchName = "";
+	    	this.searchType = "";
+	    	this.searchBrand = "";
+	    	this.search();
+	    },
+
+	    recalculate()
+	    {
+	    	var total = 0;
+
+	    	for(var i = 0; i < this.cartList.length; i++)
+	    	{
+	    		total += this.cartList[i].price * this.cartList[i].qty;
+	    	}
+
+	    	this.total_price = total;
 	    }
 	}
 })
@@ -263,33 +264,42 @@ var orderDetail = new Vue(
 	{
 		orderDetail: 
 		{
-			name: "",
-			email: "",
-			contact: "",
-			address: ""
+			name: "Kok Chuan",
+			email: "chuanfrost98@gmail.com",
+			contact: "01820744556",
+			address: "Somewhere"
 		},
 		error: {},
 	},
 	methods:
 	{
 		handleSubmit(event)
-		{
+		{	
+			if(shoppingCart.cartList.length <= 0)
+			{
+				SwalError("Cart is empty. Unable to place order.", "");
+				return 0;
+			}
 			var obj = {};
 			Object.assign(obj, this.orderDetail);
 			obj.cart = shoppingCart.cartList;
 			obj.total_price = shoppingCart.formatPrice(shoppingCart.total_price);
+			obj.searchName = shoppingCart.searchName;
+			obj.searchType = shoppingCart.searchType;
+			obj.searchBrand = shoppingCart.searchBrand;
 
 			jsonAjax("/Order/PlaceOrder", "POST", JSON.stringify(obj) ,function(response)
 				{
 					if(response.Status == "Success")
 					{
-						SwalSuccess("Data successfully trasmitted", "");
+						location.replace(response.Link);
 						return 0;
 					}
 
 					if(response.Status == "Quantity Error")
 					{
 						toggleOverlay("#place-order-overlay");
+						shoppingCart.productList = response.Data;
 						var data = response.Message;
 						var txt ="";
 						
@@ -300,23 +310,22 @@ var orderDetail = new Vue(
 							var counter = i +1;
 							if(data[i].qty <= 0)
 							{
-								txt += "<p>" + i+ ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> 0(Removed)</p>"; 
+								txt += "<p>" + counter+ ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> 0(Removed)</p>"; 
 								shoppingCart.cartList.splice(matchingIndex, 1);
 							}
 							else
 							{
 								shoppingCart.cartList[matchingIndex].qty = data[i].qty;
-								txt += "<p>" + i + ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> " + data[i].qty + "</p>"; 
+								txt += "<p>" + counter + ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> " + data[i].qty + "</p>"; 
 							}
 						}
 
-						// SwalError("Apologies, we are running out of stock for item(s) ordered.", '<p>Cart is automatically refreshed, changes are as follow:<p>' + txt);
 						Swal.fire(
 						{
 							title: "Apologies, we are running out of stock for item(s) ordered.",
 							html: '<p>Cart is automatically refreshed, changes are as follow:<p>' + txt,
 						});
-
+						shoppingCart.recalculate();
 						return 0;
 					}	
 
@@ -332,7 +341,6 @@ var orderDetail = new Vue(
 						SwalError("Database Error", "");
 						return 0;
 					}
-
 
 				}, alertError);
 		}

@@ -20,7 +20,7 @@
         <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/app.css') }}">
         <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/all.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_max991.css')}}">
-        <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_min992.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/RWD_992to1210.css')}}">
 
 
         <script src="{{ URL::asset('js/app.js')}}"></script>
@@ -46,7 +46,6 @@
     </head>
     <body>
 
-
         <div class="nav-wrapper">
 
             <nav id="sidebar">
@@ -58,15 +57,15 @@
                 </div>  
 
                 <ul class="list-unstyled components">
-                    <li><a href="{{ url('Admin/Home')}}"><i class="fas fa-home"></i>&nbsp;&nbsp;Home</a></li>
+
+                    <li><a href="{{ url('Admin/OrderManager' )}}"><i class="fas fa-receipt"></i>&nbsp;&nbsp;Order</a></li>
+
                     @role('Admin|Store Manager|Product Manager')
-                    <li><a href="{{ url('Admin/ProductManager') }}"><i class="fas fa-boxes"></i>&nbsp;&nbsp;Product</a></li>
-                    @endrole
+                    <li><a href="{{ url('Admin/ProductManager') }}"><i class="fas fa-boxes"></i>&nbsp;&nbsp;Product</a></li> @endrole
 
                     @role('Admin|Store Manager')
                     <li><a href="{{ url('Admin/Account') }}"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>    
                     @endrole    
-                    <li><a href="{{ url('Admin/OrderManager' )}}"><i class="fas fa-receipt"></i>&nbsp;&nbsp;Order</a></li>
                     {{-- <li><a href="#"></i>&nbsp;&nbsp;{{ Auth::user()->username}}</a></li>  --}}
                     <li><a href="{{ url('Account/Logout')}}">&nbsp;&nbsp;Logout</a></li>
                 </ul>

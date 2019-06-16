@@ -1,9 +1,9 @@
 @component('mail::message')
-# Order has been placed.
+Dear {{ $name }},
 
-Please verify your order.
+We have received your order. Please verify your order.
 
-@component('mail::button', ['url' => 'http://localhost:8000/Test2'])
+@component('mail::button', ['url' => url("Order/ConfirmOrder?email_token=$token&id=$id")])
 Verify Order
 @endcomponent
 

@@ -7,13 +7,15 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderPlaced extends Mailable
+class ChangePasswordEmail extends Mailable
 {
     use Queueable, SerializesModels;
+
 
     protected $token;
     protected $id;
     protected $name;
+
     /**
      * Create a new message instance.
      *
@@ -21,9 +23,9 @@ class OrderPlaced extends Mailable
      */
     public function __construct($token, $id, $name)
     {
-        $this->token = $token;
-        $this->id = $id;
-        $this->name = $name;
+        $this->token  = $token;
+        $this->id  = $id;
+        $this->name  = $name;
     }
 
     /**
@@ -33,6 +35,6 @@ class OrderPlaced extends Mailable
      */
     public function build()
     {
-        return $this->markdown('email.order-placed')->subject("Order ID: $this->id [Order Confirmation]")->with(['token' => $this->token, 'id' => $this->id, 'name' => $this->name]);
+        return $this->markdown('email.change-password-email')->subject("Request to change password.")->with(['token'=> $this->token, 'id' => $this->id, 'name' => $this->name]);
     }
 }
