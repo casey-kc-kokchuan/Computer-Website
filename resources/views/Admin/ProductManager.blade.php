@@ -441,6 +441,10 @@ var productDetail = new Vue(
 
 			if(this.isEdit)
 			{
+				var img = productManager.productList[form.get('id')].img; 
+				var imgDetail = productManager.productList[form.get('id')].imgDetail; 
+				img = img + "?1";
+				imgDetail = imgDetail + "?1";
 				formAjax("/Product/EditProduct", "POST", form , this.editProductList, alertError);
 			}
 			else

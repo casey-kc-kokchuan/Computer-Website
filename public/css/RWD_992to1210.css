@@ -1,5 +1,42 @@
 @media screen and (min-width: 992px) and (max-width:1210px)
 {
+
+
+	#sidebar
+	{
+	    width: 200px;
+	    height: 100vh;
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    z-index: 999;
+	    background: #263238;
+	    color: white;
+	    transition: all 0.3s;
+	}
+
+	#sidebar.active
+	{
+	    margin-left: -200px;
+	}
+
+	#main.active 
+	{
+	    width: 100%;
+	}
+
+	#main
+	{
+	    width: calc(100% - 200px);
+	    transition: all 0.3s;
+	    position: absolute;
+	    height:100vh;
+	    top: 0;
+	    right: 0;
+	    padding: 15px 15px 15px 30px;
+	    background:#E0E0E0;
+	}
+
 	.product-search-box, .product-control-box
 	{
 	    margin:5px 0;
