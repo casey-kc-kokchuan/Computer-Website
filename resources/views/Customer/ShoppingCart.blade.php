@@ -59,9 +59,9 @@
 							<img :src="product.img">
 						</div>
 						<div class="col-lg-8">
-							<p><strong>@{{product.name}}</strong></p>
-							<p>RM&nbsp;@{{ formatPrice(product.price) 	}}</p>
-							<p style="font-size:0.8em">@{{product.qty}} <i>in stock</i></p>
+							<p class="p-name">@{{product.name}}</p>
+							<p class="p-price">RM&nbsp;@{{ formatPrice(product.price) 	}}</p>
+							<p class="p-qty">@{{product.qty}} <i>in stock</i></p>
 
 
 							<div class="btn-position">
@@ -77,7 +77,7 @@
 		<div class="col-12 col-lg-5 max-height">
 			<div class="cart-list">
 				<div v-for="(cart, index) in cartList" class="cart" id="cart" >
-					<p><strong>@{{cart.name}}</strong></p>
+					<p class="c-name">@{{cart.name}}</p>
 					<img :src="cart.img" style="width:150px;height:100px">
 					<p>RM&nbsp;@{{ formatPrice(cart.price)}}</p>
 					<p>Qty: @{{cart.qty}}</p>
@@ -87,7 +87,7 @@
 			</div>
 
 			<div class="order-box">
-				<p class="float-lg-left" style="color:#F9D342;font-size:18px;font-weight:600">Total: RM @{{ formatPrice(total_price) }}</p>
+				<p class="float-lg-left total-price" style="">Total: RM @{{ formatPrice(total_price) }}</p>
 				<button class="float-lg-right btn-yellow btn-size-form" onclick="toggleOverlay('#place-order-overlay')">Place Order</button>
 			</div>
 
@@ -98,11 +98,27 @@
 		
 		<div id="about-product-overlay">
 			<div id="about-product">
-				<button onclick="toggleOverlay('#about-product-overlay')">Close</button>
-				<h3>@{{ aboutProduct.name }}</h3>
-				<img :src="aboutProduct.img" style="width:150px;height:150px;">
-				<p>RM&nbsp;@{{ formatPrice(aboutProduct.price) }}</p>
-				<img :src="aboutProduct.imgDetail">
+				<div class="row no-gutters">
+					<div class="col-12">
+						<button class="overlay-close-btn2" type="button" onclick="toggleOverlay('#about-product-overlay')"><i class="fas fa-angle-down"></i></button>
+					</div>
+					<div class="col-12 col-lg-8 offset-lg-2 text-center">
+						<div class="row no-gutters about-product-detail">
+							<div class="col-6 text-center img-box">
+								<img  class="img" :src="aboutProduct.img" >
+							</div>
+							<div class="col-6 text-left detail-box">
+								<p class="a-name">@{{ aboutProduct.name }}</p >
+								<p class="a-price">RM&nbsp;@{{formatPrice(aboutProduct.price) }}</p>
+								<p class="a-qty">@{{ aboutProduct.qty}}&nbsp;<i>in stock</i></p>
+							</div>
+							<div class="col-12 img-detail-box">
+								<p>Product Detail</p>
+								<img class="imgDetail" :src="aboutProduct.imgDetail">
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -111,32 +127,40 @@
 
 <div id="place-order-overlay">
 	<div id="place-order">
-		<form @submit.prevent="handleSubmit">
-			<div class="form-group">
-				<label>Name</label>
-				<input type="text" class="form-control" v-model="orderDetail.name">
-				<p class="text-danger" v-if="error.name">@{{ error.name[0] }}</p>
+		<div class="row no-gutters">
+			<div class="col-12">
+				<button class="overlay-close-btn2" type="button" onclick="toggleOverlay('#place-order-overlay')"><i class="fas fa-angle-down"></i></button>
 			</div>
-			<div class="form-group">
-				<label>Email</label>
-				<input type="text" class="form-control" v-model="orderDetail.email">
-				<p class="text-danger" v-if="error.email">@{{ error.email[0] }}</p>	
-			</div>
-			<div class="form-group">
-				<label>Contact</label>
-				<input type="text" class="form-control" v-model="orderDetail.contact">
-				<p class="text-danger" v-if="error.contact">@{{ error.contact[0] }}</p>
+			<div class="col-12 col-lg-6 offset-lg-3">
+				<form @submit.prevent="handleSubmit">
+					<div class="form-group">
+						<label>Name</label>
+						<input type="text" class="form-control" v-model="orderDetail.name">
+						<p class="text-danger" v-if="error.name">@{{ error.name[0] }}</p>
+					</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="text" class="form-control" v-model="orderDetail.email">
+						<p class="text-danger" v-if="error.email">@{{ error.email[0] }}</p>	
+					</div>
+					<div class="form-group">
+						<label>Contact</label>
+						<input type="text" class="form-control" v-model="orderDetail.contact">
+						<p class="text-danger" v-if="error.contact">@{{ error.contact[0] }}</p>
 
-			</div>
-			<div class="form-group">
-				<label>Address</label>
-				<input type="text" class="form-control" v-model="orderDetail.address">
-				<p class="text-danger" v-if="error.address">@{{ error.address[0] }}</p>
-			</div>
+					</div>
+					<div class="form-group">
+						<label>Address</label>
+						<input type="text" class="form-control" v-model="orderDetail.address">
+						<p class="text-danger" v-if="error.address">@{{ error.address[0] }}</p>
+					</div>
 
-			<button>Submit</button>
-			<button onclick="toggleOverlay('#place-order-overlay')" type="button">Close</button>
-		</form>
+					<button class="btn-yellow btn-size-form2" style="width:100%">Submit</button>
+
+				</form>
+			</div>
+		</div>	
+
 	</div>
 </div>
 

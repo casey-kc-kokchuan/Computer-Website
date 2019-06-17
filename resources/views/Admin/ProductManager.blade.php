@@ -201,8 +201,8 @@
 						<img :src="productDetail.imgDetail" id="imgDetail">
 					</div>
 
-					<button type="submit" class="btn-blue btn-size-form" v-if="isEdit">Update</button>
-					<button type="submit" class="btn-green btn-size-form" v-else>Add</button>
+					<button type="submit" class="btn-blue btn-size-form2" v-if="isEdit">Update</button>
+					<button type="submit" class="btn-green btn-size-form2" v-else>Add</button>
 				</form>
 			</div>
 

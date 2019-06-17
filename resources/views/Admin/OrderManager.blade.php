@@ -2,7 +2,7 @@
 
 
 
-@section('title', 'OrderManager')
+@section('title', 'Order Manager')
 
 
 

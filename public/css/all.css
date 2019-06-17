@@ -48,6 +48,11 @@ input[disabled] {
     margin-left: -250px;
 }
 
+.sidebar-header
+{
+    height:20vh;
+}
+
 #main.active 
 {
     width: 100%;
@@ -65,8 +70,7 @@ input[disabled] {
     background:#E0E0E0;
 }
 
-
-#sidebar ul li a
+#sidebar a
 {
     font-family: arial;
     font-size:1.5em;
@@ -74,12 +78,66 @@ input[disabled] {
     color: #e4eaec;
 }
 
-#sidebar button
+
+#sidebar .username
+{
+    font-family: arial;
+    font-size:1.5em;
+    font-weight: bold;
+    color: #e4eaec;
+    background:#516874;
+    text-align:center;
+    padding:10px;
+}
+#sidebar .toggle-btn
 {
     border-radius:50%;
     position: absolute;
     right:-27px;
 }
+
+#sidebar .nav-btn
+{
+   padding:10px;
+   width:100%;
+   border-left: 0;
+   border-right: 0;
+   border-top: 1px solid #516874;
+   border-bottom: 1px solid #516874;
+   background:transparent;
+   display:block;
+
+}
+
+#sidebar .nav-btn:hover
+{
+   text-decoration: none;
+   background:#516874;
+}
+
+
+#sidebar .logout-btn
+{
+    border-radius:20px;
+    position:absolute;
+    left:10px;
+    bottom:10px;
+    background:transparent;
+    border:2px solid white;
+    width:80%;
+    transition:all 0.3s linear;
+    text-align: center;
+}
+
+
+#sidebar .logout-btn:hover
+{
+    background:white;
+    color:#263238;
+    text-decoration: none;
+}
+
+
 
 .overlay-close-btn
 {
@@ -92,6 +150,18 @@ input[disabled] {
 
     transition: all 0.3s linear;
 
+}
+
+.overlay-close-btn2
+{
+    background: rgb(255,0,0);
+    background:linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,85,85,1) 50%, rgba(255,0,0,1) 100%);
+    border:0;
+
+    width:100%;
+    transition: all 0.3s linear;
+    font-size:40px ;
+    line-height: 0;
 }
 
 .overlay-close-btn .fa-angle-right
@@ -172,6 +242,13 @@ input[disabled] {
 {
     padding:3px 10px;    
     font-size: 17px;
+    font-weight: 600;
+}
+
+.btn-size-form2
+{
+    line-height: 50px;    
+    font-size: 20px;
     font-weight: 600;
 }
 
@@ -264,6 +341,27 @@ input[disabled] {
     width:90%;
 }
 
+.product-list p
+{
+    margin-bottom:10px;
+}
+
+.product-list .p-name
+{
+    font-size:2em;
+    font-weight:750;
+}
+
+.product-list .p-price
+{
+    font-size:1.5em;
+}
+
+.product-list .p-qty
+{
+    margin-top:10vh;
+}
+
 .btn-position
 {
     position: absolute;
@@ -317,11 +415,23 @@ input[disabled] {
     margin-bottom:5px ;
 }
 
+.cart .c-name
+{
+    font-weight:800;
+}
+
 .order-box
 {
     height:10%;
     background:#222222;
     box-shadow: 0px -8px 5px 0px rgba(0,0,0,0.75);
+}
+
+.total-price
+{
+    color:#F9D342;
+    font-size:20px;
+    font-weight:600;
 }
 
 #place-order-overlay, #about-product-overlay
@@ -346,7 +456,7 @@ input[disabled] {
     top:0;    
 }
 
-#place-order, #about-product
+#place-order,#about-product
 {
     background: white;
     position:relative;
@@ -355,6 +465,67 @@ input[disabled] {
     width:80%;
     height:100%;
     overflow-y:auto;
+}
+
+
+#place-order form
+{
+    padding:30px 15px;
+}
+
+.about-product-detail 
+{
+    padding-top:30px;
+}
+
+
+.img-box
+{
+    border-right:4px solid grey;
+    min-height:25vh;
+}
+
+.img-box img
+{
+    max-width:80%;
+}
+
+.detail-box
+{   
+    padding-left:10px !important;
+}
+
+.detail-box p
+{
+    margin-bottom:10px;
+}
+
+.detail-box .a-name
+{
+    font-size:1.7em;
+    font-weight:600;
+}
+
+.detail-box .a-price
+{
+    font-size:1.3em;
+}
+
+.img-detail-box
+{
+   border-top:4px solid grey;
+   background:#E0E0E0;
+}
+
+.img-detail-box p
+{
+    font-size:1.5em;
+    font-weight:800;
+}
+
+.img-detail-box img
+{
+    width:90%;
 }
 
 
