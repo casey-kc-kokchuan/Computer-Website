@@ -13,4 +13,15 @@
 	{
 		padding:0 10px 0 5px;
 	}
+
+	.product-list .p-name
+	{
+	    font-size:1.7em;
+	    font-weight:800;
+	}
+
+	.product-list .p-qty
+	{
+		margin-top: 9vh
+	}
 }

@@ -50,24 +50,28 @@
 
             <nav id="sidebar">
                 
-                 <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="toggleSidebar()">
+                 <button type="button" id="sidebarCollapse" class="btn btn-info toggle-btn" onclick="toggleSidebar()">
                     <i class="fas fa-angle-left" id="arrow"></i>
                  </button>
                 <div class="sidebar-header">
+                    <picture>
+                        <source media="(max-width:991px)" srcset="{{ url("/img/slogo.png")}}">
+                        <img src="{{ url("/img/logo.png")}}">
+                    </picture>
                 </div>  
 
                 <ul class="list-unstyled components">
+                    <li class="username"><i class="fas fa-user"></i>&nbsp;&nbsp;{{ Auth::user()->username}}</li> 
 
-                    <li><a href="{{ url('Admin/OrderManager' )}}"><i class="fas fa-receipt"></i>&nbsp;&nbsp;Order</a></li>
+                    <li><a class="nav-btn" href="{{ url('Admin/OrderManager' )}}"><i class="fas fa-receipt"></i>&nbsp;&nbsp;Order</a></li>
 
                     @role('Admin|Store Manager|Product Manager')
-                    <li><a href="{{ url('Admin/ProductManager') }}"><i class="fas fa-boxes"></i>&nbsp;&nbsp;Product</a></li> @endrole
+                    <li><a class="nav-btn" href="{{ url('Admin/ProductManager') }}"><i class="fas fa-boxes"></i>&nbsp;&nbsp;Product</a></li> @endrole
 
                     @role('Admin|Store Manager')
-                    <li><a href="{{ url('Admin/Account') }}"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>    
+                    <li><a  class="nav-btn" href="{{ url('Admin/Account') }}"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Account</a></li>    
                     @endrole    
-                    {{-- <li><a href="#"></i>&nbsp;&nbsp;{{ Auth::user()->username}}</a></li>  --}}
-                    <li><a href="{{ url('Account/Logout')}}">&nbsp;&nbsp;Logout</a></li>
+                    <li><a class="logout-btn" href="{{ url('Account/Logout')}}">&nbsp;&nbsp;Logout</a></li>
                 </ul>
 
             </nav>
