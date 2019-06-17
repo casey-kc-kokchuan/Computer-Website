@@ -8,70 +8,163 @@
 
 @section('head')
 
+<style type="text/css">
 
+
+/*override container fluid	*/
+.container-fluid
+{
+	padding: 0px !important;
+}
+
+</style>
 @endsection
 
 
 
 @section('body')
 
-<div class="container" >
-	<div class="row" id="shoppingCart">
+<div class="container-fluid ">
+	<div class="row no-gutters" id="shoppingCart">
 
 
-		<div class="col-12" style="height:5%;">
-			
-			<label for="sortby">Sort By: </label>
-			<select class="form-control" v-model="type" style="width:30%;display: inline-block;">
+		<div class="col-12 col-lg-2 max-height cart-search-box">
+
+			<label>Name</label>
+			<input type="text" v-model="searchName" placeholder="Search" class="form-control">
+			<label>Type</label>
+			<select class="form-control" v-model="searchType">
 				<option value="">All</option>
 				@foreach ($types as $type)
 					<option value="{{$type->type}}">{{$type->type}}</option>
 				@endforeach
 			</select>
-			<input type="text" v-model="name" placeholder="Search" class="form-control" style="width:40%;display: inline-block;">
-			<button @click="search" type="button">Search</button>
+			<label>Brand</label>
+			<select class="form-control" v-model="searchBrand">
+				<option value="">All</option>
+				@foreach ($brands as $brand)
+					<option value="{{$brand->brand}}">{{$brand->brand}}</option>
+				@endforeach
+			</select>
+
+			
+			<button @click="search" type="button" class="btn-yellow btn-size-form mt-lg-3">Search</button>
+			<button @click="clear" type="button" class="btn-red btn-size-form mt-lg-3">Clear</button>
 		</div>
 
-		<div class="col-12 col-lg-4 productList"  >
-			
-				
+		<div class="col-12 col-lg-5 product-list">
 				<div v-for="(product, index) in productList" class="product" id="product">
-					
-					<p>@{{product.name}}</p>
-					<img :src="product.img" style="width:100px;height:100px">
-					<p>@{{product.price}}</p>
+					<div class="row no-gutters max-height">
+						<div class="col-lg-4">
+							<img :src="product.img">
+						</div>
+						<div class="col-lg-8">
+							<p class="p-name">@{{product.name}}</p>
+							<p class="p-price">RM&nbsp;@{{ formatPrice(product.price) 	}}</p>
+							<p class="p-qty">@{{product.qty}} <i>in stock</i></p>
 
 
-					<button @click="addToCart(index)">+</button>
-					<button>About</button>
+							<div class="btn-position">
+								<button @click="addToCart(index)" class="btn-green btn-size-form"><i class="fas fa-cart-plus"></i><span class="atc">&nbsp;Add To Cart</span></button>
+								<button class="btn-blue btn-size-form" @click="about(index)">About</button>
+							</div>
+						</div>
+					</div>
 					
 				</div>
-
-
-			
 		</div>
 
-		<div class="col-12 col-lg-8 cartList">
+		<div class="col-12 col-lg-5 max-height">
+			<div class="cart-list">
+				<div v-for="(cart, index) in cartList" class="cart" id="cart" >
+					<p class="c-name">@{{cart.name}}</p>
+					<img :src="cart.img" style="width:150px;height:100px">
+					<p>RM&nbsp;@{{ formatPrice(cart.price)}}</p>
+					<p>Qty: @{{cart.qty}}</p>
+					<button @click="removeFromCart(index)" class="btn-red"><i class="fas fa-minus"></i></button>
 
-			<div v-for="(cart, index) in cartList" class="cart" id="cart" >
-
-
-				<p>@{{cart.name}}</p>
-				<img :src="cart.img" style="width:100px;height:100px">
-				<p>@{{cart.price}}</p>
-				<p>Qty: @{{cart.qty}}</p>
-				<button @click="removeFromCart(index)">-</button>
-
+				</div>
 			</div>
 
+			<div class="order-box">
+				<p class="float-lg-left total-price" style="">Total: RM @{{ formatPrice(total_price) }}</p>
+				<button class="float-lg-right btn-yellow btn-size-form" onclick="toggleOverlay('#place-order-overlay')">Place Order</button>
+			</div>
 
 
 		</div>
 
 
 		
+		<div id="about-product-overlay">
+			<div id="about-product">
+				<div class="row no-gutters">
+					<div class="col-12">
+						<button class="overlay-close-btn2" type="button" onclick="toggleOverlay('#about-product-overlay')"><i class="fas fa-angle-down"></i></button>
+					</div>
+					<div class="col-12 col-lg-8 offset-lg-2 text-center">
+						<div class="row no-gutters about-product-detail">
+							<div class="col-6 text-center img-box">
+								<img  class="img" :src="aboutProduct.img" >
+							</div>
+							<div class="col-6 text-left detail-box">
+								<p class="a-name">@{{ aboutProduct.name }}</p >
+								<p class="a-price">RM&nbsp;@{{formatPrice(aboutProduct.price) }}</p>
+								<p class="a-qty">@{{ aboutProduct.qty}}&nbsp;<i>in stock</i></p>
+							</div>
+							<div class="col-12 img-detail-box">
+								<p>Product Detail</p>
+								<img class="imgDetail" :src="aboutProduct.imgDetail">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </div>
+
+<div id="place-order-overlay">
+	<div id="place-order">
+		<div class="row no-gutters">
+			<div class="col-12">
+				<button class="overlay-close-btn2" type="button" onclick="toggleOverlay('#place-order-overlay')"><i class="fas fa-angle-down"></i></button>
+			</div>
+			<div class="col-12 col-lg-6 offset-lg-3">
+				<form @submit.prevent="handleSubmit">
+					<div class="form-group">
+						<label>Name</label>
+						<input type="text" class="form-control" v-model="orderDetail.name">
+						<p class="text-danger" v-if="error.name">@{{ error.name[0] }}</p>
+					</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="text" class="form-control" v-model="orderDetail.email">
+						<p class="text-danger" v-if="error.email">@{{ error.email[0] }}</p>	
+					</div>
+					<div class="form-group">
+						<label>Contact</label>
+						<input type="text" class="form-control" v-model="orderDetail.contact">
+						<p class="text-danger" v-if="error.contact">@{{ error.contact[0] }}</p>
+
+					</div>
+					<div class="form-group">
+						<label>Address</label>
+						<input type="text" class="form-control" v-model="orderDetail.address">
+						<p class="text-danger" v-if="error.address">@{{ error.address[0] }}</p>
+					</div>
+
+					<button class="btn-yellow btn-size-form2" style="width:100%">Submit</button>
+
+				</form>
+			</div>
+		</div>	
+
+	</div>
+</div>
+
+
 
 @endsection
 
@@ -89,8 +182,11 @@ var shoppingCart = new Vue(
 	{	
 		productList: {!! json_encode($products) !!},
 		cartList: [],
-		type: "",
-		name: "",
+		searchType: "",
+		searchName: "",
+		searchBrand: "",
+		total_price: 0.00,
+		aboutProduct: { name: "", img: "/img/placeholder.png", price: 0.00, imgDetail: "/img/placeholder.png"}
 	},
 	methods:
 	{
@@ -102,14 +198,31 @@ var shoppingCart = new Vue(
 			var	matchingIndex = this.cartList.findIndex(x => x.id == obj.id)
 
 			if( matchingIndex == -1)
-			{
-				obj.qty = 1;
-				this.cartList.push(obj)
+			{	
+				if(obj.qty <= 0)
+				{
+					alert("nope");
+				}
+				else
+				{
+					obj.qty = 1;
+					this.cartList.push(obj);
+					this.total_price += this.productList[index].price;
+				}
 			}
 			else
 			{
-				this.cartList[matchingIndex].qty += 1;
+				if(obj.qty <= this.cartList[matchingIndex].qty)
+				{
+					alert("nope");
+				}
+				else
+				{
+					this.cartList[matchingIndex].qty += 1;
+					this.total_price += this.productList[index].price;
+				}
 			}
+			
 			
 		},
 
@@ -118,6 +231,8 @@ var shoppingCart = new Vue(
 			var obj = this.cartList[index];
 
 			obj.qty -= 1;
+
+			this.total_price -= this.cartList[index].price;
 
 			if(obj.qty <= 0)
 			{
@@ -129,12 +244,133 @@ var shoppingCart = new Vue(
 		search()
 		{
 
-			var url = "/Product/search?type=" + this.type + "&brand=&name=" + this.name;
-			jsonAjax(url, "GET", "", function(response) {shoppingCart.productList = response;}, function() {alert("Server Error")});
-		}
+			var url = "/Product/search?type=" + this.searchType + "&brand="+ this.searchBrand + "&name=" + this.searchName;
+			jsonAjax(url, "GET", "", function(response) {shoppingCart.productList = response;}, alertError);
+		},
+
+		about(index)
+		{
+			this.aboutProduct = this.productList[index];
+			toggleOverlay("#about-product-overlay");
+		},
+
+		formatPrice(value) 
+		{
+	       return val = (value).toFixed(2);	
+	    },
+
+	    clear()
+	    {
+	    	this.searchName = "";
+	    	this.searchType = "";
+	    	this.searchBrand = "";
+	    	this.search();
+	    },
+
+	    recalculate()
+	    {
+	    	var total = 0;
+
+	    	for(var i = 0; i < this.cartList.length; i++)
+	    	{
+	    		total += this.cartList[i].price * this.cartList[i].qty;
+	    	}
+
+	    	this.total_price = total;
+	    }
 	}
 })
 
+var orderDetail = new Vue(
+{
+	el: "#place-order",
+	data: 
+	{
+		orderDetail: 
+		{
+			name: "",
+			email: "",
+			contact: "",
+			address: ""
+		},
+		error: {},
+	},
+	methods:
+	{
+		handleSubmit(event)
+		{	
+			if(shoppingCart.cartList.length <= 0)
+			{
+				SwalError("Cart is empty. Unable to place order.", "");
+				return 0;
+			}
+			var obj = {};
+			Object.assign(obj, this.orderDetail);
+			obj.cart = shoppingCart.cartList;
+			obj.total_price = shoppingCart.formatPrice(shoppingCart.total_price);
+			obj.searchName = shoppingCart.searchName;
+			obj.searchType = shoppingCart.searchType;
+			obj.searchBrand = shoppingCart.searchBrand;
+
+			jsonAjax("/Order/PlaceOrder", "POST", JSON.stringify(obj) ,function(response)
+				{
+					if(response.Status == "Success")
+					{
+						location.replace(response.Link);
+						return 0;
+					}
+
+					if(response.Status == "Quantity Error")
+					{
+						toggleOverlay("#place-order-overlay");
+						shoppingCart.productList = response.Data;
+						var data = response.Message;
+						var txt ="";
+						
+						for(var i = 0; i < data.length; i++)
+						{
+							var	matchingIndex = shoppingCart.cartList.findIndex(x => x.id == data[i].id);
+
+							var counter = i +1;
+							if(data[i].qty <= 0)
+							{
+								txt += "<p>" + counter+ ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> 0(Removed)</p>"; 
+								shoppingCart.cartList.splice(matchingIndex, 1);
+							}
+							else
+							{
+								shoppingCart.cartList[matchingIndex].qty = data[i].qty;
+								txt += "<p>" + counter + ". " + shoppingCart.cartList[matchingIndex].name + " <i class='fas fa-arrow-right'></i> " + data[i].qty + "</p>"; 
+							}
+						}
+
+						Swal.fire(
+						{
+							title: "Apologies, we are running out of stock for item(s) ordered.",
+							html: '<p>Cart is automatically refreshed, changes are as follow:<p>' + txt,
+						});
+						shoppingCart.recalculate();
+						return 0;
+					}	
+
+					if(response.Status == "Validation Error")
+					{
+						SwalError("Validation Error", '');
+						orderDetail.error = response.Message;
+						return 0;
+					}
+
+					if(response.Status == "Database Error")
+					{
+						SwalError("Database Error", "");
+						return 0;
+					}
+
+				}, alertError);
+		}
+	}
+
+})
 
 </script>
 

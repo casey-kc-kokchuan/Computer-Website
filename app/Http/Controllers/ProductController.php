@@ -5,102 +5,16 @@ namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Products;
 use \Illuminate\Database\QueryException;
 use App\Types;
 use App\Brands;
+use App\Orders;
+use App\OrderList;
 
 class ProductController extends Controller
 {
-    public function index()
-    {
-        // $product = Products::all()->toArray();
-        // return view('Admin.AdminInventory', compact('product'));
-        //return view('Customer.ShoppingCart', compact('product'));
-    }
-
-    public function create()
-    {
-        return view('Admin.AdminCreate');
-    }
-
-    public function store(Request $request)
-    {
-        // $this->validate($request, [
-        //     'name'  => 'required',
-        //     'type'  => 'required',
-        //     'price' => 'required'
-        // ]);
-        // $product = new products([
-        //     'name'  => $request->get('name'),
-        //     'type'  => $request->get('type'),
-        //     'price'  => $request->get('price')
-        // ]);
-        // $product->save();
-        // return redirect()->route('Admin.index')->with('success', 'Data Added');
-
-
-
-        //To store image
-        // $file =  $request->img;
-        // $file->move(public_path('/img'),'test.jpg');
-
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required',
-        // ]);
-
-        // if($validator->fails())
-        // {
-        //     return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
-
-        // }
-
-        return response()->json(['Status' => "Success", "Data" => [['type' => 'A'],['type' => 'B']]]);
-    }
-
-    public function edit($id)
-    {
-        $product = Products::find($id);
-        return view('Admin.AdminEdit', compact('product','id'));
-    }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $this->validate($request, [
-    //         'name'  => 'required',
-    //         'type'  => 'required',
-    //         'price' => 'required'
-    //     ]);
-    //     $product = Products::find($id);
-    //     $product->name = $request->get('name');
-    //     $product->type = $request->get('type');
-    //     $product->price = $request->get('price');
-    //     $product->save();
-    //     return redirect()->route('Admin.index')->with('success', 'Data Updated');
-    // }
-
-    public function destroy($id)
-    {
-        $product = Products::find($id);
-        $product->delete();
-        return redirect()->route('Admin.index')->with('success', 'Data Deleted');
-    }
-
-
-    // public function deleteBrand(Request $request)
-    // {
-    //   try {
-    //       $id = $request->id;
-    //       $brands = Brands::find($id);
-    //       $brands->delete();
-
-    //   } catch (Exception $e) {
-    //       return response()->json(['Status' => "Database Error"]);
-    //   }
-
-    // }
-
-    
     public function search(Request $request)
     {
 
@@ -127,10 +41,10 @@ class ProductController extends Controller
         $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:products',
+            'name' => 'required|unique:products|max:255',
             'type' => 'required',
             'brand' => 'required',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|min:0',
             'qty' => 'required|integer|min:0',
             'img' => 'required|image',
             'imgDetail' => 'required|image',
@@ -144,30 +58,33 @@ class ProductController extends Controller
 
         try
         {
-
             $product = new Products();
             $product->name = $request->name;
             $product->type = $request->type;
             $product->brand = $request->brand;
             $product->price = $request->price;
             $product->qty = $request->qty;
+            $product->user = Auth::user()->username;
             $product->save();
             $id = $product->id;
 
-        } catch (QueryException $e) {
-
+        }catch (QueryException $e) 
+        {
             return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
         }
 
-        $db_name_1 = '/img/default.jpg';
-        $db_name_2 = '/img/default.jpg';
+        $db_name_1 = '/img/placeholder.png';
+        $db_name_2 = '/img/placeholder.png';
 
-        if($request->hasFile('img')){
+        if($request->hasFile('img'))
+        {
             $image = $request->img;
             $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
             $image->move(public_path('img'), $new_name_1);
             $db_name_1 = '/img/'.$new_name_1;
-        }if($request->hasFile('imgDetail')){
+        }
+        if($request->hasFile('imgDetail'))
+        {
             $imgDetail = $request->imgDetail;
             $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
             $imgDetail->move(public_path('img'), $new_name_2);
@@ -179,24 +96,118 @@ class ProductController extends Controller
             ->update(['img' => $db_name_1, 'imgDetail' => $db_name_2]);
 
 
-        // $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
-        //                     ->where('type', 'LIKE', '%'.$searchType.'%')
-        //                     ->where('brand', 'LIKE', '%'.$searchBrand.'%')
-        //                     ->get();
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
 
 
-        // return response()->json(['Status' => "Success","Data" => $searchProduct]);
+        return response()->json(['Status' => "Success","Data" => $searchProduct]);
 
-        return response()->json(['Status' => "Success","Data" => Types::all()]);
+    }
+
+    public function EditProduct(Request $request)
+    {
+        $searchType = empty($request->searchType)? "": $request->searchType;
+        $searchName = empty($request->searchName)? "": $request->searchName;
+        $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
+        $id = $request->id;
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'type' => 'required',
+            'brand' => 'required',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'qty' => 'required|integer|min:0',
+
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        }
+
+        try
+        {
+            $product = Products::find($id);
+            $product->name = $request->name;
+            $product->type = $request->type;
+            $product->brand = $request->brand;
+            $product->price = $request->price;
+            $product->qty = $request->qty;
+            $product->user = Auth::user()->username;
+            $product->save();
+
+        } catch (QueryException $e) {
+
+            return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+        }
+
+        if($request->hasFile('img'))
+        {
+            $image = $request->img;
+            $new_name_1 = $id.'_product'.'.'.$image->getClientOriginalExtension();
+            $image->move(public_path('img'), $new_name_1);
+            $db_name_1 = '/img/'.$new_name_1;
+
+            DB::table('products')
+                ->where('id', $id)
+                ->update(['img' => $db_name_1]);
+        }
+        if($request->hasFile('imgDetail'))
+        {
+            $imgDetail = $request->imgDetail;
+            $new_name_2 = $id.'_detail'.'.'.$imgDetail->getClientOriginalExtension();
+            $imgDetail->move(public_path('img'), $new_name_2);
+            $db_name_2 = '/img/'.$new_name_2;
+
+            DB::table('products')
+                ->where('id', $id)
+                ->update(['imgDetail' => $db_name_2]);
+        }
+
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
+
+
+        return response()->json(['Status' => "Success","Data" => $searchProduct]);
+
+    }
+
+
+    public function RemoveProduct(Request $request)
+    {
+
+        $searchType = empty($request->searchType)? "": $request->searchType;
+        $searchName = empty($request->searchName)? "": $request->searchName;
+        $searchBrand = empty($request->searchBrand)? "": $request->searchBrand;
+
+        try {
+            $id = $request->id;
+            $product = Products::find($id);
+            $product->delete();
+        } catch (Exception $e) {
+            return response()->json(['Status' => "Database Error"]);
+        }
+
+
+        $searchProduct = Products::where('name', 'LIKE', '%'.$searchName.'%')
+                            ->where('type', 'LIKE', '%'.$searchType.'%')
+                            ->where('brand', 'LIKE', '%'.$searchBrand.'%')
+                            ->get();
+
+        return response()->json(['Status' => "Success", "Data" => $searchProduct]);
+        
     }
 
 
     public function AddType(Request $request)
     {
 
-
         $validator = Validator::make($request->all(), [
-        'type' => 'required|unique:types',
+        'type' => 'required|unique:types|max:255',
 
         ]);
 
@@ -205,8 +216,6 @@ class ProductController extends Controller
         {
             return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
         }
-
-
 
         try
         {
@@ -227,10 +236,8 @@ class ProductController extends Controller
     public function AddBrand(Request $request)
     {
 
-     
-      
         $validator = Validator::make($request->all(), [
-        'brand' => 'required|unique:brands',
+        'brand' => 'required|unique:brands|max:255',
 
         ]);
 
@@ -245,7 +252,6 @@ class ProductController extends Controller
             $brands = new Brands();
             $brands->brand = $request->brand;
             $brands->save();
-            $id = $brands->id;
 
 
         } catch (QueryException $e) {
@@ -259,19 +265,189 @@ class ProductController extends Controller
 
     }
 
-
-
-    public function check(Request $request)
+    public function DeleteType(Request $request)
     {
-        // $product = new Products();
-        // $product->name = $request->name;
-        // $product->save();
-        // $id = $product->id;
-        // DB::table('products')
-        //     ->where('id', $id)
-        //     ->update(['img' => 'something', 'imgDetail' => 'somethingelse']);
+          try {
+              $id = $request->id;
+              $types = Types::find($id);
+              $types->delete();
+
+         } catch (QueryException $e) {
+              return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+         }
+
+
+         return response()->json(['Status' => "Success","Data" => Types::all()]);
 
     }
 
+
+    public function DeleteBrand(Request $request)
+    {
+           try {
+               $id = $request->id;
+               $brands = Brands::find($id);
+               $brands->delete();
+
+          } catch (QueryException $e) {
+               return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+          }
+
+          return response()->json(['Status' => "Success","Data" => Brands::all()]);
+
+    }
+
+    public function PlaceOrder(Request $request)
+    {   
+
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|max:255',
+        //     'email' => 'email',
+        //     'contact' => 'required|regex:/(01)[0-9]{8,9}/',
+        //     'address' => 'required',
+
+        // ]);
+
+        // if($validator->fails())
+        // {
+        //     return response()->json(['Status' => "Validation Error", "Message" => $validator->errors()]);
+        // }
+
+        $document = $request->cart;
+        $all_exceed = [] ;
+        foreach($document as $check){
+
+            $purchase_id = $check['id'];
+            $purchase_qty = $check['qty'];
+
+            $stock_qty = DB::table('products')
+                        ->select('qty')
+                        ->where('id', $purchase_id)
+                        ->get();
+
+            foreach($stock_qty as $stock_qty1){
+                $qty = $stock_qty1->qty;
+            }
+
+            if ($qty == 0 || $qty < $purchase_qty){
+
+                $exceed = [
+                    'id' => $purchase_id,
+                    'qty' => $qty,
+                ];
+
+                array_push($all_exceed, $exceed); 
+            }         
+        }
+
+        if ($all_exceed != null)
+        {
+            return response()->json(['Status' => "Quantity Error", "Message" => $all_exceed]);
+        }
+        else
+        {
+
+            //insert into orders database
+            try
+            {
+                $order = new Orders();
+                $order->name = $request->name;
+                $order->email = $request->email;
+                $order->contact = $request->contact;
+                $order->address = $request->address;
+                $order->total_price = $request->total_price;
+                $order->status = "Pending Confirmation";
+                $order->save();
+                $id = $order->id;
+            }
+            catch (QueryException $e) 
+            {
+                return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]);
+            }
+
+
+            //insert into order_list database
+            try 
+            {
+                foreach($document as $data){ 
+                    $orderlist = new OrderList();
+                    $orderlist->orders_id = $id;
+                    $orderlist->name = $data['name'];
+                    $orderlist->type = $data['type'];
+                    $orderlist->brand = $data['brand'];
+                    $orderlist->price = $data['price'];
+                    $orderlist->qty = $data['qty'];
+                    $orderlist->save();
+                    $product_id = $data['id'];
+                    $order_qty = $data['qty'];
+                    $products = Products::find($product_id);
+                    $product_qty = $products->qty;
+                    $new_qty = $product_qty - $order_qty;
+                    $products->qty = $new_qty;
+                    $products->save();
+                }
+                
+            } catch (Exception $e) {
+                
+                return response()->json(['Status' => "Database Error", "Message" => $e->getMessage()]); 
+            }
+
+        }
+        
+
+        return response()->json(['Status' => "Success"]);
+
+    }
+
+    public function ShowOrder()
+    {
+
+        $order = Orders::all();
+        $array_list1 = [];
+        $array_list2 = [];
+
+        foreach ($order as $orders)
+        {
+
+            $orderlist = Orders::find($orders->id)->orderlist;
+
+            foreach ($orderlist as $orderlists)
+            {
+
+                $name = $orderlists->name;
+
+                 $list2 = [
+                    'orders_id' => $orderlists->orders_id,
+                    'name' => $orderlists->name,
+                    'type' => $orderlists->type,
+                    'brand' => $orderlists->brand,
+                    'price' => $orderlists->price,
+                    'qty' => $orderlists->qty,
+                    ];
+
+                array_push($array_list2, $list2);
+
+            }
+            
+            $list1 = [
+                    'id' => $orders->id,
+                    'name' => $orders->name,
+                    'email' => $orderlists->email,
+                    'contact' => $orderlists->contact,
+                    'address' => $orderlists->address,
+                    'total_price' => $orderlists->total_price,
+                    'user' => $orderlists->user,
+                    'status' => $orderlists->status,
+                    'orderlist' => $array_list2,
+                    ];
+
+            $array_list2 = [];
+
+            array_push($array_list1, $list1);
+        }
+
+        return $array_list1;
+        
+    }
 
 }

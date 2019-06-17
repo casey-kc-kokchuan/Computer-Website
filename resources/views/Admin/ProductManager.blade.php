@@ -9,7 +9,7 @@
 @section('head')
 
 <style type="text/css">
-	
+
 
 
 /*Override default styling*/
@@ -30,37 +30,37 @@
 
 
 
-	
+
 <div id="product-manager" class="max-height">
 	<div class="row max-height">
 		<div class="col-12 col-lg-3 product-left-pane">
-			
+
 			<div class="row" style="width:100%;margin:0">
 				<div class="product-control-box order-2 order-lg-1 col-12 ">
 					<button  @click="addItem" class="btn-green add-btn"><i class="fas fa-plus"></i></button>
-					<button onclick="toggleOverlay('#product-setting-overlay')" class="config-btn mt-lg-3 mt-0"><i class="fas fa-cog pr-lg-1 pr-0"></i><span class="config-txt">Configuration</span></button>		
+					<button onclick="toggleOverlay('#product-setting-overlay')" class="config-btn mt-lg-3 mt-0"><i class="fas fa-cog pr-lg-1 pr-0"></i><span class="config-txt">Configuration</span></button>
 				</div>
-				
+
 				<div class="product-search-box order-1 order-lg-2 col-12 no-gutters">
 					{{-- <h3>Search Box</h3> --}}
 					<div class="form-group">
 						<label for="">Name</label>
-						<input type="text" v-model="name"  class="form-control" placeholder="Search">	
+						<input type="text" v-model="name"  class="form-control" placeholder="Search">
 					</div>
 					<div class="form-group">
-						
+
 						<label for="">Type</label>
 						<select v-model="type" class="form-control">
-								<option value="">Select Type</option>
+								<option value="">All</option>
 								<option v-for="type in types" :value="type.type">@{{type.type}}</option>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="">Brand</label>
 						<select v-model="brand" class="form-control">
-							<option value="">Select Brand</option>
+							<option value="">All</option>
 							<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
-						</select>	
+						</select>
 					</div>
 
 
@@ -68,13 +68,13 @@
 					<button @click="clear()" class=" btn-size-form btn-red mt-lg-2 mt-0">Clear</button>
 				</div>
 			</div>
-			
+
 		</div>
 		<div class="col-12 col-lg-9 product-right-pane">
-			
+
 			<div class="product-manager-list">
 				<div v-for="(product, index) in productList" class="product" id="product">
-					
+
 					<p><strong>@{{product.name}}</strong></p>
 					<img :src="product.img" style="width:150px;height:100px">
 					<p>RM&nbsp;@{{product.price}}</p>
@@ -83,7 +83,7 @@
 
 					<button @click="edit(index)" class="btn-blue btn-size-form">Edit</button>
 					<button @click="remove(index)" class="btn-red btn-size-form"><i class="fas fa-times"></i></button>
-					
+
 				</div>
 			</div>
 		</div>
@@ -95,10 +95,10 @@
 
 <div id="product-detail-overlay">
 	<div id="product-detail">
-		
+
 
 		<div class="row">
-			
+
 			<div class="col-12 col-lg-1">
 				<button type="button" @click="hide" class="overlay-close-btn"><i class="fas fa-angle-right"></i></button>
 			</div>
@@ -106,12 +106,12 @@
 			<div class="col-12 col-lg-6">
 				<form id="myForm" @submit.prevent="handleSubmit">
 				@csrf
-				
+
 					<input type="hidden" name="id" v-model="productDetail.id">
 
 					<div class="form-group">
 						<center>
-							
+
 							<img :src=productDetail.img id="img">
 							<div class="file has-name pt-2">
 							  <label class="file-label  mx-lg-auto">
@@ -128,29 +128,29 @@
 							      @{{ imgStatus }}
 							    </span>
 							  </label>
-							</div>	
+							</div>
 
 							<p class="text-danger" v-if="error.img">@{{ error.img[0]}}</p>
 						</center>
 
-	
+
 					</div>
 
 					<div class="form-group">
-						<label for="name">Name</label>	
+						<label for="name">Name</label>
 						<input type="text" v-model="productDetail.name" name="name" class="form-control">
 						<p class="text-danger" v-if="error.name">@{{ error.name[0]}}</p>
 					</div>
 
 
 					<div class="form-group">
-						<label for="type">Type</label>	
+						<label for="type">Type</label>
 						<select name="type" class="form-control" v-model="productDetail.type">
 							<option value="">Select Type</option>
 							<option v-for="type in types" :value="type.type">@{{type.type}}</option>
 							<option v-if="tempoType" :value="tempoType">@{{ tempoType }}</option>
 						</select>
-							<p class="text-danger" v-if="error.type">@{{ error.type[0]}}</p>					
+							<p class="text-danger" v-if="error.type">@{{ error.type[0]}}</p>
 					</div>
 
 					<div class="form-group">
@@ -159,25 +159,25 @@
 							<option value="">Select Brand</option>
 							<option v-for="brand in brands" :value="brand.brand">@{{brand.brand}}</option>
 							<option v-if="tempoBrand" :value="tempoBrand">@{{ tempoBrand }}</option>
-						</select>	
+						</select>
 							<p class="text-danger" v-if="error.brand">@{{ error.brand[0]}}</p>
 					</div>
 
 					<div class="form-group">
-						<label for="price">Price</label>	
+						<label for="price">Price</label>
 						<input type="text" name="price" class="form-control" v-model="productDetail.price">
 						<p class="text-danger" v-if="error.price">@{{ error.price[0]}}</p>
 					</div>
 
 					<div class="form-group">
-						<label for="qty">Qty in Stock</label>	
+						<label for="qty">Qty in Stock</label>
 						<input type="text" name="qty" class="form-control" v-model="productDetail.qty">
 						<p class="text-danger" v-if="error.qty">@{{ error.qty[0]}}</p>
 					</div>
 
 					<div class="form-group">
-						<label for="imgDetail">Product Detail Image</label>	
-						
+						<label for="imgDetail">Product Detail Image</label>
+
 						<br>
 						<div class="file has-name">
 						  <label class="file-label">
@@ -194,22 +194,22 @@
 						      @{{ imgDetailStatus }}
 						    </span>
 						  </label>
-						</div>	
-						
+						</div>
+
 						<p class="text-danger" v-if="error.imgDetail">@{{ error.imgDetail[0]}}</p>
 						<br>
 						<img :src="productDetail.imgDetail" id="imgDetail">
 					</div>
 
-					<button type="submit" class="btn-blue btn-size-form"v-if="isEdit">Save</button>
-					<button type="submit" class="btn-green btn-size-form" v-else>Add</button>
-				</form>	
+					<button type="submit" class="btn-blue btn-size-form2" v-if="isEdit">Update</button>
+					<button type="submit" class="btn-green btn-size-form2" v-else>Add</button>
+				</form>
 			</div>
 
 		</div>
 
 	</div>
-	
+
 </div>
 
 
@@ -244,7 +244,7 @@
 				<div id="brandsTable" class="mt-2"></div>
 			</div>
 		</div>
-	</div>	
+	</div>
 </div>
 
 
@@ -258,7 +258,7 @@
 @section('script')
 
 <script type="text/javascript">
-	
+
 var productManager = new Vue(
 {
 	el: "#product-manager",
@@ -308,7 +308,9 @@ var productManager = new Vue(
 				productDetail.tempoBrand = this.productList[index].brand;
 			}
 
-			productDetail.productDetail = this.productList[index];
+			var obj = {};
+			Object.assign(obj, this.productList[index]);
+			productDetail.productDetail = obj;
 			productDetail.isEdit = true;
 		},
 
@@ -373,7 +375,7 @@ var productManager = new Vue(
 
 	},
 
-	watch: 
+	watch:
 	{
 		types: function()
 		{
@@ -398,25 +400,25 @@ var productDetail = new Vue(
 	el: "#product-detail",
 	data:
 	{
-		productDetail: 
+		productDetail:
 		{
-			id: "", 
-			name: "", 
+			id: "",
+			name: "",
 			type: "",
 			brand: "",
 			price: "",
-			img: "/img/placeholder.png", 
+			img: "/img/placeholder.png",
 			imgDetail: "/img/placeholder.png",
 			qty: "",
 
 		},
 		error:
 		{
-			name: [], 
+			name: [],
 			type: [],
 			brand: [],
 			price: [],
-			img: [], 
+			img: [],
 			imgDetail: [],
 			qty: []
 		},
@@ -432,7 +434,6 @@ var productDetail = new Vue(
 	{
 		handleSubmit(event)
 		{
-		
 			var form = new FormData(event.target);
 			form.append("searchName", productManager.name)
 			form.append("searchType", productManager.type)
@@ -452,7 +453,7 @@ var productDetail = new Vue(
 		{
 			var reader = new FileReader();
 
-			reader.onload = function(e) 
+			reader.onload = function(e)
 			{
 			  $('#img').attr('src', e.target.result);
 			}
@@ -465,7 +466,7 @@ var productDetail = new Vue(
 		{
 			var reader = new FileReader();
 
-			reader.onload = function(e) 
+			reader.onload = function(e)
 			{
 			  $('#imgDetail').attr('src', e.target.result);
 			}
@@ -477,20 +478,20 @@ var productDetail = new Vue(
 
 		hide()
 		{
-			this.$refs.img.value = '';	
-			this.$refs.imgDetail.value = '';	
+			this.$refs.img.value = '';
+			this.$refs.imgDetail.value = '';
 			this.tempoBrand = '';
 			this.tempoType = '';
 			this.imgDetailStatus = "No file is selected";
 			this.imgStatus = "No file is selected";
 			this.productDetail =
 				{
-					id: "", 
-					name: "", 
+					id: "",
+					name: "",
 					type: "",
 					brand: "",
 					price: "",
-					img: "/img/placeholder.png", 
+					img: "/img/placeholder.png",
 					imgDetail: "/img/placeholder.png",
 					qty: ""
 				};
@@ -551,13 +552,13 @@ var productDetail = new Vue(
 
 		emptyError()
 		{
-			this.error = 		
+			this.error =
 			{
-				name: [], 
+				name: [],
 				type: [],
 				brand: [],
 				price: [],
-				img: [], 
+				img: [],
 				imgDetail: [],
 				qty: []
 			};
@@ -602,6 +603,8 @@ var productSetting = new Vue(
 			var obj = {brand: this.newBrand};
 			jsonAjax("/Product/AddBrand", "POST", JSON.stringify(obj), this.manageBrand, alertError);
 		},
+
+
 
 		manageType(response)
 		{
@@ -649,7 +652,7 @@ var productSetting = new Vue(
 				SwalError('Database Error. Please contact administrator.','');
 			}
 		},
-		
+
 		hide()
 		{
 			this.newType ='';
@@ -710,7 +713,7 @@ var typesTable = new Tabulator('#typesTable',
 						if(result.value)
 						{
 
-							jsonAjax("/Product/RemoveType", "POST", JSON.stringify({id: cell.getData().id}), function(response)
+							jsonAjax("/Product/DeleteType", "POST", JSON.stringify({id: cell.getData().id}), function(response)
 								{
 									if(response.Status == "Success")
 									{
@@ -735,7 +738,7 @@ var typesTable = new Tabulator('#typesTable',
 
 						}
 					});
-				
+
 			}
 		}
 
@@ -769,7 +772,7 @@ var brandsTable = new Tabulator('#brandsTable',
 					{
 						if(result.value)
 						{
-							jsonAjax("/Product/RemoveBrand", "POST", JSON.stringify({id: cell.getData().id}), function(response)
+							jsonAjax("/Product/DeleteBrand", "POST", JSON.stringify({id: cell.getData().id}), function(response)
 								{
 									if(response.Status == "Success")
 									{
@@ -794,7 +797,7 @@ var brandsTable = new Tabulator('#brandsTable',
 
 						}
 					});
-				
+
 			}
 		}
 
