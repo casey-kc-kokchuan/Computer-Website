@@ -306,6 +306,47 @@ input[disabled] {
 }
 
 
+/*Loader*/
+
+#loader-overlay
+{
+    height:100%;
+    width:100%;
+
+    background-color:black;
+    position:fixed;
+    
+    top:0;
+    opacity:0.8;
+
+    z-index:9999999999999999;
+
+    display:none;
+}
+
+#load-icon
+{
+    border: 10px solid #292826; 
+    border-top: 10px solid #F9D342; 
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 1s linear infinite;
+
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20%;
+
+    opacity:99999;
+    
+    
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 
 /*------------------------------------------------------------------------------------------------*/
 /*Shopping cart*/
@@ -534,7 +575,6 @@ input[disabled] {
 {
     width:90%;
 }
-
 
 
 

@@ -202,7 +202,7 @@ var shoppingCart = new Vue(
 			{	
 				if(obj.qty <= 0)
 				{
-					alert("nope");
+					SwalError('Unable to add.', 'Item exceeds quantity left in stock.');
 				}
 				else
 				{
@@ -215,7 +215,7 @@ var shoppingCart = new Vue(
 			{
 				if(obj.qty <= this.cartList[matchingIndex].qty)
 				{
-					alert("nope");
+					SwalError('Unable to add.', 'Item exceeds quantity left in stock.');
 				}
 				else
 				{
