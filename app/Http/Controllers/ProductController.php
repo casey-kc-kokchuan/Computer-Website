@@ -19,7 +19,6 @@ class ProductController extends Controller
     {
 
         //default value to empty string if no value is passed in
-
         $type = empty($request->type)? "": $request->type;
         $name = empty($request->name)? "": $request->name;
         $brand = empty($request->brand)? "": $request->brand;

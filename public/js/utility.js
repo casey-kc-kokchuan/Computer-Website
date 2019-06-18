@@ -1,5 +1,6 @@
 function jsonAjax(path, type, data, onSuccess, onError)
 {
+     showOverlay("loader-overlay");
      $.ajax(
         {
             url: path,
@@ -12,10 +13,12 @@ function jsonAjax(path, type, data, onSuccess, onError)
             contentType: "application/json; charset=utf-8",
            success: function (response)
             {
+              hideOverlay("loader-overlay");
               onSuccess(response)
             },
             error: function (xhr, status, error)
             {
+                hideOverlay("loader-overlay");
                 onError()
             }
         });
@@ -23,6 +26,7 @@ function jsonAjax(path, type, data, onSuccess, onError)
 
 function formAjax(path, type, data, onSuccess, onError)
 {
+    showOverlay("loader-overlay");
      $.ajax(
         {
             url: path,
@@ -36,10 +40,12 @@ function formAjax(path, type, data, onSuccess, onError)
             contentType:false,
            success: function (response)
             {
+              hideOverlay("loader-overlay");
               onSuccess(response)
             },
             error: function (xhr, status, error)
             {
+                hideOverlay("loader-overlay");
                 onError()
             }
         });
@@ -85,32 +91,17 @@ function alertError()
   }) 
 }
 
-function hideOverlay(name, callback)
+function hideOverlay(name)
 {
  
-  var element = document.getElementById(name);
-  if(callback == "")
-  {
-      element.style.display="none";
-  }
-  else
-  {
-      callback(element, "hide");  
-  }
+ document.getElementById(name).style.display="none";
 }
 
-function showOverlay(name, callback)
+function showOverlay(name)
 {
  
-  var element = document.getElementById(name);
-  if(callback == "")
-  {
-      element.style.display="block"
-  }
-  else
-  {
-      callback(element, "show");  
-  }
+  var element = document.getElementById(name).style.display="block";
+
 }
 
 
@@ -119,19 +110,19 @@ function toggleOverlay(name)
     $(name).toggleClass('active');
 }
 
-function productDetailOverlay(element, type)
-{
-  if(type == "show")
-  {
-    element.style.display = "block";
-    element.style.marginTop = "0";    
-  }
-  else
-  {
-    element.style.marginTop = "-90%";        
-    element.style.display = "none";
-  }
-}
+// function productDetailOverlay(element, type)
+// {
+//   if(type == "show")
+//   {
+//     element.style.display = "block";
+//     element.style.marginTop = "0";    
+//   }
+//   else
+//   {
+//     element.style.marginTop = "-90%";        
+//     element.style.display = "none";
+//   }
+// }
 
 
 
