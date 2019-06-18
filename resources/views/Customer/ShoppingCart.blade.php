@@ -53,7 +53,7 @@
 		</div>
 
 		<div class="col-12 col-lg-5 product-list">
-				<div v-for="(product, index) in productList" class="product" id="product">
+				<div v-for="(product, index) in productList" class="product" :class="{active : product.qty == 0}" id="product">
 					<div class="row no-gutters max-height">
 						<div class="col-lg-4">
 							<img :src="product.img">
@@ -61,10 +61,11 @@
 						<div class="col-lg-8">
 							<p class="p-name">@{{product.name}}</p>
 							<p class="p-price">RM&nbsp;@{{ formatPrice(product.price) 	}}</p>
-							<p class="p-qty">@{{product.qty}} <i>in stock</i></p>
+							<p class="p-sold-out"  v-if="product.qty == 0">OUT OF STOCK</p>
+							<p class="p-qty" v-else>@{{product.qty}}&nbsp;<i>in stock</i>	</p>
 
 
-							<div class="btn-position">
+							<div class="btn-position" v-if="product.qty != 0">
 								<button @click="addToCart(index)" class="btn-green btn-size-form"><i class="fas fa-cart-plus"></i><span class="atc">&nbsp;Add To Cart</span></button>
 								<button class="btn-blue btn-size-form" @click="about(index)">About</button>
 							</div>

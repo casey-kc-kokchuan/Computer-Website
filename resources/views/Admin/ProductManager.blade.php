@@ -73,7 +73,7 @@
 		<div class="col-12 col-lg-9 product-right-pane">
 
 			<div class="product-manager-list">
-				<div v-for="(product, index) in productList" class="product" id="product">
+				<div v-for="(product, index) in productList" class="product" :class="{active: product.qty == 0}" id="product">
 
 					<p><strong>@{{product.name}}</strong></p>
 					<img :src="product.img" style="width:150px;height:100px">

@@ -335,6 +335,11 @@ input[disabled] {
 
 }
 
+.product-list .product.active
+{
+    background:#FF6F6F;
+}
+
 .product-list .product img
 {
     height:25vh;
@@ -348,18 +353,20 @@ input[disabled] {
 
 .product-list .p-name
 {
-    font-size:2em;
+    font-size:1.75em;
     font-weight:750;
 }
 
 .product-list .p-price
 {
-    font-size:1.5em;
+    font-size:1.25em;
 }
 
-.product-list .p-qty
+.product-list .p-sold-out
 {
-    margin-top:10vh;
+    color:#CA4141;
+    font-size:1.25em;
+    font-weight:700;
 }
 
 .btn-position
@@ -553,6 +560,11 @@ input[disabled] {
     padding:5px;
     background:white;
     text-align: center;
+}
+
+.product-manager-list .product.active
+{
+   background:#FF6F6F;
 }
 
 .product-manager-list p, .product-manager-list img, .product-manager-list button
