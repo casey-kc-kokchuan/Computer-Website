@@ -170,6 +170,7 @@
 	{
 	    font-size:1em;
 	    font-weight:800;
+	    word-wrap: normal;
 	}
 
 	.product-list .p-price
@@ -187,6 +188,11 @@
 	    margin-top:0;
 	}
 
+	.product-list .p-sold-out
+	{
+	    font-size:1em;
+	    font-weight:600;
+	}
 
 	.btn-position
 	{

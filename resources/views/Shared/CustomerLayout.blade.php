@@ -42,6 +42,7 @@
        @yield('body')
        
 
+       @include('Shared/Loader')
        @yield('script')
     </body>
 </html>
