@@ -1,4 +1,9 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/js/utility.js": "/js/utility.js",
+    "/js/ShoppingCart.js": "/js/ShoppingCart.js",
+    "/js/OrderManager.js": "/js/OrderManager.js",
+    "/jsAccount.js": "/jsAccount.js",
+    "/js/ProductManager.js": "/js/ProductManager.js",
+    "/css/all.css": "/css/all.css"
 }
