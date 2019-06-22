@@ -25,7 +25,7 @@
 
 <div class="row account-box">
 	<div class="col-12 col-lg-11 account-btn-box">
-		<button class="btn-green btn-size-form addBtn" onclick="accountDetail.isEdit=false;toggleOverlay('#account-detail-overlay')"><i class="fas fa-user-plus mr-2"></i>Add Account</button>
+		<button class="btn-green btn-size-form addBtn" onclick="isEditFalse();toggleOverlay('#account-detail-overlay')"><i class="fas fa-user-plus mr-2"></i>Add Account</button>
 		<div class="account-table-box">
 			<div id="account-table"></div>
 		</div>
@@ -75,7 +75,6 @@
 						<label for="">Role</label>
 						<select name="role" v-model="accountDetail.role" class="form-control">
 							<option value="">Select Role</option>
-							<option value="Admin">Admin</option>
 							<option value="Store Manager">Store Manager</option>
 							<option value="Product Manager">Product Manager</option>
 							<option value="Sales Assistant">Sales Assistant</option>

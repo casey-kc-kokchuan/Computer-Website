@@ -1,8 +1,12 @@
 
+function isEditFalse()
+{
+	accountDetail.isEdit = false;
+}
 
 var deleteIcon = function(cell, formatterParams, onRendered)
 {
-	return '<button class="btn-red"><i class="fas fa-times"></i></button>'
+	return '<i class="fas fa-times text-danger"></i>'
 }
 
 var editIcon = function(cell, formatterParams, onRendered)
