@@ -3,7 +3,7 @@
     "/js/utility.js": "/js/utility.js",
     "/js/ShoppingCart.js": "/js/ShoppingCart.js",
     "/js/OrderManager.js": "/js/OrderManager.js",
-    "/jsAccount.js": "/jsAccount.js",
+    "/js/Account.js": "/js/Account.js",
     "/js/ProductManager.js": "/js/ProductManager.js",
     "/css/all.css": "/css/all.css"
 }

@@ -15,7 +15,7 @@ mix.js('resources/js/app.js', 'public/js')
 	.scripts('resources/js/utility.js', 'public/js/utility.js')
 	.scripts('resources/js/ShoppingCart.js', 'public/js/ShoppingCart.js')
 	.scripts('resources/js/OrderManager.js' , 'public/js/OrderManager.js')
-	.scripts('resources/js/Account.js' , 'public/jsAccount.js')
+	.scripts('resources/js/Account.js' , 'public/js/Account.js')
 	.scripts('resources/js/ProductManager.js' , 'public/js/ProductManager.js')
     .styles([
     	'resources/css/all.css',
