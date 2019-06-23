@@ -98,7 +98,7 @@ class PageController extends Controller
 
 		if(Auth::check())
 		{
-			return view('Admin/OrderManager');
+			return redirect('Admin/OrderManager');
 		}
 		else
 		{
