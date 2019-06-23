@@ -76,7 +76,7 @@
 				<div v-for="(product, index) in productList" class="product" :class="{active: product.qty == 0}" id="product">
 
 					<p><strong>@{{product.name}}</strong></p>
-					<img :src="product.img" style="width:150px;height:100px">
+					<img :src="product.img + '?' + Math.random()" style="width:150px;height:100px">
 					<p>RM&nbsp;@{{product.price}}</p>
 					<p style="font-size:0.8em">@{{product.qty}} <i>in stock</i></p>
 
@@ -112,7 +112,7 @@
 					<div class="form-group">
 						<center>
 
-							<img :src=productDetail.img id="img">
+							<img :src="productDetail.img + '?' + Math.random()" id="img">
 							<div class="file has-name pt-2">
 							  <label class="file-label  mx-lg-auto">
 							    <input type="file" name="img" @change="previewImg" ref="img" class="file-input">
@@ -198,7 +198,7 @@
 
 						<p class="text-danger" v-if="error.imgDetail">@{{ error.imgDetail[0]}}</p>
 						<br>
-						<img :src="productDetail.imgDetail" id="imgDetail">
+						<img :src="productDetail.imgDetail + '?' + Math.random()" id="imgDetail">
 					</div>
 
 					<button type="submit" class="btn-blue btn-size-form2" v-if="isEdit">Update</button>
