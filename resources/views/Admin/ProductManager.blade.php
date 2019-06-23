@@ -112,7 +112,7 @@
 					<div class="form-group">
 						<center>
 
-							<img :src="productDetail.img + '?' + Math.random()" id="img">
+							<img :src="productDetail.img" id="img">
 							<div class="file has-name pt-2">
 							  <label class="file-label  mx-lg-auto">
 							    <input type="file" name="img" @change="previewImg" ref="img" class="file-input">
@@ -198,7 +198,7 @@
 
 						<p class="text-danger" v-if="error.imgDetail">@{{ error.imgDetail[0]}}</p>
 						<br>
-						<img :src="productDetail.imgDetail + '?' + Math.random()" id="imgDetail">
+						<img :src="productDetail.imgDetail" id="imgDetail">
 					</div>
 
 					<button type="submit" class="btn-blue btn-size-form2" v-if="isEdit">Update</button>

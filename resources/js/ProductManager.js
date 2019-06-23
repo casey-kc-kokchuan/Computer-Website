@@ -50,6 +50,8 @@ var productManager = new Vue(
 
 			var obj = {};
 			Object.assign(obj, this.productList[index]);
+			obj.img += '?' + Math.random();
+			obj.imgDetail += '?' + Math.random();
 			productDetail.productDetail = obj;
 			productDetail.isEdit = true;
 		},
