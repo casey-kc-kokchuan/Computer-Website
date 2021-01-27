@@ -14,7 +14,7 @@
 
 
         <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/app.css') }}">
-        <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/all.css') }}">
+        <link rel="stylesheet" type="text/css"  href="{{ URL::asset('css/all.css') }}"> 
 
         <script src="{{ URL::asset('js/app.js')}}"></script>
         <script src="{{ URL::asset('js/utility.js')}}"></script>

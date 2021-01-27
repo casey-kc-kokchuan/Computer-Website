@@ -26,7 +26,7 @@ Route::get('/VerifyOrderEmail', 'PageController@showVerifyOrderEmail');
 
  
 // Admin
-Route::group(['prefix' => 'Admin', 'middleware' => ['auth']], function()
+Route::group(['prefix' => '/Admin', 'middleware' => ['auth']], function()
 	{
 		Route::get('/ProductManager', 'PageController@showProductManager')->middleware('role:Admin|Store Manager|Product Manager');
 		Route::get('/Account', 'PageController@showAccount')->middleware('role:Admin|Store Manager');
@@ -34,16 +34,10 @@ Route::group(['prefix' => 'Admin', 'middleware' => ['auth']], function()
 		Route::get('/Home', 'PageController@showHome');
 	});
 
-Route::get('Admin', 'PageController@showLogin');
-Route::get('Admin/ChangePasswordRequest', 'PageController@showChangePasswordRequest');
+Route::get('/Admin', 'PageController@showLogin');
+Route::get('/Admin/ChangePasswordRequest', 'PageController@showChangePasswordRequest');
 
 
-Route::get('/Test', 'PageController@testGet');
-Route::post('/Test', 'PageController@testPost');
-Route::get('/Test2', function()
-{
-	dd('Order Verified');
-});
 /*
 --------------------------------------------------------------------------
 Product Controller
@@ -78,7 +72,7 @@ Order Controller
 
 
 
-Route::group(['prefix' => 'Order'], function()
+Route::group(['prefix' => '/Order'], function()
 {
 	Route::get('/ConfirmOrder', 'OrderController@ConfirmOrder');
 	Route::get('/ShowOrder', 'OrderController@ShowOrder');
@@ -92,7 +86,7 @@ Account Controller
 --------------------------------------------------------------------------
 */
 
-Route::group(['prefix' => 'Account', 'middleware' => ['auth','role:Admin|Store Manager']], function()
+Route::group(['prefix' => '/Account', 'middleware' => ['auth','role:Admin|Store Manager']], function()
 {
 	Route::get('/ShowAllData', 'AccountController@ShowAllData');
 	Route::post('/AddAccount', 'AccountController@AddAccount');
@@ -101,8 +95,8 @@ Route::group(['prefix' => 'Account', 'middleware' => ['auth','role:Admin|Store M
 });
 
 
-Route::get('Account/Logout', 'AccountController@Logout')->middleware('auth');
-Route::get('Account/VerifyChangePasswordRequest', 'AccountController@VerifyChangePasswordRequest');
-Route::post('Account/ChangePassword', 'AccountController@ChangePassword');
-Route::post('Account/ChangePasswordRequest', 'AccountController@ChangePasswordRequest');
-Route::post('Account/Login', 'AccountController@Login');
+Route::get('/Account/Logout', 'AccountController@Logout')->middleware('auth');
+Route::get('/Account/VerifyChangePasswordRequest', 'AccountController@VerifyChangePasswordRequest');
+Route::post('/Account/ChangePassword', 'AccountController@ChangePassword');
+Route::post('/Account/ChangePasswordRequest', 'AccountController@ChangePasswordRequest');
+Route::post('/Account/Login', 'AccountController@Login');
